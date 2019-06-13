@@ -18,7 +18,7 @@ function transformquote(match, algnblck, opt, algn, bdy, offset, string) {
     aligntable: tableAlignment(algnblck),
     options: opt.replace(/\r?\n$/, "").split(/[\r\n]+/),
     alignrow: algn.replace(/^ *|\| *$/g, "").split(/ *\| */),
-    cells: bdy.replace(/^\|(.+)$/gm, "$1")
+    body: bdy.replace(/ *\| */g, "\t")
   };
 
   let tableSource = null;
@@ -49,11 +49,11 @@ function transformquote(match, algnblck, opt, algn, bdy, offset, string) {
     eol
   );
 
+  result.push("<p>" + eol + item.body + "</p>" + eol);
+
   if (tableSource) {
     result.push("<footer>" + tableSource + "</footer>" + eol);
   }
-
-  result.push("<p>" + item.bdy + "</p>" + eol);
 
   result.push("</blockquote>" + eol);
 
