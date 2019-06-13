@@ -1,0 +1,53 @@
+
+
+body {counter-reset: chapter;}
+div.chapter {counter-increment: chapter;}
+
+/*p {
+    page-break-inside: avoid;
+  }*/
+
+
+p { outline: 1px solid blue };
+
+
+    body{
+        width: 29.7cm;
+        height: 21cm;
+        margin: 30mm 45mm 30mm 45mm; 
+        /* change the margins as you want them to be. */
+   } 
+
+   p { outline: 1px solid red !important };
+
+   @page { 
+    size:21cm 29.7cm;/* a4 landscape;*/
+    margin: 2cm; 
+    @bottom-center { content: counter(page) " of " counter(pages); };
+    @top-center { content: "Chapter" counter(chapter) };
+} 
+
+
+
+@page :first {
+    @top-left { content: "first" }
+    margin-top: 10cm;    
+  }
+
+@page :left {
+    @top-left { content: "left" }
+    margin-left: 3cm;
+    margin-right: 4cm; 
+}
+
+@page :right {
+    @top-right { content: "right" }
+    margin-left: 4cm;
+    margin-right: 3cm;   
+}
+
+@page :blank {
+    @top-center { content: "This page is intentionally left blank" }
+  }
+
+ /* @page toc, index { ... }*/
