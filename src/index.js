@@ -1,4 +1,5 @@
 var wmu = require('./wmu-main');
+var fs = require('fs')
 
 const eol = "\r\n";
 
@@ -25,5 +26,6 @@ let wmu_string = "|h|1|'Hoofdstuk 1'" + eol +
 
     let html = wmu.processConfigFile("./config.wmu", true);
 
-    console.log(`result:\n${html}`); 
+ //   console.log(`result:\n${html}`); 
 
+    fs.writeFileSync('./out/book.html',html,'utf8');

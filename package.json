@@ -1,0 +1,21 @@
+{
+  "name": "wmu",
+  "version": "0.0.1",
+  "description": "WritersMarkUp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "markup",
+    "language",
+    "write",
+    "book"
+  ],
+  "author": "SP",
+  "license": "ISC",
+  "dependencies": {
+    "nwjs": "^1.4.4",
+    "open": "^6.3.0"
+  }
+}

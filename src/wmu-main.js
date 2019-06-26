@@ -4,6 +4,7 @@ const eol = "\r\n";
 
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
+var wmucode = require('./wmu-code');
 
 const regex_LineEscape = '\\|';
 
@@ -53,6 +54,11 @@ const wmu_commands = [
         to: wmuquote.transformquote
     },
     {
+        type: 'block-code',
+        regex: wmucode.regex_Code,
+        to: wmucode.transformcode
+    },
+    {
         type: 'headers',
         regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
         to: '<h$1>$2</h$1>' + eol
@@ -88,7 +94,7 @@ function processConfigFile(filename, fullHtml) {
         let transformed = transformString(bodyhtml);
         if (fullHtml) {
             let vars = { 
-                cssx: "./test.css",
+                cssx: "../test.css",
                 transformed: transformed
             };
             let templ = getHTMLstr();
