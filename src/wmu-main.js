@@ -120,9 +120,10 @@ function getHTMLstr() {
 
         <link rel="stylesheet" href="css/styles.css?v=1.0">
         <link rel="stylesheet" href="##1##">
+        <link rel="stylesheet" href="../book-imitate.css">
     </head>
 
-    <body>
+    <body class="multipage">
     
 ##2##
 
