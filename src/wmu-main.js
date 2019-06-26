@@ -1,30 +1,163 @@
+var fs = require('fs')
+
+const eol = "\r\n";
+
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
 
 const regex_LineEscape = '\\|';
-const regex_Paragraphs = new RegExp( '^(?!' + regex_LineEscape + ')(.+?)(?=$|\\r?\\n\\r?\\n)', 'gm');
-const regex_EmptyLines = new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm');
-const regex_Headers = new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm');
-const regex_Bold = /(?:\*\*)(.+)(?:\*\*)/;
-const regex_Italic = /(?:\/\/)(.+)(?:\/\/)/;
-const regex_Underscore = /(?:\_\_)(.+)(?:\_\_)/;
-const regex_Striketrough = /(?:~~)(.+)(?:~~)/;
-const regex_InlineQuote = /(?:"")(.+)(?:"")/;
 
-function transform(x){
-    x=x.replace(regex_Paragraphs, '<p>$&</p>');
-    x=x.replace(regex_EmptyLines, '<br>\r\n');
-    x=x.replace(regex_Headers, '<h$1>$2</h$1>\r\n');
-    x=x.replace(regex_Bold, '<b>$1</b>');
-    x=x.replace(regex_Italic, '<i>$1</i>');
-    x=x.replace(regex_Underscore, '<u>$1</u>');
-    x=x.replace(regex_Striketrough, '<del>$1</del>');
-    x=x.replace(regex_InlineQuote, '<q>$1</q>');
-    x=x.replace(wmutable.regex_Table, wmutable.transformtable);
-    x=x.replace(wmuquote.regex_Quote, wmuquote.transformquote);
-    return x;
+const wmu_commands = [
+    {
+        type: 'paragraphs', // should be first in line
+        regex: new RegExp( '^(?!' + regex_LineEscape + ')(.+?)(?=$|\\r?\\n\\r?\\n)', 'gm'),
+        to: '<p>$&</p>'
+    },
+
+    // inline:
+    {
+        type: 'bold', 
+        regex: /(?:\*\*)(.+)(?:\*\*)/, 
+        to: '<b>$1</b>' 
+    },
+    {
+        type: 'underscore', 
+        regex: /(?:\_\_)(.+)(?:\_\_)/, 
+        to: '<u>$1</u>' 
+    },
+    {
+        type: 'strike-trough', 
+        regex: '<del>$1</del>', 
+        to: '<b>$1</b>' 
+    },
+    {
+        type: 'inline-quote', 
+        regex: '<q>$1</q>', 
+        to: '<b>$1</b>' 
+    },
+    {
+        type: 'italic',
+        regex: /(?:\/\/)(.+)(?:\/\/)/,
+        to: '<i>$1</i>'
+    },
+
+    // blocks:
+    {
+        type: 'table',
+        regex: wmutable.regex_Table,
+        to: wmutable.transformtable
+    },
+    {
+        type: 'block-quote',
+        regex: wmuquote.regex_Quote,
+        to: wmuquote.transformquote
+    },
+    {
+        type: 'headers',
+        regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
+        to: '<h$1>$2</h$1>' + eol
+    },
+
+    // rest:
+    {
+        type: 'empty-lines',
+        regex: new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm'),
+        to: '<br>\r\n'
+    }
+];
+
+function transformString(str){
+    wmu_commands.forEach((cmd) => {
+        str=str.replace(cmd.regex, cmd.to);
+    });
+    return str;
+}
+
+function processConfigFile(filename, fullHtml) {
+    let wmuproject = {};
+
+    let data = fs.readFileSync(filename, 'utf8');
+        let wmusettings = data.split(/\r\n/gm);
+        wmusettings.forEach(element => {
+            setting = element.split(/\|/);
+            wmuproject[setting[0]] = setting[1];
+        });
+
+    if (wmuproject.files) {
+        let bodyhtml = concatFiles(wmuproject.files);
+        let transformed = transformString(bodyhtml);
+        if (fullHtml) {
+            let vars = { 
+                cssx: "./test.css",
+                transformed: transformed
+            };
+            let templ = getHTMLstr();
+            return fillTemplate(templ, vars);
+        }
+        else {
+            return transformed;
+        }
+    } else {
+        console.log('No files found in config file')
+    }
+}
+
+function getHTMLstr() {
+
+    let lang = 'nl';
+
+    let templ = `<!doctype html>
+<html lang='${lang}'>
+    <head>
+        <meta charset="utf-8">
+        <title>boek</title>
+
+        <link rel="stylesheet" href="css/styles.css?v=1.0">
+        <link rel="stylesheet" href="##1##">
+    </head>
+
+    <body>
+    
+##2##
+
+    </body>
+</html>`;
+
+    templ = templ.replace('##1##','${this.cssx}');
+    templ = templ.replace('##2##','${this.transformed}');
+    return templ;
+}
+
+function concatFiles(files) {
+    let contentArray = [];
+    let allfiles = files.split(/,/);
+
+    allfiles.forEach(file => {
+
+        let filename = "./" + file.trim();
+
+        if (!fs.existsSync(filename)) {
+            console.log('file not found: ' + filename);
+        }
+
+        try {
+            contentArray.push( fs.readFileSync(filename, 'utf8') );
+        } catch (err) {
+            console.log('error reading file', err)
+        };
+
+    });
+
+    return contentArray.join(eol + eol); // important x2!
+}
+
+// todo: mode to util or something:
+const fillTemplate = function(templ, vars){
+   // new Function(`return \`${templ}\`;`).call(vars);
+    return new Function("return `" + templ + "`;").call(vars);
 }
 
 module.exports = {
-    transform
+    transformString,
+    processConfigFile
 }

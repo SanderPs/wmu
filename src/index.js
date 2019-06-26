@@ -21,6 +21,9 @@ let wmu_string = "|h|1|'Hoofdstuk 1'" + eol +
     "|much more so than pining for" + eol +
     "|someone brings pain." + eol; 
 
-let html = wmu.transform(wmu_string);
+//let html = wmu.transformString(wmu_string);
 
-console.log(html);
+    let html = wmu.processConfigFile("./config.wmu", true);
+
+    console.log(`result:\n${html}`); 
+

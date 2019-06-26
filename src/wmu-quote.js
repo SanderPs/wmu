@@ -41,11 +41,9 @@ function transformquote(match, algnblck, opt, algn, bdy, offset, string) {
   result.push(
     "<blockquote" +
     (item.aligntable || tableFormat
-      ? " class='" +
-      (item.aligntable ? "table-" + item.aligntable + " " : "") +
-      (tableFormat ? tableFormat + " " : "")
+      ? ` class='${item.aligntable} ${tableFormat}'`
       : "") +
-    "'>" +
+    ">" +
     eol
   );
 
