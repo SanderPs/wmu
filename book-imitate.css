@@ -1,0 +1,21 @@
+
+body {
+    margin: 2% 20%;
+    border: 1px solid #888;
+    box-shadow: 5px 5px 3px #ccc;
+}
+
+.multipage {
+-webkit-columns: 300px 2;
+   -moz-columns: 300px 2;
+        columns: 300px 2;
+    column-gap: 6em;
+    column-rule-color: #aaa;
+    column-rule-style: solid;
+    column-rule-width: 3em;
+}
+
+.multipage h1 {
+    page-break-before: always;
+    break-before: always;
+}
