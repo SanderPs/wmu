@@ -10,12 +10,22 @@ const regex_LineEscape = '\\|';
 
 const wmu_commands = [
     {
-        type: 'paragraphs', // should be first in line
+        type: 'ampersand',
+        regex: /(?: *)&(?: *)/g,
+        to: '&#x26;'
+    },
+    {
+        type: 'escaped-pipe',
+        regex: /\\\|/g,
+        to: '&#x7c;'
+    },
+    {
+        type: 'paragraphs', // should be before lines starting with '|'
         regex: new RegExp( '^(?!' + regex_LineEscape + ')(.+?)(?=$|\\r?\\n\\r?\\n)', 'gm'),
         to: '<p>$&</p>'
     },
 
-    // inline:
+    // // inline:
     {
         type: 'bold', 
         regex: /(?:\*\*)(.+)(?:\*\*)/, 
@@ -28,13 +38,18 @@ const wmu_commands = [
     },
     {
         type: 'strike-trough', 
-        regex: '<del>$1</del>', 
-        to: '<b>$1</b>' 
+        regex: /(?:~~)(.+)(?:~~)/, 
+        to: '<del>$1</del>' 
     },
     {
         type: 'inline-quote', 
-        regex: '<q>$1</q>', 
-        to: '<b>$1</b>' 
+        regex: /(?:"")(.+)(?:"")/, 
+        to: '<q>$1</q>' 
+    },
+    {
+        type: 'inline-code',
+        regex: /(?:`)(.+)(?:`)/,
+        to: '<code>$1</code>'
     },
     {
         type: 'italic',
