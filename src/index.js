@@ -24,7 +24,8 @@ let wmu_string = "|h|1|'Hoofdstuk 1'" + eol +
 
 //let html = wmu.transformString(wmu_string);
 
-    let html = wmu.processConfigFile("./config.wmu", true);
+    let html = wmu.processConfigFile("./config.wmu"
+    , { fullHtml: true, createToc: true });
 
  //   console.log(`result:\n${html}`); 
 

@@ -87,14 +87,24 @@ const wmu_commands = [
     }
 ];
 
-function transformString(str){
+const defaultConfig = {
+    fullHtml: undefined, // depends on which function is called
+    createToc: false,
+};
+
+function transformString(str, config){
+
+    const newConfig = Object.assign(defaultConfig, config, { fullHtml: false });
+
     wmu_commands.forEach((cmd) => {
         str=str.replace(cmd.regex, cmd.to);
     });
     return str;
 }
 
-function processConfigFile(filename, fullHtml) {
+function processConfigFile(filename, config) {
+
+    const newConfig = Object.assign(defaultConfig, config);
     let wmuproject = {};
 
     let data = fs.readFileSync(filename, 'utf8');
@@ -106,21 +116,39 @@ function processConfigFile(filename, fullHtml) {
 
     if (wmuproject.files) {
         let bodyhtml = concatFiles(wmuproject.files);
-        let transformed = transformString(bodyhtml);
-        if (fullHtml) {
-            let vars = { 
-                cssx: "../test.css",
-                transformed: transformed
-            };
-            let templ = getHTMLstr();
-            return fillTemplate(templ, vars);
-        }
-        else {
-            return transformed;
-        }
+        return composeHtml(bodyhtml, config);
     } else {
         console.log('No files found in config file')
     }
+}
+
+function composeHtml(wmustring, config) {
+
+    let result = "";
+
+    result = transformString(wmustring);
+
+    if (config.fullHtml) {
+        let vars = { 
+            cssx: "../test.css",
+            transformed: result
+        };
+        let templ = getHTMLstr();
+        result = fillTemplate(templ, vars);
+    }
+
+    if (config.createToc) {
+
+        let tocHtml = "toc";
+
+        if (config.fullHtml) {
+            result = result.replace(/##toc##/, tocHtml);
+        } else {
+            result = tocHtml + result;
+        }
+    }
+
+    return result;
 }
 
 function getHTMLstr() {
@@ -139,6 +167,8 @@ function getHTMLstr() {
     </head>
 
     <body class="multipage">
+
+##toc##
     
 ##2##
 
