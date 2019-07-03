@@ -59,6 +59,11 @@ const wmu_commands = [
         to: wmucode.transformcode
     },
     {
+        type: 'chapters',
+        regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
+        to: '<div class="bookpage">$1</div>'
+    }
+    {
         type: 'headers',
         regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
         to: '<h$1>$2</h$1>' + eol
@@ -153,7 +158,9 @@ function getHTMLstr() {
 
     <body class="multipage">
 
-##toc##
+    <div class="bookpage">
+    ##toc##
+    </div>
     
 ##2##
 

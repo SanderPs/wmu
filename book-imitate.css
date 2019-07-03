@@ -8,7 +8,10 @@ body {
 .multipage {
 -webkit-columns: 300px 2;
    -moz-columns: 300px 2;
-        columns: 300px 2;
+        column-width: 300px;
+        -webkit-column-count: auto; /* Chrome, Safari, Opera */
+        -moz-column-count: auto; /* Firefox */
+        column-count: auto;
     column-gap: 6em;
     column-rule-color: #aaa;
     column-rule-style: solid;
@@ -18,4 +21,10 @@ body {
 .multipage h1 {
     page-break-before: always;
     break-before: always;
+}
+
+.bookpage {
+    -webkit-column-break-before: always;
+    break-before: column;
+
 }
