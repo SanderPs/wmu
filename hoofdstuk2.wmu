@@ -3,9 +3,9 @@
 |table|:-:
 |format|dash
 |caption|Fig 1.
-|a|b|c|d|e|
+|left|right|spread|center|none|
 |:---|---:|:---:|-:-|---|
-|1|2|3|4|5|
+|This is 1|and 2|but also 3|not foget 4|last but not least 5|
 
 |code
 |language|js
@@ -13,3 +13,13 @@
 |for (var x=0; x++ x<10) {
 |    console.log('hallo'); // dit is een test
 |}
+| if (a || b) {
+|   // pipe in code block should be ok    
+|}
+| if (d && e) {
+|    // ampersand should be ....
+|}
+
+When using \| inside a paragraph, it should be translated into an html entity: \|
+
+when using ampersand: &

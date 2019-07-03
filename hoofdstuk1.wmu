@@ -1,8 +1,11 @@
 |h|1|'Hoofstuk 1'
 
-Dit is de //eerste// paragraaf
+Dit is de //eerste// paragraaf met `code` in de tekst
 
 |quote
-|source|x
+|source|Albert Einstein
 |-
-|test
+|Try not to become a man
+|of success, but rather try to
+|became a man of value
+    

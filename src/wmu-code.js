@@ -18,7 +18,7 @@ const regex_Code = new RegExp(
       aligntable: tableAlignment(algnblck),
       options: opt.replace(/\r?\n$/, "").split(/[\r\n]+/),
       alignrow: algn.replace(/^ *|\| *$/g, "").split(/ *\| */),
-      body: bdy.replace(/ *\| */g, "\t")
+      body: bdy.replace(/^\| */gm, "\t")
     };
   
     let tableSource = null;
