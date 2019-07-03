@@ -45,30 +45,20 @@ blockquote > p {
     text-rendering: optimizeLegibility;
 }
 blockquote {
-    position: relative;
-    width: 80%;
-    border-radius: 3px;
-    padding: 1rem 1.2rem;
-    margin: 1rem auto 2rem;
     font-style: italic;
-    text-align: center;
-}
-blockquote:before,
-blockquote:after {
-    position: absolute;
-    top: 13px;
-    font-size: 34px;
-}
-blockquote:before {
-    content: "\"";
-    margin-right: 13px;
-    right: 100%;
-}
-blockquote:after {
-    content: "\"";
-    margin-left: 13px;
-    left: 100%;  
-}
+    padding:20px;
+    background:#fff;
+    }
+    blockquote p:before {
+    content: '"';
+    font-size: 30px;
+    vertical-align: bottom;
+    }
+    blockquote p:after {
+    content: '"';
+    font-size: 30px;
+    vertical-align: top;
+    }
 blockquote > footer {
     margin-top: .5em;
     padding: 0;

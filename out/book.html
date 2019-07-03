@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <title>boek</title>
 
-        <link rel="stylesheet" href="css/styles.css?v=1.0">
         <link rel="stylesheet" href="../test.css">
         <link rel="stylesheet" href="../book-imitate.css">
+        <link rel="stylesheet" href="../base.css">
     </head>
 
     <body class="multipage">
@@ -15,40 +15,56 @@
     toc
     </div>
     
-<h1 class="bookpage">Hoofstuk 1</h1>
+<h1>Hoofstuk 1</h1>
 
-<p>Dit is de <i>eerste</i> paragraaf</p>
+<p>Dit is de <i>eerste</i> paragraaf met <code>code</code> in de tekst</p>
 
 <blockquote>
 <p>
-	test
+	Try not to become a man
+	of success, but rather try to
+	became a man of value
 </p>
-<footer>x</footer>
+<footer>Albert Einstein</footer>
 </blockquote>
+<p>    </p>
+<pre class='null null devlang-wmu'><code>	&#x7c; voorbeeld van een escaped pipe
+</code></pre>
 
-<h1 class="bookpage">Hoofstuk 2</h1>
+
+<h1>Hoofstuk 2</h1>
 
 <table class='table-fill dash '>
 <caption>Fig 1.</caption>
 <tr>
-	<th align='left'>a</th>
-	<th align='right'>b</th>
-	<th align='fill'>c</th>
-	<th align='center'>d</th>
-	<th>e</th>
+	<th align='left'>left</th>
+	<th align='right'>right</th>
+	<th align='fill'>spread</th>
+	<th align='center'>center</th>
+	<th>none</th>
 </tr>
 <tr>
-	<td>1</td>
-	<td>2</td>
-	<td>3</td>
-	<td>4</td>
-	<td>5</td>
+	<td>This is 1</td>
+	<td>and 2</td>
+	<td>but also 3</td>
+	<td>not foget 4</td>
+	<td>last but not least 5</td>
 </tr>
-
-</table>
-<pre><code>	for (var x=0; x++ x<10) {
+</table>
+<pre class='null null devlang-js'><code>	for (var x=0; x++ x<10) {
 	console.log('hallo'); // dit is een test
-	}</code></pre>
+	}
+	if (a || b) {
+	// pipe in code block should be ok    
+	}
+	if (d&#x26;&#x26;e) {
+	// ampersand should be ....
+	}
+</code></pre>
+
+<p>When using &#x7c; inside a paragraph, it should be translated into an html entity: &#x7c;</p>
+
+<p>when using ampersand:&#x26;</p>
 
 
     </body>

@@ -23,25 +23,31 @@ const regex_Code = new RegExp(
   
     let tableSource = null;
     let tableFormat = null;
+    let tableLanguage = null;
     for (i = 0; i < item.options.length; i++) {
       let option = item.options[i].match(/\|(.+)\|(.+)/);
-      switch (option[1]) {
+      // todo: null als geen options
+      switch (option[1].toLowerCase()) {
         case "source":
           tableSource = option[2];
           break;
         case "format":
           tableFormat = option[2];
           break;
-        }
+        case "language":
+          tableLanguage = option[2];
+          break;
+          }
     }
   
     // create output
   
     let result = [];
+    let tableLanguageStr = tableLanguage ? 'devlang-' + tableLanguage : '';
     result.push(
       "<pre" +
-      (item.aligntable || tableFormat
-        ? ` class='${item.aligntable} ${tableFormat}'`
+      (item.aligntable || tableFormat || tableLanguageStr
+        ? ` class='${item.aligntable} ${tableFormat} ${tableLanguageStr}'`
         : "") +
       "><code>" );
   

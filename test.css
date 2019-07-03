@@ -26,3 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 .bookpage {
     outline: 1px dashed blueviolet;
 }
+
+pre {
+    outline: 2px dashed greenyellow;
+}

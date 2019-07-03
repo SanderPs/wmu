@@ -9,13 +9,13 @@ var wmucode = require('./wmu-code');
 const regex_LineEscape = '\\|';
 
 const wmu_commands = [
+    // { onnodig?
+    //     type: 'ampersand',
+    //     regex: /(?: *)&(?: *)/g,
+    //     to: '&#x26;'
+    // },
     {
-        type: 'ampersand',
-        regex: /(?: *)&(?: *)/g,
-        to: '&#x26;'
-    },
-    {
-        type: 'escaped-pipe',
+        type: 'escaped-pipe', // alleen nodig als het het eerste karakter in een regel is?!
         regex: /\\\|/g,
         to: '&#x7c;'
     },
@@ -73,11 +73,11 @@ const wmu_commands = [
         regex: wmucode.regex_Code,
         to: wmucode.transformcode
     },
-    {
-        type: 'chapters',
-        regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
-        to: '<div class="bookpage">$1</div>'
-    }
+    // {
+    //     type: 'chapters',
+    //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
+    //     to: '<div class="bookpage_xxxtemp">$1</div>'
+    // },
     {
         type: 'headers',
         regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
@@ -166,9 +166,9 @@ function getHTMLstr() {
         <meta charset="utf-8">
         <title>boek</title>
 
-        <link rel="stylesheet" href="css/styles.css?v=1.0">
         <link rel="stylesheet" href="##1##">
         <link rel="stylesheet" href="../book-imitate.css">
+        <link rel="stylesheet" href="../base.css">
     </head>
 
     <body class="multipage">
