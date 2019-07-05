@@ -22,11 +22,9 @@ let wmu_string = "|h|1|'Hoofdstuk 1'" + eol +
     "|much more so than pining for" + eol +
     "|someone brings pain." + eol; 
 
-//let html = wmu.transformString(wmu_string);
+   let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
+   fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
 
-    let html = wmu.processConfigFile("./config.wmu"
-    , { fullHtml: true, createToc: true });
 
- //   console.log(`result:\n${html}`); 
-
-    fs.writeFileSync('./out/book.html',html,'utf8');
+   let html_2 = wmu.processConfigFile("./config.wmu", {});
+   fs.writeFileSync('./out/book.html',html_2,'utf8');

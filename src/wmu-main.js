@@ -15,7 +15,7 @@ const wmu_commands = [
     //     to: '&#x26;'
     // },
     {
-        type: 'escaped-pipe', // alleen nodig als het het eerste karakter in een regel is?!
+        type: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
         regex: /\\\|/g,
         to: '&#x7c;'
     },
@@ -73,11 +73,12 @@ const wmu_commands = [
         regex: wmucode.regex_Code,
         to: wmucode.transformcode
     },
-    // {
-    //     type: 'chapters',
-    //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
-    //     to: '<div class="bookpage_xxxtemp">$1</div>'
-    // },
+    {
+        type: 'chapters',
+        level: 'book',
+        regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
+        to: '<div class="bookpage_xxxtemp">$1</div>'
+    },
     {
         type: 'headers',
         regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
@@ -95,21 +96,33 @@ const wmu_commands = [
 const defaultConfig = {
     fullHtml: undefined, // depends on which function is called
     createToc: false,
+    toBook: false,
 };
 
-function transformString(str, config){
+function transformFragment(str, config) {
 
     const newConfig = Object.assign(defaultConfig, config, { fullHtml: false });
 
+    return transformWmu(str, newConfig);
+}
+
+function transformWmu(str, config){
+
     wmu_commands.forEach((cmd) => {
+
+        if (cmd.level === 'book' && !config.toBook) {
+            return;
+        }
+
         str=str.replace(cmd.regex, cmd.to);
     });
+
     return str;
 }
 
 function processConfigFile(filename, config) {
 
-    const newConfig = Object.assign(defaultConfig, config);
+    const newConfig = Object.assign(defaultConfig, config, { fullHtml: true });
     let wmuproject = {};
 
     let data = fs.readFileSync(filename, 'utf8');
@@ -121,7 +134,7 @@ function processConfigFile(filename, config) {
 
     if (wmuproject.files) {
         let bodyhtml = concatFiles(wmuproject.files);
-        return composeHtml(bodyhtml, config);
+        return composeHtml(bodyhtml, newConfig);
     } else {
         console.log('No files found in config file')
     }
@@ -131,7 +144,7 @@ function composeHtml(wmustring, config) {
 
     let result = "";
 
-    result = transformString(wmustring);
+    result = transformWmu(wmustring, config);
 
     if (config.fullHtml) {
         let vars = { 
@@ -217,6 +230,7 @@ const fillTemplate = function(templ, vars){
 }
 
 module.exports = {
-    transformString,
+    transformWmu,
+    transformFragment,
     processConfigFile
 }
