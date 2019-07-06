@@ -21,9 +21,9 @@ const regex_Code = new RegExp(
       body: bdy.replace(/^\| */gm, "\t")
     };
   
-    let tableSource = null;
-    let tableFormat = null;
-    let tableLanguage = null;
+    let tableSource = "";
+    let tableFormat = "";
+    let tableLanguage = "";
     for (i = 0; i < item.options.length; i++) {
       let option = item.options[i].match(/\|(.+)\|(.+)/);
       // todo: null als geen options

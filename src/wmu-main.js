@@ -2,9 +2,11 @@ var fs = require('fs')
 
 const eol = "\r\n";
 
+var wmubase = require('./wmu-base');
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
 var wmucode = require('./wmu-code');
+var wmuheader = require('./wmu-header');
 
 const regex_LineEscape = '\\|';
 
@@ -81,16 +83,24 @@ const wmu_commands = [
     },
     {
         type: 'headers',
-        regex: new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm'),
-        to: '<h$1>$2</h$1>' + eol
+        regex: wmuheader.regex_Header,
+        to: wmuheader.transformheader
     },
 
     // rest:
-    {
-        type: 'empty-lines',
-        regex: new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm'),
-        to: '<br>\r\n'
-    }
+
+    // onnodig?! want enkele \r?\n -> <br>?!
+    // {
+    //     type: 'empty-lines',
+    //     regex: new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm'),
+    //     to: '<br>\r\n'
+    // }
+    
+    // {
+    //     type: 'single-newlines',
+    //     regex: /\r?\n(?!\r?\n)/g,
+    //     to: '<br>'
+    // }
 ];
 
 const defaultConfig = {
@@ -123,24 +133,29 @@ function transformWmu(str, config){
 function processConfigFile(filename, config) {
 
     const newConfig = Object.assign(defaultConfig, config, { fullHtml: true });
-    let wmuproject = {};
 
+    let _wmuproject = wmubase.getAll();
+ 
     let data = fs.readFileSync(filename, 'utf8');
         let wmusettings = data.split(/\r\n/gm);
         wmusettings.forEach(element => {
             setting = element.split(/\|/);
-            wmuproject[setting[0]] = setting[1];
+            _wmuproject[setting[0]] = setting[1];
         });
 
-    if (wmuproject.files) {
-        let bodyhtml = concatFiles(wmuproject.files);
-        return composeHtml(bodyhtml, newConfig);
+    if (_wmuproject.files) {
+        let bodyWmu = concatFiles(_wmuproject.files);
+        let bodyHtml = composeHtml(bodyWmu, _wmuproject, newConfig);
+        if (_wmuproject.toc.length) {
+            console.log('toc ', _wmuproject.toc)
+        }
+        return bodyHtml;
     } else {
         console.log('No files found in config file')
     }
 }
 
-function composeHtml(wmustring, config) {
+function composeHtml(wmustring, wmuproject, config) {
 
     let result = "";
 
@@ -155,9 +170,10 @@ function composeHtml(wmustring, config) {
         result = fillTemplate(templ, vars);
     }
 
-    if (config.createToc) {
+    let toc = wmuproject.toc;
+    if (config.createToc && toc) {
 
-        let tocHtml = "toc";
+        let tocHtml = "toc: " + toc;
 
         if (config.fullHtml) {
             result = result.replace(/##toc##/, tocHtml);
