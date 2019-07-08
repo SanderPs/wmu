@@ -146,9 +146,6 @@ function processConfigFile(filename, config) {
     if (_wmuproject.files) {
         let bodyWmu = concatFiles(_wmuproject.files);
         let bodyHtml = composeHtml(bodyWmu, _wmuproject, newConfig);
-        if (_wmuproject.toc.length) {
-            console.log('toc ', _wmuproject.toc)
-        }
         return bodyHtml;
     } else {
         console.log('No files found in config file')
@@ -173,7 +170,20 @@ function composeHtml(wmustring, wmuproject, config) {
     let toc = wmuproject.toc;
     if (config.createToc && toc) {
 
-        let tocHtml = "toc: " + toc;
+        tocList = composeToc(toc.list[0]);
+
+        // toc.map((i) => {
+        //     return '\t<li>' + i.level + ': ' + i.title + '</li>' + eol;
+        // }).join('')
+        // for (let x=0; x<toc.length; x++) {
+        //     tocList[toc[x].id] = '';
+        // }
+
+        let tocHtml = 
+            '<h1>Table of contents</h1>' + eol +
+            '<div id=\'toc\'>' + eol +
+                tocList +
+            '</div>' + eol;
 
         if (config.fullHtml) {
             result = result.replace(/##toc##/, tocHtml);
@@ -183,6 +193,19 @@ function composeHtml(wmustring, wmuproject, config) {
     }
 
     return result;
+}
+
+function composeToc(element){
+    if(element.children.length === 0 && element.parent != null){
+         return "<li>" + element.name + "</li>" + eol;
+    }else {
+         let i;
+         let result = "<ul>" + eol;
+         for(i=0; i < element.children.length; i++){
+              result = result + composeToc(element.children[i]);
+         }
+         return result + "</ul>" + eol;
+    }
 }
 
 function getHTMLstr() {

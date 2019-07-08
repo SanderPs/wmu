@@ -3,6 +3,10 @@ html, body {
     width: 100%;
 }
 
+ul#toc {
+    list-style-type: none;
+  }
+
 table {
     border-collapse: collapse;
     border-width: 1px;
