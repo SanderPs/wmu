@@ -7,6 +7,7 @@ var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
 var wmucode = require('./wmu-code');
 var wmuheader = require('./wmu-header');
+var wmutoc = require('./wmu-toc');
 
 const regex_LineEscape = '\\|';
 
@@ -134,7 +135,7 @@ function processConfigFile(filename, config) {
 
     const newConfig = Object.assign(defaultConfig, config, { fullHtml: true });
 
-    let _wmuproject = wmubase.getAll();
+    let _wmuproject = wmubase.init();
  
     let data = fs.readFileSync(filename, 'utf8');
         let wmusettings = data.split(/\r\n/gm);
@@ -167,22 +168,13 @@ function composeHtml(wmustring, wmuproject, config) {
         result = fillTemplate(templ, vars);
     }
 
-    let toc = wmuproject.toc;
+    let toc = wmutoc.tocTree;
     if (config.createToc && toc) {
-
-        tocList = composeToc(toc.list[0]);
-
-        // toc.map((i) => {
-        //     return '\t<li>' + i.level + ': ' + i.title + '</li>' + eol;
-        // }).join('')
-        // for (let x=0; x<toc.length; x++) {
-        //     tocList[toc[x].id] = '';
-        // }
 
         let tocHtml = 
             '<h1>Table of contents</h1>' + eol +
             '<div id=\'toc\'>' + eol +
-                tocList +
+                toc.toHtml() +
             '</div>' + eol;
 
         if (config.fullHtml) {
@@ -193,19 +185,6 @@ function composeHtml(wmustring, wmuproject, config) {
     }
 
     return result;
-}
-
-function composeToc(element){
-    if(element.children.length === 0 && element.parent != null){
-         return "<li>" + element.name + "</li>" + eol;
-    }else {
-         let i;
-         let result = "<ul>" + eol;
-         for(i=0; i < element.children.length; i++){
-              result = result + composeToc(element.children[i]);
-         }
-         return result + "</ul>" + eol;
-    }
 }
 
 function getHTMLstr() {

@@ -1,24 +1,13 @@
 
-var _wmu_project = {
-    toc: {
-        lastadded: null,
-        list: [
-          { 
-						name: 'root',
-						level: 0,
-						parent: null,
-						index: 1,
-						children: []
-					},
-        ]
-    }
-};
-//init:
-_wmu_project.toc.lastadded = _wmu_project.toc.list[0];
+var _wmu_project;
 
-exports.getToc = function() {
-  return _wmu_project.toc;
-};
+exports.init = function() {
+  
+  _wmu_project = {
+  };
+
+  return _wmu_project;
+}
 
 exports.getAll = function() {
     return _wmu_project;
