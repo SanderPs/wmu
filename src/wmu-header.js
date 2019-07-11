@@ -14,43 +14,34 @@ const regex_Header = new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*
 
     // initialize
  
-    let id = makeid(8); //title.replace(/[^a-zA-Z0-9_]/, '');
+    let id = "id_" + hashCode(title + level);
   
 
     // store data
 
     let toc = wmutoc.tocTree;
-
-    //console.log('- ' + level + ': ' + title);
-
     toc.addSequential(title, level, id);
 
 
     // create output
-  
-    let result = [];
 
-    result.push("<h" + level + " id='" + id + "'>" +
-        title + 
-        "</h" + level + ">" + eol);
-
-    return result.join("");
+    return "<h" + level + " id='" + id + "'>" +
+            title + 
+            "</h" + level + ">" + eol;
   }
   
-  function revisedRandId() {
-    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
-}
-
-// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-function makeid(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+// based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+function hashCode(str,max){
+  var hash = 0;
+  if (!str.length) return hash;
+  for (i = 0; i < str.length; i++) {
+    char = str.charCodeAt(i);
+    hash = ((hash<<5)-hash)+char;
+    hash = hash & hash; // Convert to 32bit integer
   }
-  return result;
-}
+  return Math.abs(max?hash%max:hash);
+};
+
 
   module.exports = {
     transformheader,

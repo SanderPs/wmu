@@ -155,21 +155,21 @@ function processConfigFile(filename, config) {
 
 function composeHtml(wmustring, wmuproject, config) {
 
-    let result = "";
+    let resultHtml = "";
 
-    result = transformWmu(wmustring, config);
+    resultHtml = transformWmu(wmustring, config);
 
     if (config.fullHtml) {
         let vars = { 
             cssx: "../test.css",
-            transformed: result
+            transformed: resultHtml
         };
         let templ = getHTMLstr();
-        result = fillTemplate(templ, vars);
+        resultHtml = fillTemplate(templ, vars);
     }
 
     let toc = wmutoc.tocTree;
-    if (config.createToc && toc) {
+    if (config.createToc && toc.hasContent()) {
 
         let tocHtml = 
             '<h1>Table of contents</h1>' + eol +
@@ -178,13 +178,13 @@ function composeHtml(wmustring, wmuproject, config) {
             '</div>' + eol;
 
         if (config.fullHtml) {
-            result = result.replace(/##toc##/, tocHtml);
+            resultHtml = resultHtml.replace(/##toc##/, tocHtml); // insert into template
         } else {
-            result = tocHtml + result;
+            resultHtml = tocHtml + resultHtml; //  simply prepend
         }
     }
 
-    return result;
+    return resultHtml;
 }
 
 function getHTMLstr() {

@@ -39,6 +39,10 @@ class TocTree {
             );
     }
 
+    hasContent() {
+        return this.lastAdded.level > 0;
+    }
+
     recursiveHtml(element, cnt) {
         if (element.children.length === 0) {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
