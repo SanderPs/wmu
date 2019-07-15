@@ -118,9 +118,26 @@ function transformFragment(str, config) {
 }
 
 function transformWmu(str, config) {
+    var funcList = {
+        'table': wmutable.transformtable
+    }
+    var regexGeneralBlock = /^\|(.+?)(?:\||$)([\s\S]*?)(?=^\|-)\|-\r?\n([\s\S]*)(?=^\|-)\|-\r?\n([\s\S]*)/m;
+
     parse = str.split(/\r?\n[\r\n]+/);
     for (var x=0 ; x<parse.length; x++) {
         console.log('\n' + parse[x] + '\n\n');
+        var isBlock = parse[x].charCodeAt(0) === 124;
+        //var blockType = isBlock ? parse[x].match(/^\|(.+?)(?=\||$)/m)[1] : "par";
+        var parsedBlock = parse[x].split(/^\|\|/m);
+        var parsedDef = parsedBlock[0].replace(/^\|/,"").replace(/[\r\n\|]+$/,"").split(/[\r\n\|]+/);
+
+        switch(parsedDef[0]) {
+            case 'table':
+            case 't':
+                wmutable.wmutableparse(parsedDef, parsedBlock[1], parsedBlock[2]);
+        }
+
+//        console.log('', isBlock, parsedBlock.length, parsedDef.join("="));
     }
 }
 

@@ -100,7 +100,13 @@ function tableAlignment(str) {
   return null;
 }
 
+
+function wmutableparse(parsedDef, header, body) {
+  console.log('', parsedDef, header, body);
+}
+
 module.exports = {
   transformtable,
-  regex_Table
+  regex_Table,
+  wmutableparse
 };
