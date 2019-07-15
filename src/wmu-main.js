@@ -117,7 +117,14 @@ function transformFragment(str, config) {
     return transformWmu(str, newConfig);
 }
 
-function transformWmu(str, config){
+function transformWmu(str, config) {
+    parse = str.split(/\r?\n[\r\n]+/);
+    for (var x=0 ; x<parse.length; x++) {
+        console.log('\n' + parse[x] + '\n\n');
+    }
+}
+
+function transformWmu_v1(str, config){
 
     wmu_commands.forEach((cmd) => {
 

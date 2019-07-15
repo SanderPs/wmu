@@ -3,9 +3,9 @@ var fs = require('fs')
 
 const eol = "\r\n";
 
-let wmu_string = "|h|1|'Hoofdstuk 1'" + eol +
-    "Dit is een test" + eol + eol +
-    "Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz" + eol +
+let wmu_string = "|h|1|'Hoofdstuk 1'" + eol + eol +
+    "Dit is een test" + eol + eol + eol + eol + eol +
+    "Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz" + eol + eol +
     "Een extra lege regel: " + eol +
     "|." + eol +
     "|table|:-:" + eol +
