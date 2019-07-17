@@ -53,6 +53,7 @@ function transformtable(match, p0, p1, p2, p3, p4, offset, string) {
   if (tableCaption) {
     result.push("<caption>" + tableCaption + "</caption>" + eol);
   }
+
   if (item.header.length === item.alignrow.length) {
     for (i = 0; i < item.alignrow.length; i++) {
       item.alignrow[i] = tableAlignment(item.alignrow[i]);
@@ -101,8 +102,82 @@ function tableAlignment(str) {
 }
 
 
-function wmutableparse(parsedDef, header, body) {
-  console.log('', parsedDef, header, body);
+function wmutableparse(allVar, header, body) {
+  console.log('', allVar, header, body);
+  
+  let result = [];
+
+  result.push("<table" +
+  (allVar['blok-align'] || allVar['format']
+    ? " class='" +
+    (allVar['blok-align'] ? "table-" + tableAlignment(allVar['blok-align']) + " " : "") +
+    (allVar['format'] ? allVar['format'] + " " : "")
+    : "") +
+  "'>" + eol);
+  
+  if (allVar['caption']) {
+    result.push("<caption>" + allVar['caption'] + "</caption>" + eol);
+  }
+
+  result.push( wmutableparse_header(header) );
+
+  result.push( wmutableparse_body(body) );
+
+  result.push( "</table>" + eol );
+
+  return result.join('');
+}
+
+function wmutableparse_body(body) {
+
+  let result = [];
+
+  if (body) {
+    body = body.replace(/\n$/, "").split("\n");
+
+    for (i = 0; i < body.length; i++) {
+      result.push(
+        body[i]
+          .replace(
+            /^\|(.+)\|$/gm,
+            "<tr>" + eol + "\t<td>$1</td>" + eol + "</tr>" + eol
+          )
+          .replace(/\|/g, "</td>" + eol + "\t<td>")
+      );
+    }
+  }
+
+  return result.join('');
+}
+
+function wmutableparse_header(header) {
+
+  let rows = header.split(/\r?\n/);
+  let headerrow = rows[0].slice(1,-1).split(/ *\| */);
+  let alignrow = rows[1].slice(1,-1).split(/ *\| */);
+
+  let result = [];
+
+  if (headerrow.length === alignrow.length) {
+    for (i = 0; i < alignrow.length; i++) {
+      alignrow[i] = tableAlignment(alignrow[i]);
+    }
+
+    result.push("<tr>" + eol);
+    for (i = 0; i < headerrow.length; i++) {
+      result.push(
+        "\t<th" +
+        (alignrow[i] ? " align='" + alignrow[i] + "'" : "") +
+        ">" +
+        headerrow[i] +
+        "</th>" +
+        eol
+      );
+    }
+    result.push("</tr>" + eol);
+  }
+
+  return result.join('');
 }
 
 module.exports = {

@@ -13,77 +13,91 @@ const regex_LineEscape = '\\|';
 
 const wmu_commands = [
     // { onnodig?
-    //     type: 'ampersand',
+    //     description: 'ampersand',
+    // type: 'inline',
     //     regex: /(?: *)&(?: *)/g,
     //     to: '&#x26;'
     // },
     {
-        type: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
+        description: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
+        type: 'inline',
         regex: /\\\|/g,
         to: '&#x7c;'
     },
     {
-        type: 'paragraphs', // should be before lines starting with '|'
+        description: 'paragraphs', // should be before lines starting with '|'
+        type: 'inline',
         regex: new RegExp( '^(?!' + regex_LineEscape + ')(.+?)(?=$|\\r?\\n\\r?\\n)', 'gm'),
         to: '<p>$&</p>'
     },
 
     // // inline:
     {
-        type: 'bold', 
+        description: 'bold', 
+        type: 'inline',
         regex: /(?:\*\*)(.+)(?:\*\*)/, 
         to: '<b>$1</b>' 
     },
     {
-        type: 'underscore', 
+        description: 'underscore', 
+        type: 'inline',
         regex: /(?:\_\_)(.+)(?:\_\_)/, 
         to: '<u>$1</u>' 
     },
     {
-        type: 'strike-trough', 
+        description: 'strike-trough', 
+        type: 'inline',
         regex: /(?:~~)(.+)(?:~~)/, 
         to: '<del>$1</del>' 
     },
     {
-        type: 'inline-quote', 
+        description: 'inline-quote', 
+        type: 'inline',
         regex: /(?:"")(.+)(?:"")/, 
         to: '<q>$1</q>' 
     },
     {
-        type: 'inline-code',
+        description: 'inline-code',
+        type: 'inline',
         regex: /(?:`)(.+)(?:`)/,
         to: '<code>$1</code>'
     },
     {
-        type: 'italic',
+        description: 'italic',
+        type: 'inline',
         regex: /(?:\/\/)(.+)(?:\/\/)/,
         to: '<i>$1</i>'
     },
 
     // blocks:
     {
-        type: 'table',
+        description: 'table',
+        type: 'block',
         regex: wmutable.regex_Table,
         to: wmutable.transformtable
     },
     {
-        type: 'block-quote',
+        description: 'block-quote',
+        type: 'block',
         regex: wmuquote.regex_Quote,
         to: wmuquote.transformquote
     },
     {
-        type: 'block-code',
+        description: 'block-code',
+        type: 'block',
         regex: wmucode.regex_Code,
         to: wmucode.transformcode
     },
+    // {
+    //     description: 'chapters',
+    //     type: 'block',
+    //     level: 'book',
+    //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
+    //     to: '<div class="bookpage_xxxtemp">$1</div>'
+    // },
     {
-        type: 'chapters',
-        level: 'book',
-        regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
-        to: '<div class="bookpage_xxxtemp">$1</div>'
-    },
-    {
-        type: 'headers',
+        description: 'headers',
+        type: 'block',
         regex: wmuheader.regex_Header,
         to: wmuheader.transformheader
     },
@@ -92,13 +106,15 @@ const wmu_commands = [
 
     // onnodig?! want enkele \r?\n -> <br>?!
     // {
-    //     type: 'empty-lines',
+    //     description: 'empty-lines',
+    // type: '',
     //     regex: new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm'),
     //     to: '<br>\r\n'
     // }
     
     // {
-    //     type: 'single-newlines',
+    //     description: 'single-newlines',
+    // type: '',
     //     regex: /\r?\n(?!\r?\n)/g,
     //     to: '<br>'
     // }
@@ -123,22 +139,46 @@ function transformWmu(str, config) {
     }
     var regexGeneralBlock = /^\|(.+?)(?:\||$)([\s\S]*?)(?=^\|-)\|-\r?\n([\s\S]*)(?=^\|-)\|-\r?\n([\s\S]*)/m;
 
+    // inline markup:
+    wmu_commands.forEach((cmd) => {
+
+        if (cmd.type !== 'inline') {
+            return;
+        }
+
+        str=str.replace(cmd.regex, cmd.to);
+    });
+
+
+    // parse all blocks:
+    let result = [];
     parse = str.split(/\r?\n[\r\n]+/);
     for (var x=0 ; x<parse.length; x++) {
-        console.log('\n' + parse[x] + '\n\n');
+        // console.log('\n' + parse[x] + '\n\n');
         var isBlock = parse[x].charCodeAt(0) === 124;
         //var blockType = isBlock ? parse[x].match(/^\|(.+?)(?=\||$)/m)[1] : "par";
-        var parsedBlock = parse[x].split(/^\|\|/m);
+        var parsedBlock = parse[x].split(/\r?\n\|\|\r?\n/m);
         var parsedDef = parsedBlock[0].replace(/^\|/,"").replace(/[\r\n\|]+$/,"").split(/[\r\n\|]+/);
+        var allVar = {};
+        for (let x=1; x < parsedDef.length; x++) {
+            let nameValue = parsedDef[x].split("=");
+            if (nameValue.length === 1) {
+                allVar['blok-align'] = nameValue[0];
+            } else {
+                allVar[nameValue[0]] = nameValue[1];
+            }
+        }
 
         switch(parsedDef[0]) {
             case 'table':
             case 't':
-                wmutable.wmutableparse(parsedDef, parsedBlock[1], parsedBlock[2]);
+                result.push(wmutable.wmutableparse(allVar, parsedBlock[1], parsedBlock[2]));
         }
 
 //        console.log('', isBlock, parsedBlock.length, parsedDef.join("="));
     }
+    
+    return result.join('');
 }
 
 function transformWmu_v1(str, config){
