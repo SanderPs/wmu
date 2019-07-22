@@ -103,17 +103,17 @@ function tableAlignment(str) {
 
 
 function wmutableparse(allVar, header, body) {
-  console.log('', allVar, header, body);
-  
+
   let result = [];
 
   result.push("<table" +
   (allVar['blok-align'] || allVar['format']
     ? " class='" +
     (allVar['blok-align'] ? "table-" + tableAlignment(allVar['blok-align']) + " " : "") +
-    (allVar['format'] ? allVar['format'] + " " : "")
+    (allVar['format'] ? allVar['format'] + " " : ""
+    + "'")
     : "") +
-  "'>" + eol);
+  ">" + eol);
   
   if (allVar['caption']) {
     result.push("<caption>" + allVar['caption'] + "</caption>" + eol);
@@ -152,13 +152,13 @@ function wmutableparse_body(body) {
 
 function wmutableparse_header(header) {
 
-  let rows = header.split(/\r?\n/);
+  let rows = header.split(/\r?\n/); // todo: prevent error when not present
   let headerrow = rows[0].slice(1,-1).split(/ *\| */);
   let alignrow = rows[1].slice(1,-1).split(/ *\| */);
 
   let result = [];
 
-  if (headerrow.length === alignrow.length) {
+ // if (headerrow.length === alignrow.length) {
     for (i = 0; i < alignrow.length; i++) {
       alignrow[i] = tableAlignment(alignrow[i]);
     }
@@ -167,13 +167,13 @@ function wmutableparse_header(header) {
     for (i = 0; i < headerrow.length; i++) {
       result.push(
         "\t<th" +
-        (alignrow[i] ? " align='" + alignrow[i] + "'" : "") +
+        (alignrow[i] ? " align='cell-" + alignrow[i] + "'" : "") +
         ">" +
         headerrow[i] +
         "</th>" +
         eol
       );
-    }
+  //  }
     result.push("</tr>" + eol);
   }
 

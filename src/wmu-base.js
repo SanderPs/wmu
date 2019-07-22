@@ -13,6 +13,32 @@ exports.getAll = function() {
     return _wmu_project;
 };
 
+exports.parseDef = function (str) {
+
+  var parsedDef = str.replace(/^\|/,"").replace(/[\r\n\|]+$/,"").split(/[\r\n\|]+/);
+  var allVar = {
+    'block-type': parsedDef[0]
+  };
+  for (let x=1; x < parsedDef.length; x++) {
+      let nameValue = parsedDef[x].split("=");
+      if (nameValue.length === 1) {
+          allVar['blok-align'] = nameValue[0];
+      } else {
+          allVar[nameValue[0]] = nameValue[1];
+      }
+  }
+  return allVar;
+}
+
+
+
+
+
+
+
+
+
+
 
 //export 
 class User {

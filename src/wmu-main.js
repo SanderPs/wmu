@@ -197,13 +197,34 @@ function transformWmu_v1(str, config){
 
 function transformWmu_v3(str, config) {
 
-    str.replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
+    return (str + eol + eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
 }
 
 function transformWmuBlock(match, type, part1, part2) 
 {
-    console.log('', type, part1, part2);
+    let result = [];
 
+    var isBlock = type.charCodeAt(0) === 124;
+    let def;
+    if (isBlock) {
+        def = wmubase.parseDef(type);
+    } else {
+        def = {
+            'block-type': 'par'
+        }
+    }
+
+    switch(def['block-type']) {
+        case 'table':
+        case 't':
+            result.push( wmutable.wmutableparse(def, part1, part2) );
+            break;
+        case 'par':
+            result.push( "<p>" + type + "</p>" + eol + eol);
+            break;
+    }
+    
+    return result.join('');
 }
 
 function processConfigFile(filename, config) {
