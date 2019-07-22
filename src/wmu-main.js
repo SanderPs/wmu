@@ -155,6 +155,17 @@ function transformWmu_v1(str, config){
     return str;
 }
 
+function transformWmu_v3(str, config) {
+
+    str.replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
+}
+
+function transformWmuBlock(match, type, part1, part2) 
+{
+    console.log('', type, part1, part2);
+
+}
+
 function processConfigFile(filename, config) {
 
     const newConfig = Object.assign(defaultConfig, config, { fullHtml: true });
@@ -273,6 +284,7 @@ const fillTemplate = function(templ, vars){
 
 module.exports = {
     transformWmu,
+    transformWmu_v3,
     transformFragment,
     processConfigFile
 }
