@@ -73,8 +73,8 @@ const wmu_commands = [
     {
         description: 'table',
         type: 'block',
-        regex: wmutable.regex_Table,
-        to: wmutable.transformtable
+        regex: undefined,
+        to: undefined
     },
     {
         description: 'block-quote',
@@ -133,54 +133,6 @@ function transformFragment(str, config) {
     return transformWmu(str, newConfig);
 }
 
-function transformWmu(str, config) {
-    var funcList = {
-        'table': wmutable.transformtable
-    }
-    var regexGeneralBlock = /^\|(.+?)(?:\||$)([\s\S]*?)(?=^\|-)\|-\r?\n([\s\S]*)(?=^\|-)\|-\r?\n([\s\S]*)/m;
-
-    // inline markup:
-    wmu_commands.forEach((cmd) => {
-
-        if (cmd.type !== 'inline') {
-            return;
-        }
-
-        str=str.replace(cmd.regex, cmd.to);
-    });
-
-
-    // parse all blocks:
-    let result = [];
-    parse = str.split(/\r?\n[\r\n]+/);
-    for (var x=0 ; x<parse.length; x++) {
-        // console.log('\n' + parse[x] + '\n\n');
-        var isBlock = parse[x].charCodeAt(0) === 124;
-        //var blockType = isBlock ? parse[x].match(/^\|(.+?)(?=\||$)/m)[1] : "par";
-        var parsedBlock = parse[x].split(/\r?\n\|\|\r?\n/m);
-        var parsedDef = parsedBlock[0].replace(/^\|/,"").replace(/[\r\n\|]+$/,"").split(/[\r\n\|]+/);
-        var allVar = {};
-        for (let x=1; x < parsedDef.length; x++) {
-            let nameValue = parsedDef[x].split("=");
-            if (nameValue.length === 1) {
-                allVar['blok-align'] = nameValue[0];
-            } else {
-                allVar[nameValue[0]] = nameValue[1];
-            }
-        }
-
-        switch(parsedDef[0]) {
-            case 'table':
-            case 't':
-                result.push(wmutable.wmutableparse(allVar, parsedBlock[1], parsedBlock[2]));
-        }
-
-//        console.log('', isBlock, parsedBlock.length, parsedDef.join("="));
-    }
-    
-    return result.join('');
-}
-
 function transformWmu_v1(str, config){
 
     wmu_commands.forEach((cmd) => {
@@ -195,7 +147,7 @@ function transformWmu_v1(str, config){
     return str;
 }
 
-function transformWmu_v3(str, config) {
+function transformWmu(str, config) {
 
     return (str + eol + eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
 }
@@ -345,7 +297,6 @@ const fillTemplate = function(templ, vars){
 
 module.exports = {
     transformWmu,
-    transformWmu_v3,
     transformFragment,
     processConfigFile
 }

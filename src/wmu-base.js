@@ -1,4 +1,7 @@
 
+
+exports.eol = "\r\n";
+
 var _wmu_project;
 
 exports.init = function() {
@@ -22,7 +25,7 @@ exports.parseDef = function (str) {
   for (let x=1; x < parsedDef.length; x++) {
       let nameValue = parsedDef[x].split("=");
       if (nameValue.length === 1) {
-          allVar['blok-align'] = nameValue[0];
+          allVar['block-align'] = nameValue[0];
       } else {
           allVar[nameValue[0]] = nameValue[1];
       }
@@ -30,6 +33,18 @@ exports.parseDef = function (str) {
   return allVar;
 }
 
+exports.alignmentClass = function (str) {
+  if (/^-+:$/.test(str)) {
+    return "right";
+  } else if (/^-+:-+$/.test(str)) {
+    return "center";
+  } else if (/^:-+$/.test(str)) {
+    return "left";
+  } else if (/^:-+:$/.test(str)) {
+    return "fill"; // :-: fill = table: 100%, cell: justify
+  }
+  return null;
+}
 
 
 

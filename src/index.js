@@ -4,7 +4,7 @@ var fs = require('fs')
 const eol = "\r\n";
 
 
-let test = wmu.transformWmu_v3(`|caption
+let test = wmu.transformWmu(`|caption
 caption=Figuur 1
 
 Zomaar een paragraaf
@@ -14,7 +14,7 @@ language=js
 |=
 full Reference, and Help. You can also Save & Share with the Community, and view patterns you create or favorite in My Patterns.
 
-|table
+|table|:-:
 |class=specialcss
 |=
 |1|2|3|4|
