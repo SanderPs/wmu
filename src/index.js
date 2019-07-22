@@ -4,8 +4,15 @@ var fs = require('fs')
 const eol = "\r\n";
 
 
-let test = wmu.transformWmu(`|caption
-caption=Figuur 1
+let test = wmu.transformWmu(`|quote|-:
+caption=Figuur 1|
+format=abc
+|=
+Dit is een interessante quote
+|=
+Door iemand
+
+|h|1|Hoofdstuk 1
 
 Zomaar een paragraaf
 

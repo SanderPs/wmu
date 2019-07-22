@@ -1,7 +1,5 @@
 var fs = require('fs')
 
-const eol = "\r\n";
-
 var wmubase = require('./wmu-base');
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
@@ -24,12 +22,7 @@ const wmu_commands = [
         regex: /\\\|/g,
         to: '&#x7c;'
     },
-    {
-        description: 'paragraphs', // should be before lines starting with '|'
-        type: 'inline',
-        regex: new RegExp( '^(?!' + regex_LineEscape + ')(.+?)(?=$|\\r?\\n\\r?\\n)', 'gm'),
-        to: '<p>$&</p>'
-    },
+  
 
     // // inline:
     {
@@ -71,18 +64,6 @@ const wmu_commands = [
 
     // blocks:
     {
-        description: 'table',
-        type: 'block',
-        regex: undefined,
-        to: undefined
-    },
-    {
-        description: 'block-quote',
-        type: 'block',
-        regex: wmuquote.regex_Quote,
-        to: wmuquote.transformquote
-    },
-    {
         description: 'block-code',
         type: 'block',
         regex: wmucode.regex_Code,
@@ -95,12 +76,7 @@ const wmu_commands = [
     //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
     //     to: '<div class="bookpage_xxxtemp">$1</div>'
     // },
-    {
-        description: 'headers',
-        type: 'block',
-        regex: wmuheader.regex_Header,
-        to: wmuheader.transformheader
-    },
+
 
     // rest:
 
@@ -149,7 +125,18 @@ function transformWmu_v1(str, config){
 
 function transformWmu(str, config) {
 
-    return (str + eol + eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
+    // first step: inline
+    wmu_commands.forEach((cmd) => {
+
+        if (cmd.level === 'book' && !config.toBook) {
+            return;
+        }
+
+        str=str.replace(cmd.regex, cmd.to);
+    });
+
+    // second step: blocks
+    return (str + wmubase.eol + wmubase.eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
 }
 
 function transformWmuBlock(match, type, part1, part2) 
@@ -157,9 +144,15 @@ function transformWmuBlock(match, type, part1, part2)
     let result = [];
 
     var isBlock = type.charCodeAt(0) === 124;
+    var isSingleLine = /[\r\n]/.test(type);
+
     let def;
     if (isBlock) {
-        def = wmubase.parseDef(type);
+        if (isSingleLine) {
+            def = wmuheader.parseHeader(type); // todo: verder uitwerken
+        } else {
+            def = wmubase.parseDef(type);
+        }
     } else {
         def = {
             'block-type': 'par'
@@ -171,8 +164,16 @@ function transformWmuBlock(match, type, part1, part2)
         case 't':
             result.push( wmutable.wmutableparse(def, part1, part2) );
             break;
+        case 'header':
+        case 'h':
+            result.push( wmuheader.wmuheaderparse(def) );
+            break;
+        case 'quote':
+        case 'q':
+            result.push( wmuquote.wmuquoteparse(def, part1, part2) );
+            break;
         case 'par':
-            result.push( "<p>" + type + "</p>" + eol + eol);
+            result.push( "<p>" + type + "</p>" + wmubase.eol + wmubase.eol);
             break;
     }
     
@@ -220,10 +221,10 @@ function composeHtml(wmustring, wmuproject, config) {
     if (config.createToc && toc.hasContent()) {
 
         let tocHtml = 
-            '<h1>Table of contents</h1>' + eol +
-            '<div id=\'toc\'>' + eol +
+            '<h1>Table of contents</h1>' + wmubase.eol +
+            '<div id=\'toc\'>' + wmubase.eol +
                 toc.toHtml() +
-            '</div>' + eol;
+            '</div>' + wmubase.eol;
 
         if (config.fullHtml) {
             resultHtml = resultHtml.replace(/##toc##/, tocHtml); // insert into template
@@ -286,7 +287,7 @@ function concatFiles(files) {
 
     });
 
-    return contentArray.join(eol + eol); // important x2!
+    return contentArray.join(wmubase.eol + wmubase.eol); // important x2!
 }
 
 // todo: mode to util or something:

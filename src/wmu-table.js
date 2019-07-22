@@ -8,8 +8,8 @@ function wmutableparse(allVar, header, body) {
   (allVar['block-align'] || allVar['format']
     ? ' class="' +
     (allVar['block-align'] ? 'table-' + wmubase.alignmentClass(allVar['block-align']) + ' ' : '') +
-    (allVar['format'] ? allVar['format'] + ' ' : ''
-    + '"')
+    (allVar['format'] ? allVar['format'] + ' ' : '')
+    + '"'
     : '') +
   '>' + wmubase.eol);
   
@@ -31,7 +31,7 @@ function wmutableparse_body(body) {
   let result = [];
 
   if (body) {
-    body = body.replace(/\n$/, '').split('\n');
+    body = body.split(wmubase.eolIn);
 
     for (i = 0; i < body.length; i++) {
       result.push(
@@ -50,7 +50,7 @@ function wmutableparse_body(body) {
 
 function wmutableparse_header(header) {
 
-  let rows = header.split(/\r?\n/); // todo: prevent error when not present
+  let rows = header.split(wmubase.eolIn); // todo: prevent error when not present
   let headerrow = rows[0].slice(1,-1).split(/ *\| */);
   let alignrow = rows[1].slice(1,-1).split(/ *\| */);
 

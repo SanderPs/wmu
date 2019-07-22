@@ -1,77 +1,32 @@
+var wmubase = require('./wmu-base');
 
-const regex_Quote = new RegExp(
-  "^\\|quote\\|?(.*)\\r?\\n" +
-  "((?:\\|(?:source|format)\\|.*\\r?\\n)*)" +
-  " *\\|?( *[-:]+[-| :]*)" +
-  "(?:\\r?\\n?)" +
-  "((?:^\\|.*\\r?\\n)*)",
-  "gm"
-);
-
-const eol = "\r\n";
-
-function transformquote(match, algnblck, opt, algn, bdy, offset, string) {
-
-  // initialize
-
-  let item = {
-    aligntable: tableAlignment(algnblck),
-    options: opt.replace(/\r?\n$/, "").split(/[\r\n]+/),
-    alignrow: algn.replace(/^ *|\| *$/g, "").split(/ *\| */),
-    body: bdy.replace(/ *\| */g, "\t")
-  };
-
-  let tableSource = null;
-  let tableFormat = null;
-  for (i = 0; i < item.options.length; i++) {
-    let option = item.options[i].match(/\|(.+)\|(.+)/);
-    switch (option[1]) {
-      case "source":
-        tableSource = option[2];
-        break;
-      case "format":
-        tableFormat = option[2];
-        break;
-      }
-  }
-
-  // create output
+function wmuquoteparse(allVar, quote, source) {
 
   let result = [];
+
+  // todo: iets anders met classes
   result.push(
-    "<blockquote" +
-    (item.aligntable || tableFormat
-      ? ` class='${item.aligntable} ${tableFormat}'`
-      : "") +
-    ">" +
-    eol
-  );
+    '<blockquote' +
+    (allVar['block-align'] || allVar['format']
+    ? ' class="' +
+    (allVar['block-align'] ? 'table-' + wmubase.alignmentClass(allVar['block-align']) + ' ' : '') +
+    (allVar['format'] ? allVar['format'] + ' ' : '')
+    + '"'
+    : '') +
+  '>' + wmubase.eol);
 
-  result.push("<p>" + eol + item.body + "</p>" + eol);
 
-  if (tableSource) {
-    result.push("<footer>" + tableSource + "</footer>" + eol);
+  result.push('\t<p>' + wmubase.eol + quote + wmubase.eol + '\t</p>' + wmubase.eol);
+
+  if (source) {
+    result.push('\t<footer>' + source + '</footer>' + wmubase.eol);
   }
 
-  result.push("</blockquote>" + eol);
+  result.push('</blockquote>' + wmubase.eol + wmubase.eol);
 
-  return result.join("");
-}
-
-function tableAlignment(str) {
-  if (/^-+:$/.test(str)) {
-    return "right"; // -:  right
-  } else if (/^-+:-+$/.test(str)) {
-    return "center"; // -:- center
-  } else if (/^:-+$/.test(str)) {
-    return "left"; // :-  left
-  } else if (/^:-+:$/.test(str)) {
-    return "fill"; // :-: fill = table: 100%, cell: justify
-  }
-  return null;
+  return result.join('');
 }
 
 module.exports = {
-  transformquote,
-  regex_Quote
+  wmuquoteparse
 };

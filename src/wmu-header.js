@@ -1,50 +1,22 @@
-
-const regex_LineEscape = '\\|';
+var wmubase = require('./wmu-base');
 var wmutoc = require('./wmu-toc');
 
+function wmuheaderparse(allVar) {
 
-const regex_Header = new RegExp('^' + regex_LineEscape + 'h\\|(\\d{1,6})\\|\'(.*?)\'\\r?\\n','gm');
-  
-  const eol = "\r\n";
-  
-   transformheader = (match, level, title, offset, string) => {
+  let id = wmubase.newElementId(allVar['title'] + allVar['number']);
 
-    level = parseInt(level, 10);
+  // store data
 
+  let toc = wmutoc.tocTree;
+  toc.addSequential(allVar['title'], allVar['number'], id);
 
-    // initialize
- 
-    let id = "id_" + hashCode(title + level);
-  
+  // create output
 
-    // store data
+  return '<h' + allVar['number'] + ' id="' + id + '">' +
+          allVar['title'] + 
+          '</h' + allVar['number'] + '>' + wmubase.eol + wmubase.eol;
+}
 
-    let toc = wmutoc.tocTree;
-    toc.addSequential(title, level, id);
-
-
-    // create output
-
-    return "<h" + level + " id='" + id + "'>" +
-            title + 
-            "</h" + level + ">" + eol;
-  }
-  
-// based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-function hashCode(str,max){
-  var hash = 0;
-  if (!str.length) return hash;
-  for (i = 0; i < str.length; i++) {
-    char = str.charCodeAt(i);
-    hash = ((hash<<5)-hash)+char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return Math.abs(max?hash%max:hash);
+module.exports = {
+  wmuheaderparse
 };
-
-
-  module.exports = {
-    transformheader,
-    regex_Header
-  };
-  

@@ -1,6 +1,7 @@
 
 
 exports.eol = "\r\n";
+exports.eolIn = /\r?\n/;
 
 var _wmu_project;
 
@@ -25,7 +26,15 @@ exports.parseDef = function (str) {
   for (let x=1; x < parsedDef.length; x++) {
       let nameValue = parsedDef[x].split("=");
       if (nameValue.length === 1) {
-          allVar['block-align'] = nameValue[0];
+        if (/^\d+$/.test(nameValue[0])) {
+          allVar['number'] = parseInt(nameValue[0], 10);
+        } else {
+          if (/[:-]+/.test(nameValue[0])) {
+            allVar['block-align'] = nameValue[0];
+          } else {
+            allVar['title'] = nameValue[0]; // todo: dit is niet lekker
+          }
+        }
       } else {
           allVar[nameValue[0]] = nameValue[1];
       }
@@ -46,6 +55,21 @@ exports.alignmentClass = function (str) {
   return null;
 }
 
+// based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+exports.newElementId = function(str) {
+  return 'id_' + hashCode(str); // todo: keep list and check
+}
+
+function hashCode(str,max){
+  var hash = 0;
+  if (!str.length) return hash;
+  for (i = 0; i < str.length; i++) {
+    char = str.charCodeAt(i);
+    hash = ((hash<<5)-hash)+char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(max?hash%max:hash);
+};
 
 
 
