@@ -3,18 +3,18 @@ var wmutoc = require('./wmu-toc');
 
 function wmuheaderparse(allVar) {
 
-  let id = wmubase.newElementId(allVar['title'] + allVar['number']);
+  let id = wmubase.newElementId(allVar['title'] + allVar['level']);
 
   // store data
 
   let toc = wmutoc.tocTree;
-  toc.addSequential(allVar['title'], allVar['number'], id);
+  toc.addSequential(allVar['title'], allVar['level'], id);
 
   // create output
 
-  return '<h' + allVar['number'] + ' id="' + id + '">' +
+  return '<h' + allVar['level'] + ' id="' + id + '">' +
           allVar['title'] + 
-          '</h' + allVar['number'] + '>' + wmubase.eol + wmubase.eol;
+          '</h' + allVar['level'] + '>' + wmubase.eol + wmubase.eol;
 }
 
 module.exports = {

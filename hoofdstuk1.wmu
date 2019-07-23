@@ -1,18 +1,18 @@
-|h|1|Hoofstuk 1
+|h1|=Hoofstuk 1
 
 Dit is de //eerste// paragraaf met `code` in de tekst
 
 |quote
-||
+|=
 |Try not to become a man
 |of success, but rather try to
 |became a man of value
-||
+|=
 |Albert Einstein
 
 |code
 |language=wmu
-||
+|=
 Voorbeeld van een escaped pipe \|
 \|\|
 Hierboven een \|\|

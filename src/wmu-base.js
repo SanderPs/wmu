@@ -20,9 +20,17 @@ exports.getAll = function() {
 exports.parseDef = function (str) {
 
   var parsedDef = str.replace(/^\|/,"").replace(/[\r\n\|]+$/,"").split(/[\r\n\|]+/);
+  let isHeader = /(h|header)\d/.test(parsedDef[0]);
+  let blockType = isHeader ? 'h' : parsedDef[0]
+
   var allVar = {
-    'block-type': parsedDef[0]
+    'block-type': blockType
   };
+
+  if (isHeader) {
+    allVar['level'] = parsedDef[0].match(/\d/)[0];
+  }
+
   for (let x=1; x < parsedDef.length; x++) {
       let nameValue = parsedDef[x].split("=");
       if (nameValue.length === 1) {
@@ -36,7 +44,11 @@ exports.parseDef = function (str) {
           }
         }
       } else {
+        if (nameValue[0].length===0) {
+          allVar['title'] = nameValue[1];
+        } else {
           allVar[nameValue[0]] = nameValue[1];
+        }
       }
   }
   return allVar;

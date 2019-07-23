@@ -21,7 +21,7 @@ function wmutableparse(allVar, header, body) {
 
   result.push( wmutableparse_body(body) );
 
-  result.push( '</table>' + wmubase.eol );
+  result.push( '</table>' + wmubase.eol + wmubase.eol );
 
   return result.join('');
 }
@@ -37,7 +37,7 @@ function wmutableparse_body(body) {
       result.push(
         body[i]
           .replace(
-            /^\|(.+)\|$/gm,
+            /(.+)\|$/gm,
             '<tr>' + wmubase.eol + '\t<td>$1</td>' + wmubase.eol + '</tr>' + wmubase.eol
           )
           .replace(/\|/g, '</td>' + wmubase.eol + '\t<td>')
@@ -51,8 +51,8 @@ function wmutableparse_body(body) {
 function wmutableparse_header(header) {
 
   let rows = header.split(wmubase.eolIn); // todo: prevent error when not present
-  let headerrow = rows[0].slice(1,-1).split(/ *\| */);
-  let alignrow = rows[1].slice(1,-1).split(/ *\| */);
+  let headerrow = rows[0].slice(0,-1).split(/ *\| */);
+  let alignrow = rows[1].slice(0,-1).split(/ *\| */);
 
   let result = [];
 
@@ -70,9 +70,8 @@ function wmutableparse_header(header) {
       '</th>' +
       wmubase.eol
     );
-
-    result.push('</tr>' + wmubase.eol);
   }
+  result.push('</tr>' + wmubase.eol);
 
   return result.join('');
 }

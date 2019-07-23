@@ -1,17 +1,17 @@
-|h|1|Hoofstuk 2
+|h1|=Hoofstuk 2
 
 |table|:-:
 |format=dash
 |caption=Fig 1.
-||
+|=
 |left|right|spread|center|none|
 |:---|---:|:---:|-:-|---|
-||
+|=
 |This is 1|and 2|but also 3|not foget 4|last but not least 5|
 
 |code
 |language=js
-||
+|=
 | // use pipe character to keep one block:
 |
 |for (var x=0; x++ x<10) {
@@ -24,10 +24,20 @@
 |    // ampersand should be ....
 |}
 
+|code
+|language=wmu
+|=
+let myNumber=0;
+|
+myNumber++;
+if (x) {
+    // tab
+}
+
 When using ampersand: &
 
-|h|2|'2.1 Inleiding'
+|h2|=2.1 Inleiding
 
 bla
 
-|h|1|'3.0 En verder'
+|h1|=3.0 En verder

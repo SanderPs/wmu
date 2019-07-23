@@ -7,8 +7,6 @@ var wmucode = require('./wmu-code');
 var wmuheader = require('./wmu-header');
 var wmutoc = require('./wmu-toc');
 
-const regex_LineEscape = '\\|';
-
 const wmu_commands = [
     // { onnodig?
     //     description: 'ampersand',
@@ -23,7 +21,6 @@ const wmu_commands = [
         to: '&#x7c;'
     },
   
-
     // // inline:
     {
         description: 'bold', 
@@ -63,12 +60,7 @@ const wmu_commands = [
     },
 
     // blocks:
-    {
-        description: 'block-code',
-        type: 'block',
-        regex: wmucode.regex_Code,
-        to: wmucode.transformcode
-    },
+
     // {
     //     description: 'chapters',
     //     type: 'block',
@@ -78,22 +70,6 @@ const wmu_commands = [
     // },
 
 
-    // rest:
-
-    // onnodig?! want enkele \r?\n -> <br>?!
-    // {
-    //     description: 'empty-lines',
-    // type: '',
-    //     regex: new RegExp('(^' + regex_LineEscape + '\\.\\r?\\n)','gm'),
-    //     to: '<br>\r\n'
-    // }
-    
-    // {
-    //     description: 'single-newlines',
-    // type: '',
-    //     regex: /\r?\n(?!\r?\n)/g,
-    //     to: '<br>'
-    // }
 ];
 
 const defaultConfig = {
@@ -109,20 +85,6 @@ function transformFragment(str, config) {
     return transformWmu(str, newConfig);
 }
 
-function transformWmu_v1(str, config){
-
-    wmu_commands.forEach((cmd) => {
-
-        if (cmd.level === 'book' && !config.toBook) {
-            return;
-        }
-
-        str=str.replace(cmd.regex, cmd.to);
-    });
-
-    return str;
-}
-
 function transformWmu(str, config) {
 
     // first step: inline
@@ -136,23 +98,27 @@ function transformWmu(str, config) {
     });
 
     // second step: blocks
-    return (str + wmubase.eol + wmubase.eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, transformWmuBlock);
+    return (str + wmubase.eol + wmubase.eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
+        transformWmuBlock);
 }
 
 function transformWmuBlock(match, type, part1, part2) 
 {
     let result = [];
 
+    // remove all pipe characters at the beginning of each line
+    if (part1) {
+    part1 = part1.replace(/^\|/gm, '');
+    }
+    if (part2) {
+    part2 = part2.replace(/^\|/gm, '');
+    }
+
     var isBlock = type.charCodeAt(0) === 124;
-    var isSingleLine = /[\r\n]/.test(type);
 
     let def;
     if (isBlock) {
-        if (isSingleLine) {
-            def = wmuheader.parseHeader(type); // todo: verder uitwerken
-        } else {
-            def = wmubase.parseDef(type);
-        }
+        def = wmubase.parseDef(type);
     } else {
         def = {
             'block-type': 'par'
@@ -171,6 +137,9 @@ function transformWmuBlock(match, type, part1, part2)
         case 'quote':
         case 'q':
             result.push( wmuquote.wmuquoteparse(def, part1, part2) );
+            break;
+        case 'code':
+            result.push( wmucode.wmucodeparse(def, part1) );
             break;
         case 'par':
             result.push( "<p>" + type + "</p>" + wmubase.eol + wmubase.eol);
@@ -221,7 +190,7 @@ function composeHtml(wmustring, wmuproject, config) {
     if (config.createToc && toc.hasContent()) {
 
         let tocHtml = 
-            '<h1>Table of contents</h1>' + wmubase.eol +
+            '<h1>Table of contents</h1>' + wmubase.eol + wmubase.eol +
             '<div id=\'toc\'>' + wmubase.eol +
                 toc.toHtml() +
             '</div>' + wmubase.eol;
@@ -253,9 +222,9 @@ function getHTMLstr() {
 
     <body class="multipage">
 
-    <div class="bookpage">
+<div class="bookpage">
     ##toc##
-    </div>
+</div>
     
 ##2##
 
@@ -287,7 +256,7 @@ function concatFiles(files) {
 
     });
 
-    return contentArray.join(wmubase.eol + wmubase.eol); // important x2!
+    return contentArray.join(wmubase.eol + wmubase.eol) + wmubase.eol + wmubase.eol;
 }
 
 // todo: mode to util or something:
