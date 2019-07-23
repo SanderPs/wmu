@@ -27,7 +27,23 @@ full Reference, and Help. You can also Save & Share with the Community, and view
 |1|2|3|4|
 |:-|
 |=
-|a|b|c|d|e|`, {});
+|a|b|c|d|e|
+
+- lijst inline
+
+paragraaf:
+- inline lijst in paragraaf
+- 2
+En weer verder
+
+|list|-:-
+|=
+- nummer 1
+- nummer 2
+- nummer 3
+
+The end
+`, {});
 
 console.log(test);
 

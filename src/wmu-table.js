@@ -7,7 +7,7 @@ function wmutableparse(allVar, header, body) {
   result.push('<table' +
   (allVar['block-align'] || allVar['format']
     ? ' class="' +
-    (allVar['block-align'] ? 'table-' + wmubase.alignmentClass(allVar['block-align']) + ' ' : '') +
+    (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) + ' ' : '') +
     (allVar['format'] ? allVar['format'] + ' ' : '')
     + '"'
     : '') +
@@ -57,14 +57,14 @@ function wmutableparse_header(header) {
   let result = [];
 
   for (i = 0; i < alignrow.length; i++) {
-    alignrow[i] = wmubase.alignmentClass(alignrow[i]);
+    alignrow[i] = wmubase.alignmentClass(alignrow[i], false);
   }
 
   result.push('<tr>' + wmubase.eol);
   for (i = 0; i < headerrow.length; i++) {
     result.push(
       '\t<th' +
-      (alignrow[i] ? ' class="cell-' + alignrow[i] + '"' : '') +
+      (alignrow[i] ? ' class="' + alignrow[i] + '"' : '') +
       '>' +
       headerrow[i] +
       '</th>' +

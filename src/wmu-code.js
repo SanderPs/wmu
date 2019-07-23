@@ -8,7 +8,7 @@ function wmucodeparse(allVar, body) {
   result.push(
     '<pre' +
     (allVar['block-align'] || allVar['format'] || tableLanguageStr
-      ? ` class="${(allVar['block-align'] ? allVar['block-align'] : '')} ` +
+      ? ` class="${(allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : '')} ` +
         `${(allVar['format'] ? allVar['format'] : '')} ${tableLanguageStr} "`
       : '') +
     '><code>' + wmubase.eol);

@@ -54,15 +54,16 @@ exports.parseDef = function (str) {
   return allVar;
 }
 
-exports.alignmentClass = function (str) {
+exports.alignmentClass = function (str, isBlock) {
+  let prefix = isBlock ? 'block-' : 'text-';
   if (/^-+:$/.test(str)) {
-    return "right";
+    return prefix + 'right';
   } else if (/^-+:-+$/.test(str)) {
-    return "center";
+    return prefix + 'center';
   } else if (/^:-+$/.test(str)) {
-    return "left";
+    return prefix + 'left';
   } else if (/^:-+:$/.test(str)) {
-    return "fill"; // :-: fill = table: 100%, cell: justify
+    return prefix + 'fill'; // :-: fill = table: 100%, cell: justify
   }
   return null;
 }

@@ -4,6 +4,8 @@ var wmubase = require('./wmu-base');
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
 var wmucode = require('./wmu-code');
+var wmupar = require('./wmu-par');
+var wmulist = require('./wmu-list');
 var wmuheader = require('./wmu-header');
 var wmutoc = require('./wmu-toc');
 
@@ -14,6 +16,11 @@ const wmu_commands = [
     //     regex: /(?: *)&(?: *)/g,
     //     to: '&#x26;'
     // },
+
+
+    // todo: inline en block list?!
+    // todo: markdown compatability?
+
     {
         description: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
         type: 'inline',
@@ -120,8 +127,15 @@ function transformWmuBlock(match, type, part1, part2)
     if (isBlock) {
         def = wmubase.parseDef(type);
     } else {
+        if (/^- */.test(type)) {
+            def = {
+                'block-type': 'list'
+            };
+            part1 = type;
+        } else {
         def = {
             'block-type': 'par'
+            };
         }
     }
 
@@ -141,8 +155,11 @@ function transformWmuBlock(match, type, part1, part2)
         case 'code':
             result.push( wmucode.wmucodeparse(def, part1) );
             break;
+        case 'list':
+            result.push( wmulist.wmulistparse(def, part1) );
+            break;
         case 'par':
-            result.push( "<p>" + type + "</p>" + wmubase.eol + wmubase.eol);
+            result.push( wmupar.wmuparparse(type) );
             break;
     }
     

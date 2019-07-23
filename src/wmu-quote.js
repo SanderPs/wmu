@@ -9,7 +9,7 @@ function wmuquoteparse(allVar, quote, source) {
     '<blockquote' +
     (allVar['block-align'] || allVar['format']
     ? ' class="' +
-    (allVar['block-align'] ? 'table-' + wmubase.alignmentClass(allVar['block-align']) + ' ' : '') +
+    (allVar['block-align'] ? 'table-' + wmubase.alignmentClass(allVar['block-align'], true) + ' ' : '') +
     (allVar['format'] ? allVar['format'] + ' ' : '')
     + '"'
     : '') +
