@@ -127,16 +127,9 @@ function transformWmuBlock(match, type, part1, part2)
     if (isBlock) {
         def = wmubase.parseDef(type);
     } else {
-        if (/^- */.test(type)) {
-            def = {
-                'block-type': 'list'
-            };
-            part1 = type;
-        } else {
         def = {
             'block-type': 'par'
             };
-        }
     }
 
     switch(def['block-type']) {

@@ -1,14 +1,12 @@
 var wmubase = require('./wmu-base');
+var wmulist = require('./wmu-list');
 
 function wmuparparse(body) {
-    body = body.replace(/((?:^- *)[\s\S]+(?:^- *[\s\S]+?\r?\n))/gm, listinpar)
-    return '<p>' + wmubase.eol + body + wmubase.eol + '</p>' + wmubase.eol + wmubase.eol;
-}
 
-function listinpar(x) {
-    return '<ul>' + wmubase.eol + 
-        x.replace(/^(.+?)$/gm, '<li>$1</li>' +
-        wmubase.eol + '</ul>');
+    // handle all lists inside a paragraph:
+    let bodyLists = body.replace( /((^- *[\s\S]+?\r?\n?)+)(?:$)/gm, wmulist.unorderedList);
+
+    return '<p>' + wmubase.eol + bodyLists + wmubase.eol + '</p>' + wmubase.eol + wmubase.eol;
 }
 
 module.exports = {

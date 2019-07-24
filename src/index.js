@@ -73,9 +73,9 @@ Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz
 |much more so than pining for
 |someone brings pain.`;
 
-   let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
-   fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
+   // let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
+   // fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
 
 
-   let html_2 = wmu.processConfigFile("./config.wmu", {});
-   fs.writeFileSync('./out/book.html',html_2,'utf8');
+   // let html_2 = wmu.processConfigFile("./config.wmu", {});
+   // fs.writeFileSync('./out/book.html',html_2,'utf8');
