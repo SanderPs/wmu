@@ -1,26 +1,25 @@
 var wmubase = require('./wmu-base');
   
-function wmucodeparse(allVar, body) {
+function wmublockparse(allVar, body) {
 
   let result = [];
 
   result.push(
-    '<pre' +
+    '<div' +
     wmubase.classAttr(
       (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : null),
-      allVar['format'],
-      allVar['language'] ? 'devlang-' + allVar['language'] : null
+      allVar['format']
     ) +
-    '><code>' + wmubase.eol);
+    '>' + wmubase.eol);
   
   result.push(body);
 
-  result.push(wmubase.eol + '</code></pre>' + wmubase.eol + wmubase.eol);
+  result.push(wmubase.eol + '</div>' + wmubase.eol + wmubase.eol);
 
   return result.join('');
 }
   
 module.exports = {
-  wmucodeparse
+  wmublockparse
 };
   

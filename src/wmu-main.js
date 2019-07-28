@@ -4,7 +4,9 @@ var wmubase = require('./wmu-base');
 var wmutable = require('./wmu-table');
 var wmuquote = require('./wmu-quote');
 var wmucode = require('./wmu-code');
+var wmuimg = require('./wmu-img');
 var wmupar = require('./wmu-par');
+var wmublock = require('./wmu-block');
 var wmulist = require('./wmu-list');
 var wmuheader = require('./wmu-header');
 var wmutoc = require('./wmu-toc');
@@ -20,6 +22,8 @@ const wmu_commands = [
 
     // todo: inline en block list?!
     // todo: markdown compatability?
+    // adding |toc -> set createtoc to true
+    // output list of all used css classes
 
     {
         description: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
@@ -74,7 +78,18 @@ const wmu_commands = [
     //     level: 'book',
     //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
     //     to: '<div class="bookpage_xxxtemp">$1</div>'
-    // },
+// },
+
+
+];
+
+const markdownCommands = [
+    {
+        description: 'simple-header',
+        regex: /^([/s/S]+?)\r?\n(-{3,}.*?\r?\n)/gm,
+        def_index: 0,
+        body: undefined
+    },
 
 
 ];
@@ -146,9 +161,19 @@ function transformWmuBlock(match, type, part1, part2)
             result.push( wmuquote.wmuquoteparse(def, part1, part2) );
             break;
         case 'code':
+        case 'c':
             result.push( wmucode.wmucodeparse(def, part1) );
             break;
+        case 'block':
+        case 'b':
+            result.push( wmublock.wmublockparse(def, part1) );
+            break;
+        case 'img':
+        case 'i':
+            result.push( wmuimg.wmuimgparse(def) );
+            break;
         case 'list':
+        case 'l':
             result.push( wmulist.wmulistparse(def, part1) );
             break;
         case 'par':
@@ -278,5 +303,6 @@ const fillTemplate = function(templ, vars){
 module.exports = {
     transformWmu,
     transformFragment,
+    composeHtml,
     processConfigFile
 }

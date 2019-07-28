@@ -7,6 +7,10 @@ ul#toc {
     list-style-type: none;
   }
 
+div {
+    display: table; /* prevent table width 100% */
+}
+
 table {
     border-collapse: collapse;
     border-width: 1px;

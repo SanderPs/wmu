@@ -45,7 +45,25 @@ exports.parseDef = function (str) {
         }
       } else {
         if (nameValue[0].length===0) {
-          allVar['title'] = nameValue[1];
+          // just a '=' without name -> default
+          switch (blockType) {
+            case 'header':
+            case 'h':
+              allVar['title'] = nameValue[1];
+              break;
+            case 'code':
+            case 'c':
+              allVar['language'] = nameValue[1];
+              break;
+            case 'block':
+            case 'b':
+              allVar['format'] = nameValue[1];
+              break;
+            case 'img':
+            case 'i':
+              allVar['src'] = nameValue[1];
+              break;
+          }
         } else {
           allVar[nameValue[0]] = nameValue[1];
         }
@@ -66,6 +84,31 @@ exports.alignmentClass = function (str, isBlock) {
     return prefix + 'fill'; // :-: fill = table: 100%, cell: justify
   }
   return null;
+}
+
+exports.classAttr = function() {
+  let result = this.classList.apply(null, arguments);
+  return (result.length ? ' class="' + result + '"' : '');
+}
+
+exports.classList = function () {
+  let result = [];
+  for (var i = 0; i < arguments.length; i++) {
+    if (arguments[i] && arguments[i].length)
+      result.push(arguments[i]);
+  }
+  return result.join(' ');
+}
+
+exports.valignmentClass = function (str) {
+  if (/_/.test(str)) {
+    return 'v-bottom';
+  } else if (/-/.test(str)) {
+    return 'v-middle';
+  } else if (/T/.test(str)) {
+    return 'v-top';
+  }
+  return '';
 }
 
 // based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/

@@ -5,23 +5,21 @@ function wmutableparse(allVar, header, body) {
   let result = [];
 
   result.push('<table' +
-  (allVar['block-align'] || allVar['format']
-    ? ' class="' +
-    (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) + ' ' : '') +
-    (allVar['format'] ? allVar['format'] + ' ' : '')
-    + '"'
-    : '') +
+  wmubase.classAttr(
+    (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : ''),
+    allVar['format']
+      ) +
   '>' + wmubase.eol);
-  
+
   if (allVar['caption']) {
     result.push('<caption>' + allVar['caption'] + '</caption>' + wmubase.eol);
   }
 
-  result.push( wmutableparse_header(header) );
+  result.push(wmutableparse_header(header));
 
-  result.push( wmutableparse_body(body) );
+  result.push(wmutableparse_body(body));
 
-  result.push( '</table>' + wmubase.eol + wmubase.eol );
+  result.push('</table>' + wmubase.eol + wmubase.eol);
 
   return result.join('');
 }
@@ -51,26 +49,48 @@ function wmutableparse_body(body) {
 function wmutableparse_header(header) {
 
   let rows = header.split(wmubase.eolIn); // todo: prevent error when not present
-  let headerrow = rows[0].slice(0,-1).split(/ *\| */);
-  let alignrow = rows[1].slice(0,-1).split(/ *\| */);
+  let headerrow = rows[0].slice(0, -1).split(/ *\| */);
+  let alignrow = [], valignrow = [];
+
+  if (rows.length > 1) {
+    for (let x = 1; x < rows.length; x++) {
+      if (/^v=/.test(rows[x])) { 
+        // vertical align
+        valignrow = rows[x].slice(2, -1).split(/ *\| */);
+      } else {
+        // horizontal align
+        alignrow = rows[x].slice(0, -1).split(/ *\| */);
+      }
+    }
+    
+    if (alignrow.length) {
+      for (i = 0; i < alignrow.length; i++) {
+        alignrow[i] = wmubase.alignmentClass(alignrow[i], false);
+      }
+    }
+
+    if (valignrow.length) {
+      for (i = 0; i < valignrow.length; i++) {
+        valignrow[i] = wmubase.valignmentClass(valignrow[i]);
+      }
+    }
+  }
 
   let result = [];
 
-  for (i = 0; i < alignrow.length; i++) {
-    alignrow[i] = wmubase.alignmentClass(alignrow[i], false);
-  }
-
   result.push('<tr>' + wmubase.eol);
+
   for (i = 0; i < headerrow.length; i++) {
     result.push(
-      '\t<th' +
-      (alignrow[i] ? ' class="' + alignrow[i] + '"' : '') +
+      '\t<th ' +
+      wmubase.classAttr(alignrow[i], valignrow[i]) +
       '>' +
       headerrow[i] +
       '</th>' +
       wmubase.eol
     );
   }
+
   result.push('</tr>' + wmubase.eol);
 
   return result.join('');

@@ -2,6 +2,9 @@
 
 Dit is de //eerste// paragraaf met `code` in de tekst
 
+|c |=csharp
+var x = Repo<bla>().All();
+
 |quote
 |=
 |Try not to become a man

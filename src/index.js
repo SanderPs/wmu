@@ -4,7 +4,7 @@ var fs = require('fs')
 const eol = "\r\n";
 
 
-let test = wmu.transformWmu(`|quote|-:
+let testAll = `|quote|-:
 caption=Figuur 1|
 format=abc
 |=
@@ -19,7 +19,13 @@ Zomaar een paragraaf
 |code
 language=js
 |=
-full Reference, and Help. You can also Save & Share with the Community, and view patterns you create or favorite in My Patterns.
+function x() {
+   if (x) {
+      // bla
+   } else {
+      // huh?
+   }
+}
 
 |table|:-:
 |class=specialcss
@@ -42,10 +48,25 @@ En weer verder
 - nummer 2
 - nummer 3
 
-The end
-`, {});
+|c|=csharp
+|=
+var x=Repo<Person>().Where(i => i.Deleted && i.PersonStatus==65)
+      .ToList();
 
-console.log(test);
+|img|=./my-image.jpeg
+|title=Image that explains it all
+
+|block|=thumbsup-class
+|=
+Heel goed gedaan!
+
+The end
+`;
+
+let html_0 = wmu.composeHtml(testAll, null, { createToc: true, fullHtml: true });
+fs.writeFileSync('./out/test-all.html',html_0,'utf8');
+
+console.log(html_0);
 
 
 
@@ -64,6 +85,7 @@ Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz
 |=
 |a|b|c|d|e|
 |:---|---:|:---:|-:-|---|
+|v=T||-||_|
 |=
 |1|2|3|4|5|
 
@@ -73,9 +95,9 @@ Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz
 |much more so than pining for
 |someone brings pain.`;
 
-   // let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
-   // fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
+   let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
+   fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
 
 
-   // let html_2 = wmu.processConfigFile("./config.wmu", {});
-   // fs.writeFileSync('./out/book.html',html_2,'utf8');
+   let html_2 = wmu.processConfigFile("./config.wmu", {});
+   fs.writeFileSync('./out/book.html',html_2,'utf8');
