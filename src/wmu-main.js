@@ -9,6 +9,7 @@ var wmupar = require('./wmu-par');
 var wmublock = require('./wmu-block');
 var wmulist = require('./wmu-list');
 var wmuheader = require('./wmu-header');
+var blockConfig = require('./block-config');
 var wmutoc = require('./wmu-toc');
 
 const wmu_commands = [
@@ -24,6 +25,7 @@ const wmu_commands = [
     // todo: markdown compatability?
     // adding |toc -> set createtoc to true
     // output list of all used css classes
+
 
     {
         description: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
@@ -95,19 +97,11 @@ const markdownCommands = [
 ];
 
 const defaultConfig = {
-    fullHtml: undefined, // depends on which function is called
     createToc: false,
     toBook: false,
 };
 
-function transformFragment(str, config) {
-
-    const newConfig = Object.assign(defaultConfig, config, { fullHtml: false });
-
-    return transformWmu(str, newConfig);
-}
-
-function transformWmu(str, config) {
+function parseWmu(str, config) {
 
     // first step: inline
     wmu_commands.forEach((cmd) => {
@@ -120,27 +114,26 @@ function transformWmu(str, config) {
     });
 
     // second step: blocks
-    return (str + wmubase.eol + wmubase.eol).replace(/(?:([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
-        transformWmuBlock);
+    return (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
+        parseWmuBlock.bind(this, config));
 }
 
-function transformWmuBlock(match, type, part1, part2) 
+function parseWmuBlock(config, match, block1, block2, block3) 
 {
     let result = [];
 
     // remove all pipe characters at the beginning of each line
-    if (part1) {
-    part1 = part1.replace(/^\|/gm, '');
+    if (block2) {
+        block2 = block2.replace(/^\|/gm, '');
     }
-    if (part2) {
-    part2 = part2.replace(/^\|/gm, '');
+    if (block3) {
+        block3 = block3.replace(/^\|/gm, '');
     }
-
-    var isBlock = type.charCodeAt(0) === 124;
 
     let def;
+    let isBlock = block1.charCodeAt(0) === 124;
     if (isBlock) {
-        def = wmubase.parseDef(type);
+        def = wmubase.parseDef(block1);
     } else {
         def = {
             'block-type': 'par'
@@ -150,7 +143,7 @@ function transformWmuBlock(match, type, part1, part2)
     switch(def['block-type']) {
         case 'table':
         case 't':
-            result.push( wmutable.wmutableparse(def, part1, part2) );
+            result.push( wmutable.wmutableparse(def, block2, block3) );
             break;
         case 'header':
         case 'h':
@@ -158,15 +151,15 @@ function transformWmuBlock(match, type, part1, part2)
             break;
         case 'quote':
         case 'q':
-            result.push( wmuquote.wmuquoteparse(def, part1, part2) );
+            result.push( wmuquote.wmuquoteparse(def, block2, block3) );
             break;
         case 'code':
         case 'c':
-            result.push( wmucode.wmucodeparse(def, part1) );
+            result.push( wmucode.wmucodeparse(def, block2) );
             break;
         case 'block':
         case 'b':
-            result.push( wmublock.wmublockparse(def, part1) );
+            result.push( wmublock.wmublockparse(def, block2) );
             break;
         case 'img':
         case 'i':
@@ -174,70 +167,94 @@ function transformWmuBlock(match, type, part1, part2)
             break;
         case 'list':
         case 'l':
-            result.push( wmulist.wmulistparse(def, part1) );
+            result.push( wmulist.wmulistparse(def, block2) );
             break;
         case 'par':
-            result.push( wmupar.wmuparparse(type) );
+        case 'p':
+            result.push( wmupar.wmuparparse(block1) );
+            break;
+        case 'config':
+            blockConfig.wmuconfigblock(def, config);
+            result.push( '' );
             break;
     }
     
     return result.join('');
 }
 
-function processConfigFile(filename, config) {
+function transformFragment(str, config) {
 
-    const newConfig = Object.assign(defaultConfig, config, { fullHtml: true });
-
-    let _wmuproject = wmubase.init();
- 
-    let data = fs.readFileSync(filename, 'utf8');
-        let wmusettings = data.split(/\r\n/gm);
-        wmusettings.forEach(element => {
-            setting = element.split(/\|/);
-            _wmuproject[setting[0]] = setting[1];
-        });
-
-    if (_wmuproject.files) {
-        let bodyWmu = concatFiles(_wmuproject.files);
-        let bodyHtml = composeHtml(bodyWmu, _wmuproject, newConfig);
-        return bodyHtml;
-    } else {
-        console.log('No files found in config file')
-    }
-}
-
-function composeHtml(wmustring, wmuproject, config) {
-
+    const newConfig = Object.assign(defaultConfig, config, {});
+    wmutoc.newTocTree();
     let resultHtml = "";
 
-    resultHtml = transformWmu(wmustring, config);
+    resultHtml = parseWmu(str, newConfig);
 
-    if (config.fullHtml) {
-        let vars = { 
-            cssx: "../test.css",
-            transformed: resultHtml
-        };
-        let templ = getHTMLstr();
-        resultHtml = fillTemplate(templ, vars);
-    }
-
-    let toc = wmutoc.tocTree;
-    if (config.createToc && toc.hasContent()) {
-
-        let tocHtml = 
-            '<h1>Table of contents</h1>' + wmubase.eol + wmubase.eol +
-            '<div id=\'toc\'>' + wmubase.eol +
-                toc.toHtml() +
-            '</div>' + wmubase.eol;
-
-        if (config.fullHtml) {
-            resultHtml = resultHtml.replace(/##toc##/, tocHtml); // insert into template
-        } else {
-            resultHtml = tocHtml + resultHtml; //  simply prepend
-        }
-    }
+    resultToc = wmuDoToc(newConfig, resultHtml);
+    resultHtml = resultToc + resultHtml; //  simply prepend
 
     return resultHtml;
+}
+
+function transformPage(wmustring, config) {
+
+    const newConfig = Object.assign(defaultConfig, config, {});
+    wmutoc.newTocTree();
+    let resultHtml = "";
+
+    resultHtml = parseWmu(wmustring, newConfig);
+
+    let vars = { 
+        cssx: "../test.css",
+        transformed: resultHtml
+    };
+    let templ = getHTMLstr();
+    resultHtml = fillTemplate(templ, vars);
+
+    resultToc = wmuDoToc(newConfig, resultHtml);
+    resultHtml = resultHtml.replace(/##toc##/, resultToc); // insert into template
+
+    return resultHtml;
+}
+
+function transformProject(filename, config) {
+
+    const newConfig = Object.assign(defaultConfig, config, {});
+    wmutoc.newTocTree();
+    let _wmuproject = wmubase.init();
+
+    let data = fs.readFileSync(filename, 'utf8');
+    let wmusettings = data.split(/\r\n/gm);
+
+    wmusettings.forEach(element => {
+        setting = element.split(/\|/);
+        _wmuproject[setting[0]] = setting[1];
+    });
+
+    if (!(_wmuproject.files && _wmuproject.files.length)) {
+        console.log('ERROR: No files found in config file');
+        return; // todo: throw
+    }
+
+    let bodyWmu = concatFiles(_wmuproject.files);
+    let bodyHtml = transformPage(bodyWmu, newConfig);
+    return bodyHtml;
+}
+
+function wmuDoToc(config) {
+    let tocHtml = "";
+    let toc = wmutoc.tocTree;
+    if (config.createToc && toc.hasContent()) {
+        if (config.tocTitle) {
+            tocHtml += '<h1>' + config.tocTitle + '</h1>' + wmubase.eol + wmubase.eol;
+        }
+
+        tocHtml +=
+            '<div id=\'toc\'>' + wmubase.eol +
+                toc.toHtml() +
+            '</div>' + wmubase.eol + wmubase.eol;
+    }
+    return tocHtml;
 }
 
 function getHTMLstr() {
@@ -301,8 +318,7 @@ const fillTemplate = function(templ, vars){
 }
 
 module.exports = {
-    transformWmu,
     transformFragment,
-    composeHtml,
-    processConfigFile
+    transformPage,
+    transformProject
 }

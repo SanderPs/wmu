@@ -63,14 +63,17 @@ Heel goed gedaan!
 The end
 `;
 
-let html_0 = wmu.composeHtml(testAll, null, { createToc: true, fullHtml: true });
+let html_0 = wmu.transformPage(testAll, { createToc: true });
 fs.writeFileSync('./out/test-all.html',html_0,'utf8');
 
 console.log(html_0);
 
 
 
-let wmu_string = `|h1|=Hoofdstuk 1
+let wmu_string = `
+|config|toc
+
+|h1|=Hoofdstuk 1
 
 Dit is een test
 
@@ -99,5 +102,5 @@ Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz
    fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
 
 
-   let html_2 = wmu.processConfigFile("./config.wmu", {});
+   let html_2 = wmu.transformProject("./config.wmu", {});
    fs.writeFileSync('./out/book.html',html_2,'utf8');

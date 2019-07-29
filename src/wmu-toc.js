@@ -63,8 +63,11 @@ class TocTree {
     }
 }
 
-var tocTree = new TocTree();
+var tocTree;
 exports.tocTree = tocTree;
+exports.newTocTree = function() {
+    this.tocTree = new TocTree();
+};
 
 if (false) {
     var tree = new TocTree();
