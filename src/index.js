@@ -16,6 +16,16 @@ Door iemand
 
 Zomaar een paragraaf
 
+Dit is text[[1]] met een voetnoot, en gewoon nog een[[2]]
+
+|fn|=1
+|=
+Dit is een voetnoot voor nr. 1
+
+|fn|=2
+|=
+En deze is voor nr 2.
+
 |code
 language=js
 |=
@@ -27,6 +37,8 @@ function x() {
    }
 }
 
+|h1|Hoofdstuk 2
+
 |table|:-:
 |class=specialcss
 |=
@@ -34,6 +46,7 @@ function x() {
 |:-|
 |=
 |a|b|c|d|e|
+
 
 - lijst inline
 

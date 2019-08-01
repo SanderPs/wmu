@@ -11,6 +11,8 @@ var wmulist = require('./wmu-list');
 var wmuheader = require('./wmu-header');
 var blockConfig = require('./block-config');
 var wmutoc = require('./wmu-toc');
+var blockfn = require('./block-fn');
+var wmufn = require('./wmu-fn');
 
 const wmu_commands = [
     // { onnodig?
@@ -173,9 +175,12 @@ function parseWmuBlock(config, match, block1, block2, block3)
         case 'p':
             result.push( wmupar.wmuparparse(block1) );
             break;
+        case 'footnote':
+        case 'fn':
+            result.push( blockfn.wmufnparse(def, block2) );
+            break;
         case 'config':
-            blockConfig.wmuconfigblock(def, config);
-            result.push( '' );
+            result.push( blockConfig.wmuconfigblock(def, config) );
             break;
     }
     
@@ -186,11 +191,12 @@ function transformFragment(str, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
+    wmufn.reset();
     let resultHtml = "";
 
     resultHtml = parseWmu(str, newConfig);
-
     resultToc = wmuDoToc(newConfig, resultHtml);
+
     resultHtml = resultToc + resultHtml; //  simply prepend
 
     return resultHtml;
@@ -200,19 +206,23 @@ function transformPage(wmustring, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
+    wmufn.reset();
     let resultHtml = "";
 
     resultHtml = parseWmu(wmustring, newConfig);
+    resultToc = wmuDoToc(newConfig, resultHtml);
+    resultFootnotes = wmufn.parseNotes(resultHtml);
 
+    // todo: dit kan beter
     let vars = { 
         cssx: "../test.css",
-        transformed: resultHtml
+        transformed: resultFootnotes
     };
     let templ = getHTMLstr();
-    resultHtml = fillTemplate(templ, vars);
 
-    resultToc = wmuDoToc(newConfig, resultHtml);
+    resultHtml = fillTemplate(templ, vars);
     resultHtml = resultHtml.replace(/##toc##/, resultToc); // insert into template
+    // todo
 
     return resultHtml;
 }
@@ -221,6 +231,7 @@ function transformProject(filename, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
+    wmufn.reset();
     let _wmuproject = wmubase.init();
 
     let data = fs.readFileSync(filename, 'utf8');

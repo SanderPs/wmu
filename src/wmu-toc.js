@@ -28,6 +28,18 @@ class TocTree {
         let newChild = new TocNode(title, level, id, currentNode);
         currentNode.children.push(newChild);
         this.lastAdded = newChild;
+
+        return this.lastAdded;
+    }
+
+    getCurrentChapterId() {
+        // go back up the tree towards the h1:
+        let currentNode = this.lastAdded;
+
+        while (currentNode.level > 1) {
+            currentNode = currentNode.parent;
+        }
+        return currentNode.level == 1 ? currentNode.id : null; // level is een string!
     }
 
     toHtml() {

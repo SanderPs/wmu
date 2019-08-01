@@ -1,14 +1,14 @@
 
 body {
-    margin: 2% 20%;
+    margin: 2%;
     border: 1px solid #888;
     box-shadow: 5px 5px 3px #ccc;
 }
 
 .multipage {
--webkit-columns: 300px 2;
-   -moz-columns: 300px 2;
-        column-width: 300px;
+-webkit-columns: 400px 2;
+   -moz-columns: 400px 2;
+        column-width: 400px;
         -webkit-column-count: auto; /* Chrome, Safari, Opera */
         -moz-column-count: auto; /* Firefox */
         column-count: auto;

@@ -63,6 +63,10 @@ exports.parseDef = function (str) {
             case 'i':
               allVar['src'] = nameValue[1];
               break;
+            case 'footnote':
+            case 'fn':
+              allVar['id'] = nameValue[1];
+              break;
           }
         } else {
           allVar[nameValue[0]] = nameValue[1];
