@@ -73,6 +73,37 @@ const wmu_commands = [
         regex: /(?:\/\/)(.+)(?:\/\/)/,
         to: '<i>$1</i>'
     },
+    {
+        description: 'superscript', 
+        type: 'inline',
+        regex: /(?:\^\^)(.+)(?:\^\^)/, 
+        to: '<sup>$1</sup>' 
+    },
+    {
+        description: 'subscript', 
+        type: 'inline',
+        regex: /(?:\^_)(.+)(?:\^_|_\^)/, // todo: keuze maken, spiegelen?
+        to: '<sub>$1</sub>' 
+    },
+    {
+        description: 'class', 
+        type: 'inline',
+        regex: /(?:\[(.+)\])##(.+)(?:##)/, 
+        to: '<span class="$1">$2</span>' 
+    },
+
+    {
+        description: 'markdown-header-1', 
+        type: 'markdown',
+        regex: /^(.+?)\r?\n={3,}/gm, 
+        to: '|h1|$1' + wmubase.eol + wmubase.eol 
+    },
+    {
+        description: 'markdown-header-2', 
+        type: 'markdown',
+        regex: /^(.+?)\r?\n-{3,}/gm, 
+        to: '|h2|$1' + wmubase.eol + wmubase.eol 
+    },
 
     // blocks:
 
@@ -83,17 +114,6 @@ const wmu_commands = [
     //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
     //     to: '<div class="bookpage_xxxtemp">$1</div>'
 // },
-
-
-];
-
-const markdownCommands = [
-    {
-        description: 'simple-header',
-        regex: /^([/s/S]+?)\r?\n(-{3,}.*?\r?\n)/gm,
-        def_index: 0,
-        body: undefined
-    },
 
 
 ];

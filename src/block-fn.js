@@ -10,7 +10,7 @@ function wmufnparse(allVar, body) {
 
   wmufn.storeFootnote(allVar['id'], body, currentChapterId, newFnid);
 
-  return '';
+  return ''; // remove text, it will be added later in another place
 }
 
 module.exports = {

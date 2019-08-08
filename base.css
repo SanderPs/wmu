@@ -9,6 +9,10 @@ ul#toc {
 
 div {
     display: table; /* prevent table width 100% */
+/*    width: fit-content; 
+    height: fit-content;
+    see: https://stackoverflow.com/questions/450903/how-to-make-div-not-larger-than-its-contents
+    */
 }
 
 table {

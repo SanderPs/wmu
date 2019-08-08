@@ -73,6 +73,19 @@ var x=Repo<Person>().Where(i => i.Deleted && i.PersonStatus==65)
 |=
 Heel goed gedaan!
 
+Combinatie **//tekst//**
+
+En ^^superscript^^ maar ook ^_subscript_^
+
+Met een [small]##inline class## als output
+
+Markdown header 1
+===
+test
+
+Markdown header 2
+----
+
 The end
 `;
 

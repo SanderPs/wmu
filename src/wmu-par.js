@@ -4,7 +4,7 @@ var wmulist = require('./wmu-list');
 function wmuparparse(body) {
 
     // handle all lists inside a paragraph:
-    let bodyLists = body.replace(/((^- *[\s\S]+?\r?\n?)+)(?:$)/gm, wmulist.unorderedList);
+    let bodyLists = body.replace(/^((?:-{1}[^-][\s\S]+?\r?\n?)+)(?:$)/gm, wmulist.unorderedList);
 
     return '<p>' + wmubase.eol +
         bodyLists + wmubase.eol +
