@@ -3,16 +3,10 @@ var wmutoc = require('./wmu-toc');
 
 function wmuheaderparse(allVar) {
 
-  let newHeaderId = wmubase.newElementId(allVar['title'] + allVar['level']);
-
-  // store data
-
-  let toc = wmutoc.tocTree;
-
-
   let result = [];
 
-  if (allVar['level']=="1") { // todo: level is string
+  let toc = wmutoc.tocTree;
+  if (allVar['level']=="1") { // todo: level is string; todo2: werkt niet met parts!
     // if we have found a new h1, insert a comment with id of last/previous h1, for footnotes
     let currentChapterId=toc.getCurrentChapterId();
     if (currentChapterId) {
@@ -22,6 +16,7 @@ function wmuheaderparse(allVar) {
     }
   }
 
+  let newHeaderId = wmubase.newElementId(allVar['title'] + allVar['level']);
   let lastAdded = toc.addSequential(allVar['title'], allVar['level'], newHeaderId);
 
   

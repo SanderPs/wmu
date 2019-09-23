@@ -1,58 +1,90 @@
 var wmubase = require('./wmu-base');
+var wmutoc = require('./wmu-toc');
 
 // todo: naar een class en ook .reset();
-var allnotes = {};
-var finalnotes = {};
+var notesStore = {};
+let currentChapterId;
 
 exports.reset = function () {
-    allnotes = {}; // todo: naar this.
-    finalnotes = {};
+    notesStore = {}; // todo: naar this.
+    currentChapterId = null;
 };
 
-exports.parseNotes = function (resultHtml) {
+exports.parseInlineNoteIds = function (resultHtml) {
 
-    // parse all numbers ([[1]]) and h1's:
-    let result = resultHtml.replace(/(<h1 .+?>|\[\[.+?\]\])/g, this.parseNote);
+    // 1. lookup Notes id's and connect them to chapterIds
+    // 2. replace Notes ids's with link in superscript
 
-    // insert all footnotes:
-    for (let key in finalnotes) {
-        if (finalnotes.hasOwnProperty(key)) {
-            if (result.indexOf('<!-- footnotes ' + key + ' -->') > -1) {
-                result = result.replace('<!-- footnotes ' + key + ' -->', finalnotes[key]);
-            } else {
-                result = result + finalnotes[key]; // is altijd unasigned?
-            }
+    const notesRegex = '\\[\\[.+?\\]\\]';
+    const rHeadersAndNotes = new RegExp('(<h1 .+?>|' + notesRegex + ')', 'g');
+    const rNotes = new RegExp('(' + notesRegex + ')', 'g');
+    // todo: groups zodat hieronder niet nog match moet worden gebruikt.
+
+    currentChapterId = null;
+
+    let notesChaptersList = [];
+
+    while ((matches = rHeadersAndNotes.exec(resultHtml)) !== null) {
+        //console.log(`Found ${matches[0]}. Next starts at ${rHeadersAndNotes.lastIndex}.`);
+
+        let found = matches[0]; // todo: nothing found
+        if (found.charAt(0) === '[') {
+            // found a footnote id (like [[1]]) inline:
+            let footnoteId = found.match(/\[\[(.+?)\]\]/)[1];
+
+            notesChaptersList.push({
+                footnoteId: footnoteId,
+                chapterid: (currentChapterId ? currentChapterId : 'unasigned')
+            });
+
+        } else {
+            // found a chapter level 1 (<h1>) tag
+            currentChapterId = found.match(/ id="(.+?)"/)[1];
         }
     }
+
+      
+      // Step 2: turn notes into html:
+
+    noteCursor = 0;
+    let result = resultHtml.replace(rNotes, function (found) {
+    
+        let chapterid = notesChaptersList[noteCursor].chapterid;
+        let footnoteId = notesChaptersList[noteCursor].footnoteId
+        noteCursor++;
+
+        let anchor = chapterid + '_' + footnoteId;
+        let fnBlock = notesStore[chapterid].notes
+            .find(item => item.footnoteUserId === footnoteId); // todo: kan verkeerd gaan als userid meerdere keren voorkomt
+        // bv bij 'unassigned'
+
+        return '<sup id="fnref:' + anchor + '">' +
+            '<a href="#fn:' + anchor + '" rel="footnote">' + fnBlock.footnoteIndex + '</a>' +
+            '</sup>';
+    });
 
     return result;
 }
 
-exports.parseNote = function (found) {
-    if (found.charAt(0) === '[') {
-        // found a footnote id inline:
-        let x = found.match(/\[\[(.+?)\]\]/)[1];
+exports.storedNotesToHtml = function () {
 
-        return '<sup id="fnref:' + x + '">' +
-            '<a href="#fn:' + x + '" rel="footnote">' + x + '</a>' +
-            '</sup>';
-    }
-    // else:  found a chapter (h1) header:
-    let currentChapterId = found.match(/ id="(.+?)"/)[1];
-    if (allnotes[currentChapterId]) {
-        // if it has notes, combine them and save them to finalnotes:
+    let resultNotes = {};
+
+    for (let chapterId in notesStore) {
+
         let result = [];
 
         result.push(
-            '<div class="footnotes">' + wmubase.eol +
+            '<div class="footnotes-chapter' + chapterId + '">' + wmubase.eol +
             '\t<ol>' + wmubase.eol
         );
 
-        for (let x = 0; x < allnotes[currentChapterId].length; x++) {
+        for (let cnt = 0; cnt < notesStore[chapterId].notes.length; cnt++) {
+            let anchor = chapterId + '_' + notesStore[chapterId].notes[cnt].footnoteUserId;
             result.push(
-                '\t\t<li id="fn:' + allnotes[currentChapterId][x].footnoteIndex + '">' + wmubase.eol +
-                '\t\t\t<p>' + allnotes[currentChapterId][x].footnoteText + wmubase.eol +
-                '&nbsp;<a href="#fnref:' + allnotes[currentChapterId][x].footnoteIndex + '" class="reversefootnote">&#8593;</a></p>' + wmubase.eol +
+                '\t\t<li id="fn:' + anchor + '">' + wmubase.eol +
+                '\t\t\t<p>' + notesStore[chapterId].notes[cnt].footnoteText + wmubase.eol +
+                '&nbsp;<a href="#fnref:' + anchor + '" class="reversefootnote">&#8593;</a></p>' + wmubase.eol +
                 '\t\t</li>' + wmubase.eol
             );
         }
@@ -62,25 +94,71 @@ exports.parseNote = function (found) {
             '</div>' + wmubase.eol + wmubase.eol
         );
 
-        finalnotes[currentChapterId] = result.join('');
+        resultNotes[chapterId] = { notesAsHtml: result.join('') };
     }
-    return found;
+
+    return resultNotes;
 }
 
-exports.storeFootnote = function (id, body, chapterId, newFnid) {
+exports.insertFootNotes = function (htmlResult, notes, insertType) {
+
+    switch (insertType) {
+        case 'endOfBook':
+            let toc = wmutoc.tocTree;
+            tocIndex = toc.getIndex();
+
+            let result = [];
+            const keys = Object.keys(tocIndex)
+            for (let x=0; x < keys.length; x++) {
+                let node = tocIndex[keys[x]];
+                if (node.partTitle) {
+                    result.push('<div>' + node.partTitle + '</div>\n');
+                }
+                if (notes[node.tocChapter.id]) {
+                    result.push('<div>' + node.tocChapter.title + '</div>\n');
+                    result.push('<div>' + notes[node.tocChapter.id].notesAsHtml + '</div>\n');
+                }
+            }
+   // todo: also add 'unassigned'
+            return htmlResult = htmlResult.replace('<!-- # notes-endofbook # -->',
+                '<div class="start-page-notes-endofbook">' +
+                result.join('') +
+                '</div>');
+
+        case 'endOfChapter':
+            Object.keys(notes).map(function(elem){
+                if (htmlResult.indexOf('<!-- footnotes ' + elem + ' -->') > -1) {
+                    htmlResult = htmlResult.replace('<!-- footnotes ' + elem + ' -->', notes[elem].notesAsHtml);
+                } else{
+                    // append when chapter not found
+                    // todo: nessesary?
+                    // also: only ok for fragments!
+                    htmlResult = htmlResult + notes[elem].notesAsHtml;
+                }
+            });
+
+            return htmlResult;
+
+        default:
+            console.log('### illegal insertType');
+            break;
+    }
+};
+
+exports.storeFootnoteText = function (id, body, chapterId, newFnid) {
 
     if (chapterId === null) {
-        chapterId = 'unasigned'
+        chapterId = 'unasigned' // todo gebeurt dit ooit?
     }
 
-    if (!allnotes[chapterId]) {
-        allnotes[chapterId] = [];
+    if (!notesStore[chapterId]) {
+        notesStore[chapterId] = { notes: [] }; // an arry for all footnotes belonging to a chapter
     }
 
-    allnotes[chapterId].push({
+    notesStore[chapterId].notes.push({
         footnoteUserId: id, // wordt niet gebruikt
         footnoteId: newFnid, // wordt niet gebruikt
         footnoteText: body,
-        footnoteIndex: allnotes[chapterId].length + 1
+        footnoteIndex: notesStore[chapterId].notes.length + 1
     });
 }

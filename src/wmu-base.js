@@ -115,6 +115,7 @@ exports.valignmentClass = function (str) {
   return '';
 }
 
+// Create a signature hash
 // based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
 exports.newElementId = function (str) {
   return 'id_' + hashCode(str); // todo: keep list and check

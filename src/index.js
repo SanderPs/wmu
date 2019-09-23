@@ -86,6 +86,12 @@ test
 Markdown header 2
 ----
 
+Dit is tekst met voetnoot[[A]]
+
+|fn|=A
+|=
+Hier staat de voetnoot tekst
+
 The end
 `;
 
@@ -122,7 +128,17 @@ Meer **bold** en //italics// en __underscore__ en ~~striketrough~~ enz
 |=
 |Lover brings much hapiness,
 |much more so than pining for
-|someone brings pain.`;
+|someone brings pain.
+
+
+Dit is tekst met voetnoot[[1]]
+
+|fn|=1
+|=
+Hier staat de voetnoot tekst
+
+
+`;
 
    let html_1 = wmu.transformFragment(wmu_string, { createToc: true });
    fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');

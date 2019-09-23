@@ -27,6 +27,9 @@ const wmu_commands = [
     // todo: markdown compatability?
     // adding |toc -> set createtoc to true
     // output list of all used css classes
+    // footnotes, chapter endnotes, book endnotes
+    // escape all characters
+    // escape blocks: |par \|code
 
 
     {
@@ -136,8 +139,21 @@ function parseWmu(str, config) {
     });
 
     // second step: blocks
-    return (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
+    str = (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
         parseWmuBlock.bind(this, config));
+
+
+    // third step: if there are h1's
+    let toc = wmutoc.tocTree;
+      let currentChapterId=toc.getCurrentChapterId();
+      if (currentChapterId) {
+        str +=
+          '<!-- footnotes ' + currentChapterId + ' -->' + wmubase.eol + wmubase.eol
+        ;
+ 
+    }
+    
+    return str;
 }
 
 function parseWmuBlock(config, match, block1, block2, block3) 
@@ -207,42 +223,50 @@ function parseWmuBlock(config, match, block1, block2, block3)
     return result.join('');
 }
 
-function transformFragment(str, config) {
+function transformString(wmuString, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
     wmufn.reset();
-    let resultHtml = "";
 
-    resultHtml = parseWmu(str, newConfig);
-    resultToc = wmuDoToc(newConfig, resultHtml);
+    resultBody = parseWmu(wmuString, newConfig);
+    // notesStore is gevuld
+    resultToc = wmuDoToc(newConfig, resultBody);
+    resultBody = wmufn.parseInlineNoteIds(resultBody);
 
-    resultHtml = resultToc + resultHtml; //  simply prepend
+    let allnotes = wmufn.storedNotesToHtml(resultBody);
+
+    return {
+        body: resultBody,
+        toc: resultToc,
+        notes: allnotes,
+        //index:
+    };
+}
+
+function transformFragment(str, config) {
+
+    let parsed = transformString(str, config);
+
+    let resultHtml = parsed.toc + wmubase.eol  + wmubase.eol +
+        parsed.body + wmubase.eol  + wmubase.eol; 
+    
+    resultHtml = wmufn.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); // todo
 
     return resultHtml;
 }
 
 function transformPage(wmustring, config) {
 
-    const newConfig = Object.assign(defaultConfig, config, {});
-    wmutoc.newTocTree();
-    wmufn.reset();
-    let resultHtml = "";
+    let parsed = transformString(wmustring, config);
 
-    resultHtml = parseWmu(wmustring, newConfig);
-    resultToc = wmuDoToc(newConfig, resultHtml);
-    resultFootnotes = wmufn.parseNotes(resultHtml);
+    let resultHtml = getHTMLstr();
 
-    // todo: dit kan beter
-    let vars = { 
-        cssx: "../test.css",
-        transformed: resultFootnotes
-    };
-    let templ = getHTMLstr();
+    resultHtml = resultHtml.replace(/##toc##/, parsed.toc);
+    resultHtml = resultHtml.replace(/##body##/, parsed.body);
+    resultHtml = resultHtml.replace(/##head##/, '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol);
 
-    resultHtml = fillTemplate(templ, vars);
-    resultHtml = resultHtml.replace(/##toc##/, resultToc); // insert into template
-    // todo
+    resultHtml = wmufn.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); //endOfBook'); // todo
 
     return resultHtml;
 }
@@ -298,9 +322,9 @@ function getHTMLstr() {
         <meta charset="utf-8">
         <title>boek</title>
 
-        <link rel="stylesheet" href="##1##">
         <link rel="stylesheet" href="../book-imitate.css">
         <link rel="stylesheet" href="../base.css">
+##head##
     </head>
 
     <body class="multipage">
@@ -309,13 +333,13 @@ function getHTMLstr() {
     ##toc##
 </div>
     
-##2##
+##body##
+
+<!-- # notes-endofbook # -->
 
     </body>
 </html>`;
 
-    templ = templ.replace('##1##','${this.cssx}');
-    templ = templ.replace('##2##','${this.transformed}');
     return templ;
 }
 

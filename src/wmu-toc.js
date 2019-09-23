@@ -9,8 +9,11 @@ class TocNode {
         this.index = parent ? parent.children.length + 1 : null;
         this.parent = parent;
         this.children = [];
+        tocIndex[id] = this;
     }
 }
+
+var tocIndex = {};
 
 class TocTree {
     constructor() {
@@ -44,15 +47,36 @@ class TocTree {
 
     toHtml() {
         return this.recursiveHtml(
-            this.root.children.length == 1 ? // == 1: there are no parts
-                this.root.children[0] : 
-                this.root
+            this.root.children.length == 1 ?
+                this.root.children[0] : // no Parts found, so start at H1 level
+                this.root // start at the Parts level
             , 0
             );
     }
 
     hasContent() {
-        return this.lastAdded.level > 0;
+        return this.lastAdded.level > 0; // todo: type of level?
+    }
+
+    getIndex() {
+        let chapterIndex = {};
+        let parts = this.root.children;
+        for (let x=0; x < parts.length; x++) {
+            let chapters = parts[x].children;
+            for (let y=0; y < chapters.length; y++) {
+                chapterIndex[chapters[y].id] = {
+                    tocChapter: chapters[y]
+                };
+            }
+            if (parts.length > 1) {
+                chapterIndex[chapters[0].id].partTitle = parts[x].title;
+            }
+    }
+        return chapterIndex;
+    }
+
+    getChapter(id) {
+        return tocIndex[id];
     }
 
     recursiveHtml(element, cnt) {
@@ -79,6 +103,7 @@ var tocTree;
 exports.tocTree = tocTree;
 exports.newTocTree = function() {
     this.tocTree = new TocTree();
+    tocIndex = {};
 };
 
 if (false) {
