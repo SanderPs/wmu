@@ -1,4 +1,5 @@
 var fs = require('fs')
+const path = require('path');
 
 var wmubase = require('./wmu-base');
 var wmutable = require('./wmu-table');
@@ -152,7 +153,7 @@ function parseWmu(str, config) {
         ;
  
     }
-    
+
     return str;
 }
 
@@ -271,14 +272,16 @@ function transformPage(wmustring, config) {
     return resultHtml;
 }
 
-function transformProject(filename, config) {
+function transformProject(filepath, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
     wmufn.reset();
     let _wmuproject = wmubase.init();
 
-    let data = fs.readFileSync(filename, 'utf8');
+    let projectFile = path.parse(filepath);
+
+    let data = fs.readFileSync(projectFile.dir + path.sep + projectFile.base, 'utf8');
     let wmusettings = data.split(/\r\n/gm);
 
     wmusettings.forEach(element => {
@@ -291,8 +294,17 @@ function transformProject(filename, config) {
         return; // todo: throw
     }
 
-    let bodyWmu = concatFiles(_wmuproject.files);
+    let bodyWmu = concatFiles(_wmuproject.files, projectFile.dir + path.sep);
     let bodyHtml = transformPage(bodyWmu, newConfig);
+
+    if (config.outputPath) {
+        let outputPath = path.normalize(projectFile.dir + path.sep + config.outputPath);
+
+        fs.writeFileSync(outputPath + path.sep + 'output.html', bodyHtml, 'utf8');
+
+        return;
+    } 
+
     return bodyHtml;
 }
 
@@ -343,13 +355,13 @@ function getHTMLstr() {
     return templ;
 }
 
-function concatFiles(files) {
+function concatFiles(files, location) {
     let contentArray = [];
     let allfiles = files.split(/,/);
 
     allfiles.forEach(file => {
 
-        let filename = "./" + file.trim();
+        let filename = location + file.trim();
 
         if (!fs.existsSync(filename)) {
             console.log('file not found: ' + filename);

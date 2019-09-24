@@ -144,5 +144,5 @@ Hier staat de voetnoot tekst
    fs.writeFileSync('./out/fragmenttest.html',html_1,'utf8');
 
 
-   let html_2 = wmu.transformProject("./config.wmu", {});
-   fs.writeFileSync('./out/book.html',html_2,'utf8');
+   wmu.transformProject("./config.wmu", { outputPath: './out'});
+
