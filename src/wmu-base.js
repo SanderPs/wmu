@@ -1,7 +1,6 @@
-
-
 exports.eol = "\r\n";
 exports.eolIn = /\r?\n/;
+exports.eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
 var _wmu_project;
 
@@ -19,7 +18,10 @@ exports.getAll = function () {
 
 exports.parseDef = function (str) {
 
-  var parsedDef = str.replace(/^\|/, "").replace(/[\r\n\|]+$/, "").split(/[\r\n\|]+/);
+  var parsedDef = str
+    .replace(/^\|/, "")
+    .replace(/[\r\n\|]+$/, "")
+    .split(/[\r\n\|]+/);
   let isHeader = /(h|header)\d/.test(parsedDef[0]);
   let blockType = isHeader ? 'h' : parsedDef[0]
 

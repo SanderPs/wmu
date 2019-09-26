@@ -2,18 +2,19 @@ var fs = require('fs')
 const path = require('path');
 
 var wmubase = require('./wmu-base');
-var wmutable = require('./wmu-table');
-var wmuquote = require('./wmu-quote');
-var wmucode = require('./wmu-code');
-var wmuimg = require('./wmu-img');
-var wmupar = require('./wmu-par');
-var wmublock = require('./wmu-block');
-var wmulist = require('./wmu-list');
-var wmuheader = require('./wmu-header');
-var blockConfig = require('./block-config');
 var wmutoc = require('./wmu-toc');
-var blockfn = require('./block-fn');
-var wmufn = require('./wmu-fn');
+var wmuNotes = require('./wmu-notes');
+
+var blockList = require('./block-list');
+var blockCode = require('./block-code');
+var blockImage = require('./block-img');
+var blockPar = require('./block-par');
+var blockQuote = require('./block-quote');
+var blockHeader = require('./block-header');
+var blockConfig = require('./block-config');
+var blockTable = require('./block-table');
+var blockBlock = require('./block-block');
+var blockNote = require('./block-note');
 
 const wmu_commands = [
     // { onnodig?
@@ -182,42 +183,43 @@ function parseWmuBlock(config, match, block1, block2, block3)
     switch(def['block-type']) {
         case 'table':
         case 't':
-            result.push( wmutable.wmutableparse(def, block2, block3) );
+            result.push( blockTable.parse(def, block2, block3) );
             break;
         case 'header':
         case 'h':
-            result.push( wmuheader.wmuheaderparse(def) );
+            result.push( blockHeader.parse(def) );
             break;
         case 'quote':
         case 'q':
-            result.push( wmuquote.wmuquoteparse(def, block2, block3) );
+            result.push( blockQuote.parse(def, block2, block3) );
             break;
         case 'code':
         case 'c':
-            result.push( wmucode.wmucodeparse(def, block2) );
+            result.push( blockCode.parse(def, block2) );
             break;
         case 'block':
         case 'b':
-            result.push( wmublock.wmublockparse(def, block2) );
+            result.push( blockBlock.parse(def, block2) );
             break;
+        case 'image':
         case 'img':
         case 'i':
-            result.push( wmuimg.wmuimgparse(def) );
+            result.push( blockImage.parse(def) );
             break;
         case 'list':
         case 'l':
-            result.push( wmulist.wmulistparse(def, block2) );
+            result.push( blockList.parse(def, block2) );
             break;
         case 'par':
         case 'p':
-            result.push( wmupar.wmuparparse(block1) );
+            result.push( blockPar.parse(block1) );
             break;
         case 'footnote':
         case 'fn':
-            result.push( blockfn.wmufnparse(def, block2) );
+            result.push( blockNote.parse(def, block2) );
             break;
         case 'config':
-            result.push( blockConfig.wmuconfigblock(def, config) );
+            result.push( blockConfig.parse(def, config) );
             break;
     }
     
@@ -228,14 +230,14 @@ function transformString(wmuString, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
-    wmufn.reset();
+    wmuNotes.reset();
 
     resultBody = parseWmu(wmuString, newConfig);
     // notesStore is gevuld
     resultToc = wmuDoToc(newConfig, resultBody);
-    resultBody = wmufn.parseInlineNoteIds(resultBody);
+    resultBody = wmuNotes.parseInlineNoteIds(resultBody);
 
-    let allnotes = wmufn.storedNotesToHtml(resultBody);
+    let allnotes = wmuNotes.storedNotesToHtml(resultBody);
 
     return {
         body: resultBody,
@@ -252,7 +254,7 @@ function transformFragment(str, config) {
     let resultHtml = parsed.toc + wmubase.eol  + wmubase.eol +
         parsed.body + wmubase.eol  + wmubase.eol; 
     
-    resultHtml = wmufn.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); // todo
+    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); // todo
 
     return resultHtml;
 }
@@ -267,7 +269,7 @@ function transformPage(wmustring, config) {
     resultHtml = resultHtml.replace(/##body##/, parsed.body);
     resultHtml = resultHtml.replace(/##head##/, '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol);
 
-    resultHtml = wmufn.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); //endOfBook'); // todo
+    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); //endOfBook'); // todo
 
     return resultHtml;
 }
@@ -276,7 +278,7 @@ function transformProject(filepath, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
-    wmufn.reset();
+    wmuNotes.reset();
     let _wmuproject = wmubase.init();
 
     let projectFile = path.parse(filepath);

@@ -1,6 +1,6 @@
 var wmubase = require('./wmu-base');
   
-function wmuconfigblock(allVar, config) {
+function parse(allVar, config) {
 
     let result = [];
 
@@ -23,6 +23,6 @@ function wmuconfigblock(allVar, config) {
 }
   
 module.exports = {
-    wmuconfigblock
+    parse
 };
   

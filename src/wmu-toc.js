@@ -1,5 +1,4 @@
-
-const eol = "\r\n";
+var wmubase = require('./wmu-base');
 
 class TocNode {
     constructor(title, level, id, parent) {
@@ -82,19 +81,19 @@ class TocTree {
     recursiveHtml(element, cnt) {
         if (element.children.length === 0) {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
-                "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + eol : 
+                "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + wmubase.eol : 
                 "";
         }
         else {
             let result = "";
             if (element.level > -1 && cnt > 0) {
-                result+= "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + eol;
+                result+= "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + wmubase.eol;
             }
-            result += "\t".repeat(cnt) + "<ul>" + eol;
+            result += "\t".repeat(cnt) + "<ul>" + wmubase.eol;
             for (let i = 0; i < element.children.length; i++) {
                 result += this.recursiveHtml(element.children[i], cnt + 1);
             }
-            return result + "\t".repeat(cnt) + "</ul>" + eol;
+            return result + "\t".repeat(cnt) + "</ul>" + wmubase.eol;
         }
     }
 }

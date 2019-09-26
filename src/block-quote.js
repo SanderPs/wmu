@@ -1,6 +1,6 @@
 var wmubase = require('./wmu-base');
 
-function wmuquoteparse(allVar, quote, source) {
+function parse(allVar, quote, source) {
 
   let result = [];
 
@@ -24,5 +24,5 @@ function wmuquoteparse(allVar, quote, source) {
 }
 
 module.exports = {
-  wmuquoteparse
+  parse
 };

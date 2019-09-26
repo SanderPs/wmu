@@ -1,7 +1,6 @@
 var wmubase = require('./wmu-base');
-var wmupar = require('./wmu-par');
   
-function wmulistparse(allVar, body) {
+function parse(allVar, body) {
 
   let result = [];
 
@@ -27,11 +26,16 @@ function unorderedList(unused, ul) {
 }
 
 function listItems(li) {
-  return '\t<li>' + li.replace(/^- */gm,'').replace(/\r?\n?$/,'').split(/[\r\n]+/).join('</li>' + wmubase.eol + '\t<li>') + '</li>';
+  return '\t<li>' 
+    + li.replace(/^- */gm,'')
+      .replace(/\r?\n?$/,'')
+      .split(/[\r\n]+/)
+      .join('</li>' + wmubase.eol + '\t<li>') 
+    + '</li>';
 }
 
 module.exports = {
-  wmulistparse,
+  parse,
   unorderedList,
   listItems
 };

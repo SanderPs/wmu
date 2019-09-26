@@ -1,6 +1,6 @@
 var wmubase = require('./wmu-base');
   
-function wmuimgparse(allVar) {
+function parse(allVar) {
 
   let result = [];
 
@@ -24,6 +24,6 @@ function wmuimgparse(allVar) {
 }
   
 module.exports = {
-  wmuimgparse
+  parse
 };
   

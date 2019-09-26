@@ -1,7 +1,7 @@
 var wmubase = require('./wmu-base');
 var wmutoc = require('./wmu-toc');
 
-function wmuheaderparse(allVar) {
+function parse(allVar) {
 
   let result = [];
 
@@ -30,5 +30,5 @@ function wmuheaderparse(allVar) {
 }
 
 module.exports = {
-  wmuheaderparse
+  parse
 };

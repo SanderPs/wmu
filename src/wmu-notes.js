@@ -112,11 +112,11 @@ exports.insertFootNotes = function (htmlResult, notes, insertType) {
             for (let x=0; x < keys.length; x++) {
                 let node = tocIndex[keys[x]];
                 if (node.partTitle) {
-                    result.push('<div>' + node.partTitle + '</div>\n');
+                    result.push('<div>' + node.partTitle + '</div>' + wmubase.eol);
                 }
                 if (notes[node.tocChapter.id]) {
-                    result.push('<div>' + node.tocChapter.title + '</div>\n');
-                    result.push('<div>' + notes[node.tocChapter.id].notesAsHtml + '</div>\n');
+                    result.push('<div>' + node.tocChapter.title + '</div>' + wmubase.eol);
+                    result.push('<div>' + notes[node.tocChapter.id].notesAsHtml + '</div>' + wmubase.eol);
                 }
             }
    // todo: also add 'unassigned'

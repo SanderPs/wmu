@@ -1,30 +1,30 @@
 var wmubase = require('./wmu-base');
 
-function wmutableparse(allVar, header, body) {
+function parse(allVar, header, body) {
 
   let result = [];
 
   result.push('<table' +
-  wmubase.classAttr(
-    (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : ''),
-    allVar['format']
-      ) +
-  '>' + wmubase.eol);
+    wmubase.classAttr(
+      (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : ''),
+      allVar['format']
+    ) +
+    '>' + wmubase.eol);
 
   if (allVar['caption']) {
     result.push('<caption>' + allVar['caption'] + '</caption>' + wmubase.eol);
   }
 
-  result.push(wmutableparse_header(header));
+  result.push(parse_header(header));
 
-  result.push(wmutableparse_body(body));
+  result.push(parse_body(body));
 
   result.push('</table>' + wmubase.eol + wmubase.eol);
 
   return result.join('');
 }
 
-function wmutableparse_body(body) {
+function parse_body(body) {
 
   let result = [];
 
@@ -46,7 +46,7 @@ function wmutableparse_body(body) {
   return result.join('');
 }
 
-function wmutableparse_header(header) {
+function parse_header(header) {
 
   let rows = header.split(wmubase.eolIn); // todo: prevent error when not present
   let headerrow = rows[0].slice(0, -1).split(/ *\| */);
@@ -54,7 +54,7 @@ function wmutableparse_header(header) {
 
   if (rows.length > 1) {
     for (let x = 1; x < rows.length; x++) {
-      if (/^v=/.test(rows[x])) { 
+      if (/^v=/.test(rows[x])) {
         // vertical align
         valignrow = rows[x].slice(2, -1).split(/ *\| */);
       } else {
@@ -62,7 +62,7 @@ function wmutableparse_header(header) {
         alignrow = rows[x].slice(0, -1).split(/ *\| */);
       }
     }
-    
+
     if (alignrow.length) {
       for (i = 0; i < alignrow.length; i++) {
         alignrow[i] = wmubase.alignmentClass(alignrow[i], false);
@@ -97,5 +97,5 @@ function wmutableparse_header(header) {
 }
 
 module.exports = {
-  wmutableparse
+  parse
 };

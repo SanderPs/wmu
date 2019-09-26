@@ -1,8 +1,6 @@
 var wmu = require('./wmu-main');
 var fs = require('fs')
 
-const eol = "\r\n";
-
 
 let testAll = `|quote|-:
 caption=Figuur 1|
