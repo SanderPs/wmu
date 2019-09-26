@@ -79,6 +79,8 @@ Met een [inline class]##my-css-class## als output
 
 Inline link [klik hier voor de website van x]((http://www.x.org))
 
+Combi: [[link met een class]((http://supersite.com))]##linkclass##
+
 Markdown header 1
 ===
 test

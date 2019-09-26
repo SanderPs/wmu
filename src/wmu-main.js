@@ -45,61 +45,61 @@ const wmu_commands = [
     {
         description: 'bold', 
         type: 'inline',
-        regex: /(?:\*\*)(.+)(?:\*\*)/, 
+        regex: /(?:\*\*)(.+)(?:\*\*)/g, 
         to: '<b>$1</b>' 
     },
     {
         description: 'underscore', 
         type: 'inline',
-        regex: /(?:\_\_)(.+)(?:\_\_)/, 
+        regex: /(?:\_\_)(.+)(?:\_\_)/g, 
         to: '<u>$1</u>' 
     },
     {
         description: 'strike-trough', 
         type: 'inline',
-        regex: /(?:~~)(.+)(?:~~)/, 
+        regex: /(?:~~)(.+)(?:~~)/g, 
         to: '<del>$1</del>' 
     },
     {
         description: 'inline-quote', 
         type: 'inline',
-        regex: /(?:"")(.+)(?:"")/, 
+        regex: /(?:"")(.+)(?:"")/g, 
         to: '<q>$1</q>' 
     },
     {
         description: 'inline-code',
         type: 'inline',
-        regex: /(?:`)(.+)(?:`)/,
+        regex: /(?:`)(.+)(?:`)/g,
         to: '<code>$1</code>'
     },
     {
         description: 'italic',
         type: 'inline',
-        regex: /(?:\/\/)(.+)(?:\/\/)/,
+        regex: /(?:\/\/)(.+)(?:\/\/)/g,
         to: '<i>$1</i>'
     },
     {
         description: 'superscript', 
         type: 'inline',
-        regex: /(?:\^\^)(.+)(?:\^\^)/, 
+        regex: /(?:\^\^)(.+)(?:\^\^)/g, 
         to: '<sup>$1</sup>' 
     },
     {
         description: 'subscript', 
         type: 'inline',
-        regex: /(?:\^_)(.+)(?:_\^)/, // spiegelen! = de regel
+        regex: /(?:\^_)(.+)(?:_\^)/g, // spiegelen! = de regel
         to: '<sub>$1</sub>' 
     },
     {
         description: 'class', 
         type: 'inline',
-        regex: /(?:\[(.+)\])##(.+)(?:##)/, 
+        regex: /(?:\[(.+)\])##(.+)(?:##)/g, 
         to: '<span class="$2">$1</span>' 
     },
     {
         description: 'hyperlink', 
         type: 'inline',
-        regex: /(?:\[(.+)\])\(\((.+)(?:\)\))/, 
+        regex: /(?:\[(.+)\])\(\((.+)(?:\)\))/g, 
         to: '<a href="$2">$1</a>' 
     },
 
@@ -114,18 +114,7 @@ const wmu_commands = [
         type: 'markdown',
         regex: /^(.+?)\r?\n-{3,}/gm, 
         to: '|h2|$1' + wmubase.eol + wmubase.eol 
-    },
-
-    // blocks:
-
-    // {
-    //     description: 'chapters',
-    //     type: 'block',
-    //     level: 'book',
-    //     regex: new RegExp('(\|h\|\d{1,6}\|(.*?\r?\n)*)(?=$|\|h\|1\|)', 'g'), // todo
-    //     to: '<div class="bookpage_xxxtemp">$1</div>'
-// },
-
+    }
 
 ];
 
