@@ -75,7 +75,9 @@ Combinatie **//tekst//**
 
 En ^^superscript^^ maar ook ^_subscript_^
 
-Met een [small]##inline class## als output
+Met een [inline class]##my-css-class## als output
+
+Inline link [klik hier voor de website van x]((http://www.x.org))
 
 Markdown header 1
 ===

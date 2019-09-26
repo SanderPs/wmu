@@ -87,14 +87,20 @@ const wmu_commands = [
     {
         description: 'subscript', 
         type: 'inline',
-        regex: /(?:\^_)(.+)(?:\^_|_\^)/, // todo: keuze maken, spiegelen?
+        regex: /(?:\^_)(.+)(?:_\^)/, // spiegelen! = de regel
         to: '<sub>$1</sub>' 
     },
     {
         description: 'class', 
         type: 'inline',
         regex: /(?:\[(.+)\])##(.+)(?:##)/, 
-        to: '<span class="$1">$2</span>' 
+        to: '<span class="$2">$1</span>' 
+    },
+    {
+        description: 'hyperlink', 
+        type: 'inline',
+        regex: /(?:\[(.+)\])\(\((.+)(?:\)\))/, 
+        to: '<a href="$2">$1</a>' 
     },
 
     {
