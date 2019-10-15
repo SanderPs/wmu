@@ -65,6 +65,10 @@ exports.parseDef = function (str) {
           case 'i':
             allVar['src'] = nameValue[1];
             break;
+          case 'list':
+          case 'l':
+            allVar['start'] = nameValue[1];
+            break;
           case 'footnote':
           case 'fn':
             allVar['id'] = nameValue[1];

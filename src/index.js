@@ -1,6 +1,8 @@
 var wmu = require('./wmu-main');
 var fs = require('fs')
 
+var wmulist = require('./wmu-list');
+
 
 let testAll = `|quote|-:
 caption=Figuur 1|
@@ -94,6 +96,23 @@ Dit is tekst met voetnoot[[A]]
 |=
 Hier staat de voetnoot tekst
 
+Kan dit ook een verkorte lijst?!
+
+|list|=1|type=A
+|=
+1 een 
+2 twee
+3 drie
+
+|list|=
+|a indicates lowercase letters
+|- should be 'b'
+||A indicates uppercase letters
+|||i indicates lowercase Roman numerals
+||||I indicates uppercase Roman numerals
+|||||1 indicates numbers (default)
+|- should be 'c'
+
 The end
 `;
 
@@ -148,3 +167,16 @@ Hier staat de voetnoot tekst
 
    wmu.transformProject("./config.wmu", { outputPath: './out'});
 
+
+
+let abc = wmulist.newListTree(`a indicates lowercase letters
+- should be 'b'
+|A indicates uppercase letters
+||i:x indicates lowercase Roman numerals
+|||-:3 ul 1
+|||-:5 ul 2
+|I indicates uppercase Roman numerals
+|1 indicates numbers (default)
+- should be 'c'`);
+
+console.log( abc.toHtml() );

@@ -136,7 +136,7 @@ function parseWmu(str, config) {
     });
 
     // second step: blocks
-    str = (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?(?:(?:\r?\n\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
+    str = (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\|=\r?\n)([\s\S]+?))?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
         parseWmuBlock.bind(this, config));
 
 

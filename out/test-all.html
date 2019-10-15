@@ -30,6 +30,7 @@
 <blockquote class="block-right abc">
 	<p>
 Dit is een interessante quote
+
 	</p>
 	<footer>Door iemand</footer>
 </blockquote>
@@ -73,7 +74,7 @@ function x() {
 
 <table class="block-fill">
 <tr>
-	<th  class="text-left">1</th>
+	<th >1</th>
 	<th >2</th>
 	<th >3</th>
 	<th >4</th>
@@ -102,12 +103,11 @@ paragraaf:
 En weer verder
 </p>
 
-<ul class="block-center">
+<ul>
 	<li>nummer 1</li>
 	<li>nummer 2</li>
 	<li>nummer 3</li>
 </ul>
-
 <pre class="devlang-csharp"><code>
 var x=Repo<Person>().Where(i => i.Deleted && i.PersonStatus==65)
       .ToList();
@@ -156,6 +156,36 @@ test
 Dit is tekst met voetnoot<sup id="fnref:id_1638544066_A"><a href="#fn:id_1638544066_A" rel="footnote">1</a></sup>
 </p>
 
+<p>
+Kan dit ook een verkorte lijst?!
+</p>
+
+<ol type="1">
+	<li>een </li>
+	<li>twee</li>
+	<li>drie</li>
+</ol>
+<ol type="a">
+	<li>indicates lowercase letters</li>
+	<li>should be 'b'
+		<ol type="A">
+			<li>indicates uppercase letters
+				<ol type="i">
+					<li>indicates lowercase Roman numerals
+						<ol type="I">
+							<li>indicates uppercase Roman numerals
+								<ol type="1">
+									<li>indicates numbers (default)</li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</li>
+		</ol>
+	</li>
+	<li>should be 'c'</li>
+</ol>
 <p>
 The end
 </p>

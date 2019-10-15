@@ -1,0 +1,26 @@
+|h1|Introduction
+
+|code
+|=
+\|code|language=wmu|title=Simple Example
+\|=
+\|WMU is better then Markdown and simpler then Latex. 
+
+|h2|Main goal
+
+The main goal of WMU is to create a markup language that supports all of the elements found in books.
+
+|h2|Concrete goals
+
+|list
+|=
+|as simple as possible and easy to remember
+|convention over configuration
+
+|h2|=Main differences from Markdown
+
+|list
+|=
+- better control over empty lines
+- automatic (but opptional) table of contents
+- support of notes

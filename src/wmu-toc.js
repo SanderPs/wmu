@@ -12,6 +12,7 @@ class TocNode {
     }
 }
 
+// wordt deze nog gebruikt?
 var tocIndex = {};
 
 class TocTree {
@@ -98,6 +99,7 @@ class TocTree {
     }
 }
 
+// todo: nog een keer checken
 var tocTree;
 exports.tocTree = tocTree;
 exports.newTocTree = function() {
@@ -105,6 +107,7 @@ exports.newTocTree = function() {
     tocIndex = {};
 };
 
+//todo: ???
 if (false) {
     var tree = new TocTree();
 
