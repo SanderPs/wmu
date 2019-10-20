@@ -12,19 +12,26 @@ function parse(allVar, body) {
 
     if (items.length) {
 
-        result.push('<dl>' + wmubase.eol);
+        result.push('<dl>' + wmubase.eol + '\t<div>' + wmubase.eol);
         
+        let prevdef = false;
         for (let x=0; x < items.length;  x++) {
             let def = items[x].charAt(0) === '|';
             
-            if (def) {
-                result.push('\t<dd>' + items[x].substr(1) + '</dd>' + wmubase.eol);
-            } else {
-                result.push('\t<dt>' + items[x] + '</dt>' + wmubase.eol);
+            if (!def && prevdef) {
+                result.push('\t<div>' + wmubase.eol + '\t</div>' + wmubase.eol);
             }
+            
+            if (def) {
+                result.push('\t\t<dd>' + items[x].substr(1) + '</dd>' + wmubase.eol);
+            } else {
+                result.push('\t\t<dt>' + items[x] + '</dt>' + wmubase.eol);
+            }
+
+            prevdef = def;
         }
         
-        result.push('</dl>' + wmubase.eol + wmubase.eol);
+        result.push('\t</div>' + wmubase.eol + '</dl>' + wmubase.eol + wmubase.eol);
     }
 
     return result.join('');

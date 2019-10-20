@@ -55,8 +55,7 @@ dt {
 	font-weight: bold;
 }
 dd {
-	background:none no-repeat left top;
-	padding-left: 50px;
+	margin-inline-start: 20px;
 }
 
 

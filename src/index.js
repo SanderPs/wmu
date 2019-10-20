@@ -119,6 +119,8 @@ Kan dit ook een verkorte lijst?!
 |css
 |css3
 ||Cascading Style Sheets
+|html
+||Hyper Text Markup Language
 
 The end
 `;
