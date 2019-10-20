@@ -104,7 +104,8 @@ Kan dit ook een verkorte lijst?!
 2 twee
 3 drie
 
-|list|=
+|list
+|=
 |a indicates lowercase letters
 |- should be 'b'
 ||A indicates uppercase letters
@@ -112,6 +113,12 @@ Kan dit ook een verkorte lijst?!
 ||||I indicates uppercase Roman numerals
 |||||1 indicates numbers (default)
 |- should be 'c'
+
+|glossary
+|=
+|css
+|css3
+||Cascading Style Sheets
 
 The end
 `;
@@ -166,17 +173,3 @@ Hier staat de voetnoot tekst
 
 
    wmu.transformProject("./config.wmu", { outputPath: './out'});
-
-
-
-let abc = wmulist.newListTree(`a indicates lowercase letters
-- should be 'b'
-|A indicates uppercase letters
-||i:x indicates lowercase Roman numerals
-|||-:3 ul 1
-|||-:5 ul 2
-|I indicates uppercase Roman numerals
-|1 indicates numbers (default)
-- should be 'c'`);
-
-console.log( abc.toHtml() );

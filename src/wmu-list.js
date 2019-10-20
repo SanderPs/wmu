@@ -2,7 +2,7 @@ var wmubase = require('./wmu-base');
 
 class ListNode {
     constructor(title, level, type, parent) {
-        let tv = level > -1 ? type.match(/^(.*?)(?:(?=:|$)):*(.*?)$/) : [];
+        let tv = level > -1 ? type.match(/^(.*?)(?:(?=:|$)):?(.*?)$/) : [];
         this.title = title;
         this.level = level;
         this.type = tv[1];
@@ -47,7 +47,7 @@ class ListTree {
                 this.root.children[0] : // no Parts found, so start at H1 level
                 this.root // start at the Parts level
             , 0
-            );
+            ) + wmubase.eol;
     }
 
     hasContent() {
@@ -84,6 +84,4 @@ class ListTree {
     }
 }
 
-exports.newListTree = function(x) {
-    return new ListTree(x);
-};
+exports.ListTree = ListTree;

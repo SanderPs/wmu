@@ -51,6 +51,15 @@ table {
 }
 
 
+dt {
+	font-weight: bold;
+}
+dd {
+	background:none no-repeat left top;
+	padding-left: 50px;
+}
+
+
 /* uit bash manual */
 /* https://tiswww.case.edu/php/chet/bash/bashref.html */
 

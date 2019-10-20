@@ -15,6 +15,7 @@ var blockConfig = require('./block-config');
 var blockTable = require('./block-table');
 var blockBlock = require('./block-block');
 var blockNote = require('./block-note');
+var blockGlossary = require('./block-glossary');
 
 const wmu_commands = [
     // { onnodig?
@@ -212,6 +213,10 @@ function parseWmuBlock(config, match, block1, block2, block3)
         case 'footnote':
         case 'fn':
             result.push( blockNote.parse(def, block2) );
+            break;
+        case 'glossary':
+        case 'g':
+            result.push( blockGlossary.parse(def, block2) );
             break;
         case 'config':
             result.push( blockConfig.parse(def, config) );
