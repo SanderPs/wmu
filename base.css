@@ -50,7 +50,12 @@ table {
     text-align: justify;
 }
 
-
+dl {
+    margin: 1rem 0;
+}
+dl div {
+    margin: 2px 0;
+}
 dt {
 	font-weight: bold;
 }

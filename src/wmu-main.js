@@ -117,6 +117,8 @@ const wmu_commands = [
         to: '|h2|$1' + wmubase.eol + wmubase.eol 
     }
 
+    // idee: **title** en daarna paragraaf tekst -> markdown-header-3
+    
 ];
 
 const defaultConfig = {
@@ -126,6 +128,8 @@ const defaultConfig = {
 
 function parseWmu(str, config) {
 
+    let result = str;
+
     // first step: inline
     wmu_commands.forEach((cmd) => {
 
@@ -133,11 +137,13 @@ function parseWmu(str, config) {
             return;
         }
 
-        str=str.replace(cmd.regex, cmd.to);
+        result=result.replace(cmd.regex, cmd.to);
     });
 
     // second step: blocks
-    str = (str + wmubase.eol + wmubase.eol).replace(/(?:[\r\n]*([\s\S]+?)(?:(?:\|=\r?\n)([\s\S]+?))?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm, 
+    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:(?:\|=\r?\n)([\s\S]+?))?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
+
+    result = (result + wmubase.eol + wmubase.eol).replace(regex_block, 
         parseWmuBlock.bind(this, config));
 
 
@@ -145,13 +151,13 @@ function parseWmu(str, config) {
     let toc = wmutoc.tocTree;
       let currentChapterId=toc.getCurrentChapterId();
       if (currentChapterId) {
-        str +=
+        result +=
           '<!-- footnotes ' + currentChapterId + ' -->' + wmubase.eol + wmubase.eol
         ;
  
     }
 
-    return str;
+    return result;
 }
 
 function parseWmuBlock(config, match, block1, block2, block3) 
