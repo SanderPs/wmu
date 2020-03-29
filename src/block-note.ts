@@ -1,8 +1,9 @@
-var wmubase = require('./wmu-base');
+import * as wmubase from "./wmu-base";
+
 var wmutoc = require('./wmu-toc');
 var wmuNotes = require('./wmu-notes');
 
-function parse(allVar, body) {
+function parse(allVar: wmubase.IBlockDefinition, body: string) {
   
   // get the current 'context', the chapter where the footnote is found
   let toc = wmutoc.tocTree;
@@ -15,7 +16,3 @@ function parse(allVar, body) {
   // return empty string = remove text, it will be added later in another place
   return ''; 
 }
-
-module.exports = {
-  parse
-};

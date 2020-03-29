@@ -1,36 +1,60 @@
-var wmubase = require('./wmu-base');
+import * as wmubase from "./wmu-base";
 
 class TocNode {
-    constructor(title, level, id, parent) {
+    title: string;
+    level: number;
+    id: string;
+    index: number | null;
+    parent: TocNode | null;
+    children: TocNode[];
+
+    constructor(title: string, level: number, id: string, parent: TocNode | null) {
         this.title = title;
         this.level = level;
         this.id = id;
         this.index = parent ? parent.children.length + 1 : null;
         this.parent = parent;
         this.children = [];
-        tocIndex[id] = this;
     }
 }
 
-// wordt deze nog gebruikt?
-var tocIndex = {};
+class TocIndex {
+    index: { [key: string]: TocNode };
+
+    constructor() {
+        this.index = {};
+    }
+    add(id: string, node: TocNode) {
+        this.index[id] = node;
+    }
+    get(id: string) {
+        return this.index[id];
+    }
+}
 
 class TocTree {
+    root: TocNode | null;
+    lastAdded: TocNode | null;
+    treeIndex: TocIndex | null;
+
     constructor() {
         var rootNode = new TocNode('root', -1, 'id_root', null);
         this.root = rootNode;
         this.lastAdded = rootNode;
+        this.treeIndex = new TocIndex();
+        this.treeIndex.add('id_root', rootNode);
         this.addSequential('parts', 0, 'id_parts');
     }
 
-    addSequential(title, level, id) {
+    addSequential(title: string, level: number, id: string) {
         let currentNode = this.lastAdded;
-        while (level <= currentNode.level) {
-            currentNode = currentNode.parent;
+        while (level <= currentNode!.level) { // todo: Non-Null Assertion Operator?
+            currentNode = currentNode!.parent;
         }
         let newChild = new TocNode(title, level, id, currentNode);
-        currentNode.children.push(newChild);
+        currentNode!.children.push(newChild); // todo: Non-Null Assertion Operator?
         this.lastAdded = newChild;
+        this.treeIndex!.add(id, newChild);
 
         return this.lastAdded;
     }
@@ -39,31 +63,32 @@ class TocTree {
         // go back up the tree towards the h1:
         let currentNode = this.lastAdded;
 
-        while (currentNode.level > 1) {
-            currentNode = currentNode.parent;
+        while (currentNode!.level > 1) { // todo: Non-Null Assertion Operator?
+            currentNode = currentNode!.parent; // todo: Non-Null Assertion Operator?
         }
-        return currentNode.level == 1 ? currentNode.id : null; // level is een string!
+        return currentNode!.level == 1 ? currentNode!.id : null; // level is een string!
     }
 
     toHtml() {
         return this.recursiveHtml(
-            this.root.children.length == 1 ?
-                this.root.children[0] : // no Parts found, so start at H1 level
+            this.root!.children.length == 1 ?
+                this.root!.children[0] // no Parts found, so start at H1 level
+                :
                 this.root // start at the Parts level
             , 0
             );
     }
 
     hasContent() {
-        return this.lastAdded.level > 0; // todo: type of level?
+        return this.lastAdded!.level > 0; // todo: type of level?
     }
 
     getIndex() {
-        let chapterIndex = {};
-        let parts = this.root.children;
-        for (let x=0; x < parts.length; x++) {
+        let chapterIndex: { [key: string]: string } = {};
+        let parts = this.root!.children;
+        for (let x = 0; x < parts.length; x++) {
             let chapters = parts[x].children;
-            for (let y=0; y < chapters.length; y++) {
+            for (let y = 0; y < chapters.length; y++) {
                 chapterIndex[chapters[y].id] = {
                     tocChapter: chapters[y]
                 };
@@ -71,15 +96,11 @@ class TocTree {
             if (parts.length > 1) {
                 chapterIndex[chapters[0].id].partTitle = parts[x].title;
             }
-    }
+        }
         return chapterIndex;
     }
 
-    getChapter(id) {
-        return tocIndex[id];
-    }
-
-    recursiveHtml(element, cnt) {
+    recursiveHtml(element: TocNode, cnt: number) {
         if (element.children.length === 0) {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
                 "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + wmubase.eol : 
@@ -99,25 +120,4 @@ class TocTree {
     }
 }
 
-// todo: nog een keer checken
-var tocTree;
-exports.tocTree = tocTree;
-exports.newTocTree = function() {
-    this.tocTree = new TocTree();
-    tocIndex = {};
-};
-
-//todo: ???
-if (false) {
-    var tree = new TocTree();
-
-    tree.addSequential('Part 1', 0);
-    tree.addSequential('Hst1', 1);
-    tree.addSequential('1.1', 2);
-    tree.addSequential('Part2', 0);
-    tree.addSequential('Hst2', 1);
-    tree.addSequential('2.1', 2);
-    tree.addSequential('4.0', 4);
-
-    console.log(tree.toHtml())
-}
+export const tocTree = new TocTree();

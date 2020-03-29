@@ -1,10 +1,11 @@
-exports.eol = "\r\n";
-exports.eolIn = /\r?\n/;
-exports.eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
-var _wmu_project;
+export const eol = "\r\n";
+export const eolIn = /\r?\n/;
+export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
-exports.init = function () {
+var _wmu_project: object;
+
+export default function init() {
 
   _wmu_project = {
   };
@@ -12,25 +13,40 @@ exports.init = function () {
   return _wmu_project;
 }
 
-exports.getAll = function () {
+export function getAll() {
   return _wmu_project;
 };
 
-exports.parseDef = function (str) {
+export interface IBlockDefinition {
+  'block-type': string;
+  'level'?: string;
+  'number'?: number;
+  'block-align'? : string;
+  'title'?: string;
+  'language'?: string;
+  'format'?: string;
+  'src'?: string;
+  'start'?: string;
+  'id'?: string;
+  [key: string]: any; // todo: why type any and not type string?
+}
 
-  var parsedDef = str
+export function parseDef(str: string) {
+
+  let parsedDef = str
     .replace(/^\|/, "")
     .replace(/[\r\n\|]+$/, "")
     .split(/[\r\n\|]+/);
+    
   let isHeader = /(h|header)\d/.test(parsedDef[0]);
-  let blockType = isHeader ? 'h' : parsedDef[0]
+  let blockType = isHeader ? 'h' : parsedDef[0];
 
-  var allVar = {
+  let allVar : IBlockDefinition = {
     'block-type': blockType
   };
-
+  
   if (isHeader) {
-    allVar['level'] = parsedDef[0].match(/\d/)[0];
+    allVar['level'] = parsedDef[0].match(/\d/)![0];
   }
 
   for (let x = 1; x < parsedDef.length; x++) {
@@ -82,7 +98,7 @@ exports.parseDef = function (str) {
   return allVar;
 }
 
-exports.alignmentClass = function (str, isBlock) {
+export function alignmentClass(str: string, isBlock: boolean): string | null {
   let prefix = isBlock ? 'block-' : 'text-';
   if (/^-+:$/.test(str)) {
     return prefix + 'right';
@@ -96,12 +112,20 @@ exports.alignmentClass = function (str, isBlock) {
   return null;
 }
 
-exports.classAttr = function () {
-  let result = this.classList.apply(null, arguments);
+export function classAttr(...args: string[]) {
+  let list = args.filter(function (el) {
+    return el != null && el.length > 0;
+  });
+
+  return list.length ? ' class="' + list.join(' ') + '"' : '';
+}
+
+export function classAttrx(hrow: string | null, vrow: string | null) {
+  let result = classList(hrow, vrow);
   return (result.length ? ' class="' + result + '"' : '');
 }
 
-exports.classList = function () {
+export function classList(hrow: string | null, vrow: string | null) {
   let result = [];
   for (var i = 0; i < arguments.length; i++) {
     if (arguments[i] && arguments[i].length)
@@ -110,7 +134,7 @@ exports.classList = function () {
   return result.join(' ');
 }
 
-exports.valignmentClass = function (str) {
+export function valignmentClass(str: string) {
   if (/_/.test(str)) {
     return 'v-bottom';
   } else if (/-/.test(str)) {
@@ -123,15 +147,15 @@ exports.valignmentClass = function (str) {
 
 // Create a signature hash
 // based on: https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-exports.newElementId = function (str) {
+export function newElementId(str: string) {
   return 'id_' + hashCode(str); // todo: keep list and check
 }
 
-function hashCode(str, max) {
+function hashCode(str: string, max?: number) {
   var hash = 0;
   if (!str.length) return hash;
-  for (i = 0; i < str.length; i++) {
-    char = str.charCodeAt(i);
+  for (let i = 0; i < str.length; i++) {
+    let char = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32bit integer
   }
@@ -144,53 +168,3 @@ function hashCode(str, max) {
 
 
 
-
-
-//export 
-class User {
-
-  get firstName() {
-    return this.firstName;
-  }
-
-  get lastName() {
-    return this.lastName;
-  }
-
-  get fullName() {
-    return `${this.firstName} ${this.lastName}`;
-  }
-
-  get age() {
-    return this.age;
-  }
-
-  constructor(firstName, lastName, age) {
-    this.setName(firstName, lastName);
-    this.setAge(age);
-  }
-
-  setName(firstName, lastName) {
-    if (this.validName(firstName) && this.validName(lastName)) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-    }
-  }
-
-  setAge(age) {
-    if (age >= 18) {
-      this.age = age;
-    } else {
-      throw new Error('User age must be greater than 18');
-    }
-  }
-
-  // private 
-  validName(name) {
-    if (name.length > 0 && /^[a-zA-Z]+$/.test(name)) {
-      return true
-    } else {
-      throw new Error('Invalid name format');
-    }
-  }
-}

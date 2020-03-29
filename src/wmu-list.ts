@@ -1,19 +1,33 @@
-var wmubase = require('./wmu-base');
+import * as wmubase from "./wmu-base";
 
 class ListNode {
-    constructor(title, level, type, parent) {
-        let tv = level > -1 ? type.match(/^(.*?)(?:(?=:|$)):?(.*?)$/) : [];
+
+    title: string;
+    level: number; // number of pipe characters at beginning of line
+    type: string; // one of 'aAiI1', or else unordered; possibly followed by ':<value>'
+    index: string | null;
+    parent: ListNode | null;
+    children: ListNode[];
+
+    constructor(title: string, level: number, type: string, parent: ListNode | null) {
+        let tv = level > -1 ? 
+        type.match(/^(.*?)(?:(?=:|$)):?(.*?)$/) : 
+        [];
         this.title = title;
         this.level = level;
-        this.type = tv[1];
-        this.index = tv[2] ? tv[2] : null;
+        this.type = tv![1] ?? '';
+        this.index = tv![2] ? tv![2] : null;
         this.parent = parent;
         this.children = [];
     }
 }
 
-class ListTree {
-    constructor(body) {
+export class ListTree {
+
+    root: ListNode;
+    lastAdded: ListNode;
+
+    constructor(body: string) {
 
         let items = body.split(wmubase.eolIn);
 
@@ -24,15 +38,17 @@ class ListTree {
         for (let x=0; x < items.length;  x++) {
           let row = items[x].match(/^(\|*)(.*?(?: +))(.*)$/);
 
-          this.addSequential(row[3], row[1].length + 1, row[2].trim());
+          // row[1] = the number of pipe characters at the beginning of the line
+          // row[2] = the list-item marker (-1IaA etc)
+          // row[3] = the text
+          this.addSequential(row![3], row![1].length + 1, row![2].trim()); // todo: Non-Null Assertion Operator?
         }
-        
     }
 
-    addSequential(title, level, type) {
+    addSequential(title: string, level: number, type: string) {
         let currentNode = this.lastAdded;
         while (level <= currentNode.level) {
-            currentNode = currentNode.parent;
+            currentNode = currentNode.parent!; // todo: Non-Null Assertion Operator?
         }
         let newChild = new ListNode(title, level, type, currentNode);
         currentNode.children.push(newChild);
@@ -54,7 +70,7 @@ class ListTree {
         return this.lastAdded.level > 0; // todo: type of level?
     }
 
-    recursiveHtml(element, cnt) {
+    recursiveHtml(element: ListNode, cnt: number) {
         if (element.children.length === 0) {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
             '\t'.repeat(cnt-1) + '<li' +
@@ -83,5 +99,3 @@ class ListTree {
         }
     }
 }
-
-exports.ListTree = ListTree;
