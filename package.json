@@ -1,26 +1,26 @@
 {
   "name": "wmu",
   "version": "0.0.1",
-  "description": "WritersMarkUp",
+  "description": "WritersMarkUp: more advanced than MarkDown, easier than LaTeX",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "author": "Sander Peschier",
+  "license": "MIT",
   "scripts": {
     "prepare": "npm run build",
-    "build": "./node_modules/.bin/tsc"
+    "build": "tsc -v && tsc && tsc -m es6 --outDir lib-esm && webpack"
   },
-  "files": [
-    "lib"
-  ],
   "keywords": [
     "markup",
     "language",
     "write",
     "book"
   ],
-  "author": "SP",
-  "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^3.8.3"
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   }
 }

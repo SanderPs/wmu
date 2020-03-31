@@ -1,5 +1,13 @@
 import * as wmubase from "./wmu-base";
 
+interface IChapterIndex {
+    [key: string]: {
+        tocChapter: TocNode;
+        partTitle?: string;
+    }
+}
+
+
 class TocNode {
     title: string;
     level: number;
@@ -74,7 +82,7 @@ class TocTree {
             this.root!.children.length == 1 ?
                 this.root!.children[0] // no Parts found, so start at H1 level
                 :
-                this.root // start at the Parts level
+                this.root! // start at the Parts level
             , 0
             );
     }
@@ -84,7 +92,7 @@ class TocTree {
     }
 
     getIndex() {
-        let chapterIndex: { [key: string]: string } = {};
+        let chapterIndex : IChapterIndex = {};
         let parts = this.root!.children;
         for (let x = 0; x < parts.length; x++) {
             let chapters = parts[x].children;

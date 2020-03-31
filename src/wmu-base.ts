@@ -5,12 +5,18 @@ export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
 var _wmu_project: object;
 
-export default function init() {
+export function init() {
 
   _wmu_project = {
   };
 
   return _wmu_project;
+}
+
+export interface IConfig {
+  toBook?: boolean;
+  createToc?: boolean;
+  tocTitle?: string;
 }
 
 export function getAll() {

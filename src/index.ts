@@ -2,12 +2,27 @@ import * as wmubase from "./wmu-base";
 
 import { wmu_commands, IWMUCommands } from "./wmu-commands";
 
+import * as blockConfig from './block-config';
 import * as blockTable from './block-table';
 import * as blockQuote from './block-quote';
-import * as blockList from "./block-list";
+import * as blockList from './block-list';
+import * as blockNote from './block-note';
+import * as blockImage from './block-img';
+import * as blockHeader from './block-header';
+import * as blockGlossary from './block-glossary';
+import * as blockCode from './block-code';
+import * as blockBlock from './block-block';
 
 console.log('WMU: ', 
-    parseWmu(`
+    parseWmu(
+`
+|toc
+
+|h1|hst 1
+
+|h1|hst 2
+
+|h2|hst 2.2
 
 |table|:-:
 |format=dash
@@ -31,11 +46,41 @@ console.log('WMU: ',
 -:2 twee
 3 drie
 
+|img|=./my-image.jpeg
+|title=Image that explains it all
+
+
+|glossary
+|=
+|css
+|css3
+||Cascading Style Sheets
+|html
+||Hyper Text Markup Language
+
+|code
+|language=js
+|=
+|// use pipe character to keep one block:
+|
+|for (var x=0; x++ x<10) {
+|    console.log('hallo'); // dit is een test
+|}
+| if (a || b) {
+|   // pipe in code block should be ok    
+|}
+| if (d && e) {
+|    // ampersand should be ....
+|}
+
+|block|=thumbsup-class
+|=
+Heel goed gedaan!
+
     `, {})
 );
 
-
-export function parseWmu(str: string, config: object) {
+export function parseWmu(str: string, config: wmubase.IConfig) {
 
     let result = str;
 
@@ -51,7 +96,7 @@ export function parseWmu(str: string, config: object) {
     });
 
     // second step: blocks
-    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:\r?\n)(?:(?:\|=\r?\n)([\s\S]+?))(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
+    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
 
     interface x {
         match?: string;
@@ -82,7 +127,7 @@ export function parseWmu(str: string, config: object) {
 }
 
 
-function parseWmuBlock(config: object, block1: string, block2: string, block3: string): string
+function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, block3: string): string
 {
     let result: string[] = [];
 
@@ -112,7 +157,7 @@ function parseWmuBlock(config: object, block1: string, block2: string, block3: s
             break;
         case 'header':
         case 'h':
-//            result.push( blockHeader.parse(def) );
+            result.push( blockHeader.parse(def) );
             break;
         case 'quote':
         case 'q':
@@ -120,16 +165,16 @@ function parseWmuBlock(config: object, block1: string, block2: string, block3: s
             break;
         case 'code':
         case 'c':
-//            result.push( blockCode.parse(def, block2) );
+            result.push( blockCode.parse(def, block2) );
             break;
         case 'block':
         case 'b':
-//            result.push( blockBlock.parse(def, block2) );
+            result.push( blockBlock.parse(def, block2) );
             break;
         case 'image':
         case 'img':
         case 'i':
-//            result.push( blockImage.parse(def) );
+            result.push( blockImage.parse(def) );
             break;
         case 'list':
         case 'l':
@@ -141,14 +186,14 @@ function parseWmuBlock(config: object, block1: string, block2: string, block3: s
             break;
         case 'footnote':
         case 'fn':
-//            result.push( blockNote.parse(def, block2) );
+            result.push( blockNote.parse(def, block2) );
             break;
         case 'glossary':
         case 'g':
-//            result.push( blockGlossary.parse(def, block2) );
+            result.push( blockGlossary.parse(def, block2) );
             break;
         case 'config':
-//            result.push( blockConfig.parse(def, config) );
+            result.push( blockConfig.parse(def, config) );
             break;
     }
     

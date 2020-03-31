@@ -12,11 +12,11 @@ class ListNode {
     constructor(title: string, level: number, type: string, parent: ListNode | null) {
         let tv = level > -1 ? 
         type.match(/^(.*?)(?:(?=:|$)):?(.*?)$/) : 
-        [];
+        ['',''];
         this.title = title;
         this.level = level;
         this.type = tv![1] ?? '';
-        this.index = tv![2] ? tv![2] : null;
+        this.index = tv![2] ?? null;
         this.parent = parent;
         this.children = [];
     }

@@ -1,7 +1,7 @@
-var wmubase = require('./wmu-base');
-var wmutoc = require('./wmu-toc');
+import * as wmubase from "./wmu-base";
+import * as wmutoc from "./wmu-toc";
 
-function parse(allVar) {
+export function parse(allVar: wmubase.IBlockDefinition) {
 
   let result = [];
 
@@ -16,8 +16,10 @@ function parse(allVar) {
     }
   }
 
-  let newHeaderId = wmubase.newElementId(allVar['title'] + allVar['level']);
-  let lastAdded = toc.addSequential(allVar['title'], allVar['level'], newHeaderId);
+  let newHeaderId = wmubase.newElementId(allVar['title']! + allVar['level']);
+
+  // nodig?
+  // let lastAdded = toc.addSequential(allVar['title']!, allVar['level'], newHeaderId);
 
   
   // create output
@@ -28,7 +30,3 @@ function parse(allVar) {
 
   return result.join('');
 }
-
-module.exports = {
-  parse
-};

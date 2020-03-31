@@ -1,6 +1,6 @@
-var wmubase = require('./wmu-base');
-  
-function parse(allVar, body) {
+import * as wmubase from "./wmu-base";
+
+export function parse(allVar: wmubase.IBlockDefinition, body: string) {
 
     let result = [];
 
@@ -36,8 +36,3 @@ function parse(allVar, body) {
 
     return result.join('');
 }
-  
-module.exports = {
-  parse
-};
-  

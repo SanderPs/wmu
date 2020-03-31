@@ -1,14 +1,14 @@
-var wmubase = require('./wmu-base');
+import * as wmubase from "./wmu-base";
   
-function parse(allVar, body) {
+export function parse(allVar: wmubase.IBlockDefinition, body: string) {
 
   let result = [];
 
   result.push(
     '<div' +
     wmubase.classAttr(
-      (allVar['block-align'] ? wmubase.alignmentClass(allVar['block-align'], true) : null),
-      allVar['format']
+      wmubase.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
+      allVar['format'] ?? ''
     ) +
     '>' + wmubase.eol);
   
@@ -18,8 +18,3 @@ function parse(allVar, body) {
 
   return result.join('');
 }
-  
-module.exports = {
-  parse
-};
-  
