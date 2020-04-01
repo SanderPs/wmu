@@ -13,7 +13,10 @@ describe('Tag bold', () => {
 
     const result = blockImage.parseWmu('Text in **bold**', options);
 
-    expect(result).to.equal('Text in <b>bold</b>');
+    expect(result).to.equal(
+      '<p>' + wmubase.eol +
+        'Text in <b>bold</b>' + wmubase.eol +
+      '</p>' + wmubase.eol + wmubase.eol);
   });
 
 });

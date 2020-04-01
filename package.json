@@ -9,7 +9,8 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc -v && tsc && tsc -m es6 --outDir lib-esm && webpack",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "test": "mocha -r ts-node/register test/**/*.ts",
+    "compilets": "tsc"
   },
   "keywords": [
     "markup",

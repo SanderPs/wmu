@@ -28,7 +28,8 @@ describe('Block image', () => {
 
     const result = blockImage.parse(allVar);
 
-    expect(result).to.equal('');
+    // todo: abstract error messages away
+    expect(result).to.equal('<div class="wmu-error">Image without source</div>');
   });
 
 });
