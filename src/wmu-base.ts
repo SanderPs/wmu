@@ -24,7 +24,7 @@ export function getAll() {
 };
 
 export interface IBlockDefinition {
-  'block-type': string;
+  'block-type'?: string;
   'level'?: string;
   'number'?: number;
   'block-align'? : string;

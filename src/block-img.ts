@@ -2,6 +2,11 @@ import * as wmubase from "./wmu-base";
   
 export function parse(allVar: wmubase.IBlockDefinition) {
 
+  if (!allVar['src']?.length) {
+
+    return '<div class="wmu-error">Image without source</div>';
+  }
+
   let result = [];
 
   result.push('<figure>' + wmubase.eol);

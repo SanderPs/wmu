@@ -14,70 +14,7 @@ import * as blockCode from './block-code';
 import * as blockBlock from './block-block';
 
 console.log('WMU: ', 
-    parseWmu(
-`
-|toc
-
-|h1|hst 1
-
-|h1|hst 2
-
-|h2|hst 2.2
-
-|table|:-:
-|format=dash
-|caption=Fig 1.
-|=
-|a|b|c|d|e|
-|:---|---:|:---:|-:-|---|
-|v=T||-||_|
-|=
-|1|2|3|4|5|
-
-|quote
-|=
-|Quote
-|=
-|Door SP
-
-|list|=1|type=A
-|=
-1 een 
--:2 twee
-3 drie
-
-|img|=./my-image.jpeg
-|title=Image that explains it all
-
-
-|glossary
-|=
-|css
-|css3
-||Cascading Style Sheets
-|html
-||Hyper Text Markup Language
-
-|code
-|language=js
-|=
-|// use pipe character to keep one block:
-|
-|for (var x=0; x++ x<10) {
-|    console.log('hallo'); // dit is een test
-|}
-| if (a || b) {
-|   // pipe in code block should be ok    
-|}
-| if (d && e) {
-|    // ampersand should be ....
-|}
-
-|block|=thumbsup-class
-|=
-Heel goed gedaan!
-
-    `, {})
+parseWmu(`Text in **bold**`, {})
 );
 
 export function parseWmu(str: string, config: wmubase.IConfig) {

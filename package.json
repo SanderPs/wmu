@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc -v && tsc && tsc -m es6 --outDir lib-esm && webpack"
+    "build": "tsc -v && tsc && tsc -m es6 --outDir lib-esm && webpack",
+    "test": "mocha -r ts-node/register test/**/*.ts"
   },
   "keywords": [
     "markup",
@@ -18,7 +19,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
     "ts-loader": "^6.2.2",
+    "ts-node": "^8.8.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
