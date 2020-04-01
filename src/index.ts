@@ -12,6 +12,7 @@ import * as blockHeader from './block-header';
 import * as blockGlossary from './block-glossary';
 import * as blockCode from './block-code';
 import * as blockBlock from './block-block';
+import * as blockPar from './block-par';
 
 console.log('WMU: ', 
     parseWmu(
@@ -182,7 +183,7 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
             break;
         case 'par':
         case 'p':
-//            result.push( blockPar.parse(block1) );
+            result.push( blockPar.parse(block1) );
             break;
         case 'footnote':
         case 'fn':
