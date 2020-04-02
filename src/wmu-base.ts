@@ -17,6 +17,7 @@ export interface IConfig {
   toBook?: boolean;
   createToc?: boolean;
   tocTitle?: string;
+  doctype?: string; // 'book', 'ebook', 'web'
 }
 
 export function getAll() {

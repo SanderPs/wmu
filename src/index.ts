@@ -14,6 +14,9 @@ import * as blockCode from './block-code';
 import * as blockBlock from './block-block';
 import * as blockPar from './block-par';
 
+import * as wmutoc from './wmu-toc';
+
+
 console.log('WMU: ', 
 parseWmu(`Text in **bold**`, {})
 );
@@ -22,7 +25,18 @@ export function parseWmu(str: string, config: wmubase.IConfig) {
 
     let result = str;
 
-    // first step: inline
+    result = parseTags(str, config);
+
+    result = parseBlocks(result, config);
+
+    result = addAdditional(result, config);
+
+    return result;
+}
+
+function parseTags(str: string, config: wmubase.IConfig) {
+    let result = str;
+
     wmu_commands.forEach((cmd: IWMUCommands) => {
 
         // todo: wordt nu niet (meer?) gebruikt
@@ -33,15 +47,13 @@ export function parseWmu(str: string, config: wmubase.IConfig) {
         result=result.replace(cmd.regex, cmd.to);
     });
 
-    // second step: blocks
-    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
+    return result;
+}
 
-    interface x {
-        match?: string;
-        block1?: string;
-        block2?: string;
-        block3?: string;
-    }
+function parseBlocks(str: string, config: wmubase.IConfig) {
+    let result = str;
+
+    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
 
     result = (result + wmubase.eol + wmubase.eol).replace(regex_block, 
         function (substring: string, ...args: any[]): any { // todo: ts edgecase 'any'?
@@ -49,21 +61,22 @@ export function parseWmu(str: string, config: wmubase.IConfig) {
         }
     );
 
-
-    // third step: if there are h1's
-// temp!!!
-    // let toc = wmutoc.tocTree;
-    //   let currentChapterId=toc.getCurrentChapterId();
-    //   if (currentChapterId) {
-    //     result +=
-    //       '<!-- footnotes ' + currentChapterId + ' -->' + wmubase.eol + wmubase.eol
-    //     ;
- 
-    // }
-
     return result;
 }
 
+function addAdditional(str: string, config: wmubase.IConfig) {
+
+    let result = str;
+
+    let toc = wmutoc.tocTree;
+      let currentChapterId=toc.getCurrentChapterId();
+      if (currentChapterId) {
+        result +=
+          '<!-- footnotes ' + currentChapterId + ' -->' + wmubase.eol + wmubase.eol;
+     }
+
+    return result;
+}
 
 function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, block3: string): string
 {

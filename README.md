@@ -6,6 +6,11 @@ More advanced then Markdown, simpler then LaTeX
 
 - spaties: na tekst voor regeleinde, en op lege regel
 
+## Handig:
+
+- zie https://github.com/matteobruni/tsparticles/blob/master/webpack.config.js
+- idem voor packages scripts!
+
 ## Todo
 
 - todo: inline en block list?!
