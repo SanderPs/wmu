@@ -1,5 +1,5 @@
-import * as wmubase from "./wmu-base";
-import * as wmulist from "./wmu-list";
+import * as wmubase from "./../wmu-base";
+import * as wmulist from "./../wmu-list";
    
 export function parse(allVar: wmubase.IBlockDefinition, body: string) {
     return new wmulist.ListTree(body).toHtml();

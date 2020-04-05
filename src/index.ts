@@ -2,23 +2,13 @@ import * as wmubase from "./wmu-base";
 
 import { wmu_commands, IWMUCommands } from "./wmu-commands";
 
-import * as blockConfig from './block-config';
-import * as blockTable from './block-table';
-import * as blockQuote from './block-quote';
-import * as blockList from './block-list';
-import * as blockNote from './block-note';
-import * as blockImage from './block-img';
-import * as blockHeader from './block-header';
-import * as blockGlossary from './block-glossary';
-import * as blockCode from './block-code';
-import * as blockBlock from './block-block';
-import * as blockPar from './block-par';
+import * as block from './blocks'; // barrel
 
 import * as wmutoc from './wmu-toc';
 
 
 console.log('WMU: ', 
-parseWmu(`Text in **bold**`, {})
+parseWmu(`Text in **bold**\n\n|code\n|=\nif x> 10`, {})
 );
 
 export function parseWmu(str: string, config: wmubase.IConfig) {
@@ -104,47 +94,47 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
     switch(def['block-type']) {
         case 'table':
         case 't':
-            result.push( blockTable.parse(def, block2, block3) );
+            result.push( block.table.parse(def, block2, block3) );
             break;
         case 'header':
         case 'h':
-            result.push( blockHeader.parse(def) );
+            result.push( block.header.parse(def) );
             break;
         case 'quote':
         case 'q':
-            result.push( blockQuote.parse(def, block2, block3) );
+            result.push( block.quote.parse(def, block2, block3) );
             break;
         case 'code':
         case 'c':
-            result.push( blockCode.parse(def, block2) );
+            result.push( block.code.parse(def, block2) );
             break;
         case 'block':
         case 'b':
-            result.push( blockBlock.parse(def, block2) );
+            result.push( block.block.parse(def, block2) );
             break;
         case 'image':
         case 'img':
         case 'i':
-            result.push( blockImage.parse(def) );
+            result.push( block.img.parse(def) );
             break;
         case 'list':
         case 'l':
-            result.push( blockList.parse(def, block2) );
+            result.push( block.list.parse(def, block2) );
             break;
         case 'par':
         case 'p':
-            result.push( blockPar.parse(block1) );
+            result.push( block.par.parse(block1) );
             break;
         case 'footnote':
         case 'fn':
-            result.push( blockNote.parse(def, block2) );
+            result.push( block.note.parse(def, block2) );
             break;
         case 'glossary':
         case 'g':
-            result.push( blockGlossary.parse(def, block2) );
+            result.push( block.glossary.parse(def, block2) );
             break;
         case 'config':
-            result.push( blockConfig.parse(def, config) );
+            result.push( block.config.parse(def, config) );
             break;
     }
     

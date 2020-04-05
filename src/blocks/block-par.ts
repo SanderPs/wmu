@@ -1,4 +1,4 @@
-import * as wmubase from "./wmu-base";
+import * as wmubase from "./../wmu-base";
 
 // todo: verplaatsen?
 import * as blockList from "./block-list";

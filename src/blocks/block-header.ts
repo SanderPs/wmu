@@ -1,5 +1,5 @@
-import * as wmubase from "./wmu-base";
-import * as wmutoc from "./wmu-toc";
+import * as wmubase from "./../wmu-base";
+import * as wmutoc from "./../wmu-toc";
 
 export function parse(allVar: wmubase.IBlockDefinition) {
 

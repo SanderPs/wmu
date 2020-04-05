@@ -1,5 +1,5 @@
 import * as wmubase from "../../src/wmu-base";
-import * as blockImage from '../../src/block-img';
+import * as blockImage from '../../src/blocks/block-img';
 
 import { expect } from 'chai';
 import 'mocha';
