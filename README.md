@@ -2,7 +2,17 @@
 
 More advanced then Markdown, simpler then LaTeX
 
-## Bug
+## Folders
+
+|folder||
+|---|---|
+|`/src/`|source files (ts)|
+|`/lib/`|output of tsc|
+|`/dist/`|output of webpack.config.js|
+|`/lib_esm/`|tsc -m es6 --outDir lib-esm|
+
+
+## Bugs
 
 - spaties: na tekst voor regeleinde, en op lege regel
 

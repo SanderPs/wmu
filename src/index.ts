@@ -83,7 +83,7 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
     let def;
     let isBlock = block1.charCodeAt(0) === 124;
     if (isBlock) {
-        def = wmubase.parseDef(block1);
+        def = wmubase.parseDef(block1); // try catch
     } else {
         // a block that doesn't start with a pipe character is a paragraph:
         def = {
