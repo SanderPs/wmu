@@ -23,7 +23,7 @@ NB: anders opzetten: alles in `/dist/` (zie notes-wmu/.../js-versions.wmu)
 - idem voor packages scripts!
 
 ## Todo
-
+- alternatieve-regex.js
 - todo: inline en block list?!
 - todo: markdown compatability?
 - adding |toc -> set createtoc to true

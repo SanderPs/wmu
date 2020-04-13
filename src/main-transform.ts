@@ -1,63 +1,58 @@
-var fs = require('fs')
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
-var wmubase = require('./wmu-base');
-var wmutoc = require('./wmu-toc');
-var wmuNotes = require('./wmu-notes');
-
-var blockList = require('./block-list');
-var blockCode = require('./block-code');
-var blockImage = require('./block-img');
-var blockPar = require('./block-par');
-var blockQuote = require('./block-quote');
-var blockHeader = require('./block-header');
-var blockConfig = require('./block-config');
-var blockTable = require('./block-table');
-var blockBlock = require('./block-block');
-var blockNote = require('./block-note');
-var blockGlossary = require('./block-glossary');
+import * as wmubase from "./wmu-base";
+import * as wmuparse from "./main-parse";
+import * as wmutoc from "./wmu-toc";
+import * as wmuNotes from "./wmu-notes";
 
 
-const defaultConfig = {
+
+const defaultConfig: wmubase.IConfig = {
     createToc: false,
     toBook: false,
 };
 
 
-function transformString(wmuString, config) {
+type IDocResult = {
+    body: string;
+    toc: string;
+    allnotes: wmuNotes.IHtmlNotes;
+}
+export function transformString(wmuString: string, config: wmubase.IConfig): IDocResult {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
     wmuNotes.reset();
 
-    resultBody = parseWmu(wmuString, newConfig);
+    let resultBody = wmuparse.parseWmu(wmuString, newConfig);
     // notesStore is gevuld
-    resultToc = wmuDoToc(newConfig, resultBody);
+    let resultToc = wmuDoToc(newConfig);
     resultBody = wmuNotes.parseInlineNoteIds(resultBody);
 
-    let allnotes = wmuNotes.storedNotesToHtml(resultBody);
+    let allnotes = wmuNotes.notesStore.toHtml();
 
     return {
         body: resultBody,
         toc: resultToc,
-        notes: allnotes,
+        allnotes: allnotes,
         //index:
     };
 }
 
-function transformFragment(str, config) {
+export function transformFragment(str: string, config: wmubase.IConfig): string {
 
     let parsed = transformString(str, config);
 
-    let resultHtml = parsed.toc + wmubase.eol  + wmubase.eol +
-        parsed.body + wmubase.eol  + wmubase.eol; 
-    
-    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); // todo
+    let resultHtml = parsed.toc + wmubase.eol + wmubase.eol +
+        parsed.body + wmubase.eol + wmubase.eol;
+
+    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); // todo
 
     return resultHtml;
 }
 
-function transformPage(wmustring, config) {
+export function transformPage(wmustring: string, config: wmubase.IConfig): string {
 
     let parsed = transformString(wmustring, config);
 
@@ -67,17 +62,17 @@ function transformPage(wmustring, config) {
     resultHtml = resultHtml.replace(/##body##/, parsed.body);
     resultHtml = resultHtml.replace(/##head##/, '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol);
 
-    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.notes, 'endOfChapter'); //endOfBook'); // todo
+    resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); //endOfBook'); // todo
 
     return resultHtml;
 }
 
-function transformProject(filepath, config) {
+export function transformProject(filepath, config) {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
     wmuNotes.reset();
-    let _wmuproject = wmubase.init();
+    let _wmuproject: wmubase.IProject = wmubase.init();
 
     let projectFile = path.parse(filepath);
 
@@ -85,7 +80,7 @@ function transformProject(filepath, config) {
     let wmusettings = data.split(/\r\n/gm);
 
     wmusettings.forEach(element => {
-        setting = element.split(/\|/);
+        let setting = element.split(/\|/);
         _wmuproject[setting[0]] = setting[1];
     });
 
@@ -103,12 +98,12 @@ function transformProject(filepath, config) {
         fs.writeFileSync(outputPath + path.sep + 'output.html', bodyHtml, 'utf8');
 
         return;
-    } 
+    }
 
     return bodyHtml;
 }
 
-function wmuDoToc(config) {
+function wmuDoToc(config: wmubase.IConfig): string {
     let tocHtml = "";
     let toc = wmutoc.tocTree;
     if (config.createToc && toc.hasContent()) {
@@ -118,13 +113,13 @@ function wmuDoToc(config) {
 
         tocHtml +=
             '<div id=\'toc\'>' + wmubase.eol +
-                toc.toHtml() +
+            toc.toHtml() +
             '</div>' + wmubase.eol + wmubase.eol;
     }
     return tocHtml;
 }
 
-function getHTMLstr() {
+function getHTMLstr(): string {
 
     let lang = 'nl';
 
@@ -155,7 +150,7 @@ function getHTMLstr() {
     return templ;
 }
 
-function concatFiles(files, location) {
+function concatFiles(files: string, location: string): string {
     let contentArray = [];
     let allfiles = files.split(/,/);
 
@@ -168,7 +163,7 @@ function concatFiles(files, location) {
         }
 
         try {
-            contentArray.push( fs.readFileSync(filename, 'utf8') );
+            contentArray.push(fs.readFileSync(filename, 'utf8'));
         } catch (err) {
             console.log('error reading file', err)
         };
@@ -179,13 +174,16 @@ function concatFiles(files, location) {
 }
 
 // todo: mode to util or something:
-const fillTemplate = function(templ, vars){
-   // new Function(`return \`${templ}\`;`).call(vars);
+export const fillTemplate = function (templ: string, vars: object) {
+    // new Function(`return \`${templ}\`;`).call(vars);
     return new Function("return `" + templ + "`;").call(vars);
 }
 
-module.exports = {
-    transformFragment,
-    transformPage,
-    transformProject
+interface IHtmlPositions {
+    toc: string;
+    body: string;
+    head: string;
 }
+function fillHtml(a: IHtmlPositions) {
+ //   return `a is ${a.toc} and b is ${a.y}`;
+  }

@@ -5,6 +5,7 @@ export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
 var _wmu_project: object;
 
+
 export function init() {
 
   _wmu_project = {
@@ -18,6 +19,10 @@ export interface IConfig {
   createToc?: boolean;
   tocTitle?: string;
   doctype?: string; // 'book', 'ebook', 'web'
+}
+
+export interface IProject {
+  files?: string;
 }
 
 export function getAll() {

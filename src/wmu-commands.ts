@@ -3,11 +3,14 @@ import * as wmubase from "./wmu-base";
 export interface IWMUCommands {
     description: string; 
     type: string; 
+    example?: string;
     regex: RegExp;
     to: string;
     level?: string;
 }
 
+
+// todo: net als launch.json:     "version": "0.2.0",
 export const wmu_commands: IWMUCommands[] = [
     // { onnodig?
     //     description: 'ampersand',
@@ -75,12 +78,14 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'class', 
         type: 'inline',
+        example: '[$text]##$class##',
         regex: /(?:\[(.+)\])##(.+)(?:##)/g, 
         to: '<span class="$2">$1</span>' 
     },
     {
         description: 'hyperlink', 
         type: 'inline',
+        example: '[$text]\\$link\\',
         regex: /(?:\[(.+)\])\(\((.+)(?:\)\))/g, 
         to: '<a href="$2">$1</a>' 
     },
@@ -88,13 +93,15 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'markdown-header-1', 
         type: 'markdown',
-        regex: /^(.+?)\r?\n={3,}/gm, 
+        example: `$1\n===$`,
+        regex: /^(.+?)\r?\n={3,}$/gm, 
         to: '|h1|$1' + wmubase.eol + wmubase.eol 
     },
     {
         description: 'markdown-header-2', 
         type: 'markdown',
-        regex: /^(.+?)\r?\n-{3,}/gm, 
+        example: `$1\n---$`,
+        regex: /^(.+?)\r?\n-{3,}$/gm, 
         to: '|h2|$1' + wmubase.eol + wmubase.eol 
     }
 ];

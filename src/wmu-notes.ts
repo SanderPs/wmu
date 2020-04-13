@@ -15,7 +15,7 @@ interface INotesStore {
     }
 }
 
-interface IHtmlNotes {
+export interface IHtmlNotes {
     [key: string]: {
         notesAsHtml: string;
     }

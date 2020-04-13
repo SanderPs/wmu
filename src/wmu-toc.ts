@@ -128,4 +128,8 @@ class TocTree {
     }
 }
 
-export const tocTree = new TocTree();
+export function newTocTree() {
+    tocTree = new TocTree();
+};
+
+export let tocTree = new TocTree();
