@@ -7,12 +7,10 @@ import * as wmutoc from "./wmu-toc";
 import * as wmuNotes from "./wmu-notes";
 
 
-
 const defaultConfig: wmubase.IConfig = {
     createToc: false,
     toBook: false,
 };
-
 
 type IDocResult = {
     body: string;
@@ -53,14 +51,14 @@ export function transformFragment(str: string, config: wmubase.IConfig): string 
 }
 
 export function transformPage(wmustring: string, config: wmubase.IConfig): string {
-
     let parsed = transformString(wmustring, config);
 
-    let resultHtml = getHTMLstr();
-
-    resultHtml = resultHtml.replace(/##toc##/, parsed.toc);
-    resultHtml = resultHtml.replace(/##body##/, parsed.body);
-    resultHtml = resultHtml.replace(/##head##/, '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol);
+    let resultHtml = pageHtml(<IHtmlPositions>{
+            lang: "nl",
+            toc: parsed.toc,
+            body: parsed.body,
+            head: '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol
+        });
 
     resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); //endOfBook'); // todo
 
@@ -119,28 +117,32 @@ function wmuDoToc(config: wmubase.IConfig): string {
     return tocHtml;
 }
 
-function getHTMLstr(): string {
-
-    let lang = 'nl';
+interface IHtmlPositions {
+    lang: string;
+    toc: string;
+    body: string;
+    head: string;
+}
+function pageHtml(vars: IHtmlPositions): string {
 
     let templ = `<!doctype html>
-<html lang='${lang}'>
+<html lang='${vars.lang}'>
     <head>
         <meta charset="utf-8">
         <title>boek</title>
 
         <link rel="stylesheet" href="../book-imitate.css">
         <link rel="stylesheet" href="../base.css">
-##head##
+${vars.head}
     </head>
 
     <body class="multipage">
 
 <div class="bookpage">
-    ##toc##
+${vars.toc}
 </div>
     
-##body##
+${vars.body}
 
 <!-- # notes-endofbook # -->
 
@@ -172,18 +174,3 @@ function concatFiles(files: string, location: string): string {
 
     return contentArray.join(wmubase.eol + wmubase.eol) + wmubase.eol + wmubase.eol;
 }
-
-// todo: mode to util or something:
-export const fillTemplate = function (templ: string, vars: object) {
-    // new Function(`return \`${templ}\`;`).call(vars);
-    return new Function("return `" + templ + "`;").call(vars);
-}
-
-interface IHtmlPositions {
-    toc: string;
-    body: string;
-    head: string;
-}
-function fillHtml(a: IHtmlPositions) {
- //   return `a is ${a.toc} and b is ${a.y}`;
-  }
