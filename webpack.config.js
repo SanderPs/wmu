@@ -1,22 +1,23 @@
-var path = require("path");
+const path = require("path");
 const TerserPlugin = require('terser-webpack-plugin');
 
-var PATHS = {
-  entryPoint: path.resolve(__dirname, 'src/index.ts'),
-  bundles: path.resolve(__dirname, 'dist'),
+var settings = {
+  libraryName : 'wmu', // name
+  entryPoint: path.resolve(__dirname, 'src/index.ts'), // start file 
+  bundles: path.resolve(__dirname, 'dist'), // output folder
 }
 
 var config = {
   entry: {
-    'my-lib': [PATHS.entryPoint],
-    'my-lib.min': [PATHS.entryPoint]
+    [settings.libraryName + '-lib']: [settings.entryPoint],
+    [settings.libraryName + '-lib.min']: [settings.entryPoint]
   },
   output: {
-    path: PATHS.bundles,
+    path: settings.bundles,
     filename: '[name].js',
-    // libraryTarget: 'umd',
-    // library: 'wmu',
-    // umdNamedDefine: true
+    libraryTarget: 'umd',
+    library: settings.libraryName,
+    umdNamedDefine: true
   },
   resolve: {
     extensions: ['.ts']

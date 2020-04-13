@@ -2,15 +2,16 @@
 
 More advanced then Markdown, simpler then LaTeX
 
-## Folders
+## Code
 
-|folder||
-|---|---|
-|`/src/`|source files (ts)|
-|`/lib/`|output of tsc|
-|`/dist/`|output of webpack.config.js|
-|`/lib_esm/`|tsc -m es6 --outDir lib-esm|
+|folder|||
+|---|---|---|
+|`/src/`|source files (ts)||
+|`/lib/`|output of tsc|node (ES5)|
+|`/dist/`|output of webpack.config.js|browser umd (CommonJS, AMD, global variable)|
+|`/lib_esm/`|tsc -m es6 --outDir lib-esm|ES6/ES2015|
 
+NB: anders opzetten: alles in `/dist/` (zie notes-wmu/.../js-versions.wmu)
 
 ## Bugs
 
@@ -31,13 +32,18 @@ More advanced then Markdown, simpler then LaTeX
 - footnotes, chapter endnotes, book endnotes
 - footnote: -> note
 
-- return types van function ed
+
 
 - escape all characters
 - escape blocks: |par \|code
 - idee: **title** en daarna paragraaf tekst -> markdown-header-3
 
-- soms nog 'var' ipv 'let'?
 - alle .css naar een css map? of hoe dit ditribueren? (unpkg)
-- package.json:     "build": "./node_modules/.bin/tsc"
 
+## Todo - programmeren
+
+- `mode` in `webpack.config.js`
+- package.json:     "build": "./node_modules/.bin/tsc"
+- soms nog 'var' ipv 'let'?
+- ts: return types van function ed
+- ook css met webpack: https://webpack.js.org/loaders/css-loader/

@@ -1,25 +1,26 @@
 {
   "name": "wmu",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "WritersMarkUp: more advanced than MarkDown, easier than LaTeX",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "keywords": ["markup", "language", "write", "book"],
   "author": "Sander Peschier",
   "license": "MIT",
+
+  "main": "lib/index.js",
+  "browser": "lib/index.js",
+  "es2015": "lib-esm/index.js",
+  "typings": "lib/index.d.ts",
+
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc && tsc -m es6 --outDir lib-esm && webpack",
+    "build": "tsc && tsc -m es6 --outDir lib-esm && webpack --mode=development",
     "test": "mocha -r ts-node/register test/**/*.ts",
-    "clear:dist": "rimraf -f dist lib lib_esm",
+    "clear:dist": "rimraf -f dist lib lib-esm",
     "compilets": "tsc"
   },
-  "keywords": [
-    "markup",
-    "language",
-    "write",
-    "book"
-  ],
+
   "dependencies": {},
+
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
