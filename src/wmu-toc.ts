@@ -51,10 +51,12 @@ class TocTree {
         this.lastAdded = rootNode;
         this.treeIndex = new TocIndex();
         this.treeIndex.add('id_root', rootNode);
-        this.addSequential('parts', 0, 'id_parts');
+        this.addSequential('parts', 0);
     }
 
-    addSequential(title: string, level: number, id: string) {
+    addSequential(title: string, level: number) {
+        let id = wmubase.newElementId(title! + level);
+      
         let currentNode = this.lastAdded;
         while (level <= currentNode!.level) { // todo: Non-Null Assertion Operator?
             currentNode = currentNode!.parent;
@@ -64,7 +66,7 @@ class TocTree {
         this.lastAdded = newChild;
         this.treeIndex!.add(id, newChild);
 
-        return this.lastAdded;
+        return id;
     }
 
     getCurrentChapterId() {
@@ -74,21 +76,33 @@ class TocTree {
         while (currentNode!.level > 1) { // todo: Non-Null Assertion Operator?
             currentNode = currentNode!.parent; // todo: Non-Null Assertion Operator?
         }
-        return currentNode!.level == 1 ? currentNode!.id : null; // level is een string!
+        return currentNode!.level === 1 ? currentNode!.id : null;
     }
 
-    toHtml() {
-        return this.recursiveHtml(
-            this.root!.children.length == 1 ?
-                this.root!.children[0] // no Parts found, so start at H1 level
-                :
-                this.root! // start at the Parts level
-            , 0
-            );
+    toHtml(tocTitle: string) {
+        if (!this.hasContent())  return '';
+
+        let tocHtml = [];
+
+        if (tocTitle) {
+            tocHtml.push('<h1>' + tocTitle + '</h1>' + wmubase.eol + wmubase.eol);
+        }
+
+        tocHtml.push(
+            '<div id=\'tableofcontents\'>' + wmubase.eol +
+            this.recursiveHtml(
+                this.root!.children.length === 1 ?
+                    this.root!.children[0] // no Parts found, so start at H1 level
+                    :
+                    this.root! // start at the Parts level
+                , 0) +
+            '</div>' + wmubase.eol + wmubase.eol);
+
+        return tocHtml.join('');
     }
 
     hasContent() {
-        return this.lastAdded!.level > 0; // todo: type of level?
+        return this.lastAdded!.level > 0;
     }
 
     getIndex() {

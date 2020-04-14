@@ -3,7 +3,7 @@ import * as wmutoc from "./wmu-toc";
 
 interface INotesStoreItem {
     // todo: allemaal gebruikt?
-    footnoteUserId: string;
+    _footnoteGivenId: string; // todo: verplicht?!
     footnoteText: string;
     footnoteIndex: number;
     footnoteId: string;
@@ -30,11 +30,13 @@ class NotesStore{
 
     find(chapterid: string, footnoteId: string) {
         return this.store[chapterid].notes
-            .find(item => item.footnoteUserId === footnoteId);
+            .find(item => item._footnoteGivenId === footnoteId);
     }
 
     // should be 'add'
-    storeFootnoteText(id: string, body: string, chapterId: string, newFnid: string) {
+    storeFootnoteText(givenId: string, body: string, chapterId: string) {
+
+        let newFnid = wmubase.newElementId('footnote:' + givenId + chapterId);
 
         if (chapterId === null) {
             chapterId = 'unasigned' // todo gebeurt dit ooit?
@@ -45,8 +47,8 @@ class NotesStore{
         }
 
         this.store[chapterId].notes.push({
-            footnoteUserId: id, // wordt niet gebruikt
-            footnoteId: newFnid, // wordt niet gebruikt
+            _footnoteGivenId: givenId, // wordt niet gebruikt
+            footnoteId: newFnid, 
             footnoteText: body,
             footnoteIndex: this.store[chapterId].notes.length + 1
         });
@@ -56,7 +58,7 @@ class NotesStore{
 
         let htmlNotes: IHtmlNotes = {};
     
-        for (let chapterId in notesStore) {
+        for (let chapterId in this.store) {
     
             let result = [];
     
@@ -66,7 +68,7 @@ class NotesStore{
             );
     
             for (let cnt = 0; cnt < this.store[chapterId].notes.length; cnt++) {
-                let anchor = chapterId + '_' + this.store[chapterId].notes[cnt].footnoteUserId;
+                let anchor = chapterId + '_' + this.store[chapterId].notes[cnt].footnoteId;
                 result.push(
                     '\t\t<li id="fn:' + anchor + '">' + wmubase.eol +
                     '\t\t\t<p>' + this.store[chapterId].notes[cnt].footnoteText + wmubase.eol +
@@ -87,15 +89,6 @@ class NotesStore{
     }
 }
 
-// todo: naar een class en ook .reset();
-export let notesStore = new NotesStore();
-let currentChapterId;
-
-export function reset() {
-    notesStore = new NotesStore();
-    currentChapterId = null;
-};
-
 interface INotesChaptersList {
     footnoteId: string;
     chapterid: string;
@@ -106,7 +99,7 @@ export function parseInlineNoteIds(resultHtml: string) {
     // 1. lookup Notes id's and connect them to chapterIds
     // 2. replace Notes ids's with link in superscript
 
-    const notesRegex = '\\[\\[.+?\\]\\]';
+    const notesRegex = '{{(.+?)}}';
     const rHeadersAndNotes = new RegExp('(<h1 .+?>|' + notesRegex + ')', 'g');
     const rNotes = new RegExp('(' + notesRegex + ')', 'g');
     // todo: groups zodat hieronder niet nog match moet worden gebruikt.
@@ -120,9 +113,9 @@ export function parseInlineNoteIds(resultHtml: string) {
         //console.log(`Found ${matches[0]}. Next starts at ${rHeadersAndNotes.lastIndex}.`);
 
         let found = matches[0]; // todo: nothing found
-        if (found.charAt(0) === '[') {
+        if (found.charAt(0) === '{') {
             // found a footnote id (like [[1]]) inline:
-            let footnoteId = found.match(/\[\[(.+?)\]\]/)![1]; // todo: Non-Null Assertion Operator?
+            let footnoteId = found.match(notesRegex)![1]; // todo: Non-Null Assertion Operator?
 
             notesChaptersList.push({
                 footnoteId: footnoteId,
@@ -179,15 +172,18 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertTyp
                 }
             }
    // todo: also add 'unassigned'
-            return htmlResult = htmlResult.replace('<!-- # notes-endofbook # -->',
-                '<div class="start-page-notes-endofbook">' +
-                result.join('') +
-                '</div>');
+            return htmlResult = htmlResult.replace(
+                    wmubase.EndOfBookPlaceholder(),
+                    '<div class="start-page-notes-endofbook">' +
+                    result.join('') +
+                    '</div>'
+                );
 
         case 'endOfChapter':
             Object.keys(notes).map(function(elem){
-                if (htmlResult.indexOf('<!-- footnotes ' + elem + ' -->') > -1) {
-                    htmlResult = htmlResult.replace('<!-- footnotes ' + elem + ' -->', notes[elem].notesAsHtml);
+                let ph = wmubase.createNotesPlaceholder(elem);
+                if (htmlResult.indexOf(ph) > -1) {
+                    htmlResult = htmlResult.replace(ph, notes[elem].notesAsHtml);
                 } else{
                     // append when chapter not found
                     // todo: nessesary?
@@ -202,4 +198,12 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertTyp
             console.log('### illegal insertType');
             break;
     }
+};
+
+export let notesStore = new NotesStore();
+let currentChapterId: string | null;
+
+export function reset() {
+    notesStore = new NotesStore();
+    currentChapterId = null;
 };

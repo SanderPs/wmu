@@ -59,7 +59,7 @@ export class ListTree {
 
     toHtml() {
         return this.recursiveHtml(
-            this.root.children.length == 1 ?
+            this.root.children.length === 1 ?
                 this.root.children[0] : // no Parts found, so start at H1 level
                 this.root // start at the Parts level
             , 0
@@ -67,7 +67,7 @@ export class ListTree {
     }
 
     hasContent() {
-        return this.lastAdded.level > 0; // todo: type of level?
+        return this.lastAdded.level > 0;
     }
 
     recursiveHtml(element: ListNode, cnt: number) {

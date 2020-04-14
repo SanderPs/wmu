@@ -48,11 +48,10 @@ function postParse(str: string, config: wmubase.IConfig) {
     let result = str;
 
     let toc = wmutoc.tocTree;
-      let currentChapterId=toc.getCurrentChapterId();
-      if (currentChapterId) {
-        result +=
-          '<!-- footnotes ' + currentChapterId + ' -->' + wmubase.eol + wmubase.eol;
-     }
+    let currentChapterId = toc.getCurrentChapterId();
+    if (currentChapterId) {
+        result += wmubase.createNotesPlaceholder(currentChapterId);
+    }
 
     return result;
 }

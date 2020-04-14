@@ -10,8 +10,8 @@ export function parse(allVar: wmubase.IBlockDefinition, body: string): string {
   let currentChapterId = toc.getCurrentChapterId();
 
   // create a new hash-id and store the footnote
-  let newFnid = wmubase.newElementId('footnote:' + allVar['id'] + currentChapterId);
-  wmuNotes.notesStore.storeFootnoteText(allVar['id']!, body, currentChapterId!, newFnid);
+  // todo: allvar.id zou verplicht moeten zijn?!
+  wmuNotes.notesStore.storeFootnoteText(allVar['id']!, body, currentChapterId!);
 
   // return empty string = remove text, it will be added later in another place
   return '';

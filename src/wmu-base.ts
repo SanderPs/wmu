@@ -1,3 +1,4 @@
+import { par } from "./blocks";
 
 export const eol = "\r\n";
 export const eolIn = /\r?\n/;
@@ -31,7 +32,7 @@ export function getAll() {
 
 export interface IBlockDefinition {
   'block-type'?: string;
-  'level'?: string;
+  'level'?: number;
   'number'?: number;
   'block-align'? : string;
   'title'?: string;
@@ -46,35 +47,35 @@ export interface IBlockDefinition {
 export function parseDef(str: string) {
 
   let parsedDef = str
-    .replace(/^\|/, "")
-    .replace(/[\r\n\|]+$/, "")
-    .split(/[\r\n\|]+/);
+    .replace(/^\|/, "") // remove all | at the beginning of each line
+    .replace(/[\r\n\|]+$/, "") // remove all \r \n and | at the end of each line
+    .split(/[\r\n\|]+/); // split on \r \n and |
     
   let isHeader = /(h|header)\d/.test(parsedDef[0]);
   let blockType = isHeader ? 'h' : parsedDef[0];
-
+  
   let allVar : IBlockDefinition = {
     'block-type': blockType
   };
   
   if (isHeader) {
-    allVar['level'] = parsedDef[0].match(/\d/)![0];
+    allVar['level'] = parseInt( parsedDef[0].substring(1) ) ?? 7; // todo: error
   }
 
   for (let x = 1; x < parsedDef.length; x++) {
     let nameValue = parsedDef[x].split("=");
-    if (nameValue.length === 1) {
+    if (nameValue.length === 1) { // cases: 'somevalue'
       if (/^\d+$/.test(nameValue[0])) {
-        allVar['number'] = parseInt(nameValue[0], 10);
+        allVar['number'] = parseInt(nameValue[0], 10); // 'number=(digits)'
       } else {
         if (/[:-]+/.test(nameValue[0])) {
-          allVar['block-align'] = nameValue[0];
+          allVar['block-align'] = nameValue[0]; // 'block-align=(alignment string with : and -)'
         } else {
-          allVar['title'] = nameValue[0]; // todo: dit is niet lekker
+          allVar['title'] = nameValue[0]; // else: 'title=(string)'
         }
       }
-    } else {
-      if (nameValue[0].length === 0) {
+    } else { 
+      if (nameValue[0].length === 0) { // cases: '=somevalue'
         // just a '=' without name -> default
         switch (blockType) {
           case 'header':
@@ -174,9 +175,13 @@ function hashCode(str: string, max?: number) {
   return Math.abs(max ? hash % max : hash);
 };
 
+export function createNotesPlaceholder(el: string) {
+  return `<!-- footnotes ${el} -->` + this.eol + this.eol;
+}
 
-
-
+export function EndOfBookPlaceholder() {
+  return '<!-- # notes-endofbook # -->';
+}
 
 
 

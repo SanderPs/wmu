@@ -78,15 +78,15 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'class', 
         type: 'inline',
-        example: '[$text]##$class##',
-        regex: /(?:\[(.+)\])##(.+)(?:##)/g, 
+        example: '[[$text]]##$class##',
+        regex: /(?:\[\[(.+)\]\])##(.+)(?:##)/g, 
         to: '<span class="$2">$1</span>' 
     },
     {
         description: 'hyperlink', 
         type: 'inline',
-        example: '[$text]\\$link\\',
-        regex: /(?:\[(.+)\])\(\((.+)(?:\)\))/g, 
+        example: '[[$text]]\\$link\\',
+        regex: /(?:\[\[(.+)\]\])@@(.+)(?:@@)/g, 
         to: '<a href="$2">$1</a>' 
     },
 

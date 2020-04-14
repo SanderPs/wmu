@@ -17,7 +17,7 @@ type IDocResult = {
     toc: string;
     allnotes: wmuNotes.IHtmlNotes;
 }
-export function transformString(wmuString: string, config: wmubase.IConfig): IDocResult {
+function transformString(wmuString: string, config: wmubase.IConfig): IDocResult {
 
     const newConfig = Object.assign(defaultConfig, config, {});
     wmutoc.newTocTree();
@@ -25,7 +25,8 @@ export function transformString(wmuString: string, config: wmubase.IConfig): IDo
 
     let resultBody = wmuparse.parseWmu(wmuString, newConfig);
     // notesStore is gevuld
-    let resultToc = wmuDoToc(newConfig);
+    let resultToc = newConfig.createToc ? wmutoc.tocTree.toHtml(newConfig.tocTitle) : '';
+    
     resultBody = wmuNotes.parseInlineNoteIds(resultBody);
 
     let allnotes = wmuNotes.notesStore.toHtml();
@@ -90,8 +91,8 @@ export function transformProject(filepath, config) {
     let bodyWmu = concatFiles(_wmuproject.files, projectFile.dir + path.sep);
     let bodyHtml = transformPage(bodyWmu, newConfig);
 
-    if (config.outputPath) {
-        let outputPath = path.normalize(projectFile.dir + path.sep + config.outputPath);
+    if (newConfig.outputPath) {
+        let outputPath = path.normalize(projectFile.dir + path.sep + newConfig.outputPath);
 
         fs.writeFileSync(outputPath + path.sep + 'output.html', bodyHtml, 'utf8');
 
@@ -99,22 +100,6 @@ export function transformProject(filepath, config) {
     }
 
     return bodyHtml;
-}
-
-function wmuDoToc(config: wmubase.IConfig): string {
-    let tocHtml = "";
-    let toc = wmutoc.tocTree;
-    if (config.createToc && toc.hasContent()) {
-        if (config.tocTitle) {
-            tocHtml += '<h1>' + config.tocTitle + '</h1>' + wmubase.eol + wmubase.eol;
-        }
-
-        tocHtml +=
-            '<div id=\'toc\'>' + wmubase.eol +
-            toc.toHtml() +
-            '</div>' + wmubase.eol + wmubase.eol;
-    }
-    return tocHtml;
 }
 
 interface IHtmlPositions {
@@ -144,7 +129,7 @@ ${vars.toc}
     
 ${vars.body}
 
-<!-- # notes-endofbook # -->
+${wmubase.EndOfBookPlaceholder()}
 
     </body>
 </html>`;
