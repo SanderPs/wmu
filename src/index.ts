@@ -9,11 +9,11 @@ export {
 } from "./main-transform";
 
 import {parseWmu} from "./main-parse";
-import {transformFragment} from "./main-transform";
+import {transformPage} from "./main-transform";
 
 console.log('WMU: ', 
     //parseWmu
-    transformFragment(
+    transformPage(
 `|config|toc=true
 
 |h1|=1
@@ -22,7 +22,11 @@ console.log('WMU: ',
 
 Text in **bold**
 
-Some text with index word: [[Jung]]**Jung, Carl** etc.
+Some text with index word: [[Jung]]==Jung, Carl== etc.
+
+Some text with index word: [[Jung]]==Jung, Carl== etc.
+
+Some text with index word: [[Freud]]==Freud, Sigmund== etc.
 
 With a link: [[Go to Wikipedia]]@@en.wikipedia.org@@
 

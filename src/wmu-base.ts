@@ -183,5 +183,7 @@ export function EndOfBookPlaceholder() {
   return '<!-- # notes-endofbook # -->';
 }
 
-
+export function IndexPlaceholder() {
+  return '<!-- # book-index # -->';
+}
 
