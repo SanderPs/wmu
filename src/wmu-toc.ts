@@ -105,7 +105,7 @@ class TocTree {
         return this.lastAdded!.level > 0;
     }
 
-    getIndex() {
+    getTocIndex() {
         let chapterIndex : IChapterIndex = {};
         let parts = this.root!.children;
         for (let x = 0; x < parts.length; x++) {

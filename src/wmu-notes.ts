@@ -68,10 +68,11 @@ class NotesStore{
             );
     
             for (let cnt = 0; cnt < this.store[chapterId].notes.length; cnt++) {
-                let anchor = chapterId + '_' + this.store[chapterId].notes[cnt].footnoteId;
+                let item = this.store[chapterId].notes[cnt];
+                let anchor = chapterId + '_' + item.footnoteId;
                 result.push(
                     '\t\t<li id="fn:' + anchor + '">' + wmubase.eol +
-                    '\t\t\t<p>' + this.store[chapterId].notes[cnt].footnoteText + wmubase.eol +
+                    '\t\t\t<p>' + item.footnoteText + wmubase.eol +
                     '&nbsp;<a href="#fnref:' + anchor + '" class="reversefootnote">&#8593;</a></p>' + wmubase.eol +
                     '\t\t</li>' + wmubase.eol
                 );
@@ -145,7 +146,7 @@ export function parseInlineNoteIds(resultHtml: string) {
         let footnotedIndex = notesStore.find(chapterid, footnoteId)?.footnoteIndex;
 
         return '<sup id="fnref:' + anchor + '">' +
-            '<a href="#fn:' + anchor + '" rel="footnote">' + footnotedIndex + '</a>' +
+            '<a href="#fn:' + anchor + '">' + footnotedIndex + '</a>' +
             '</sup>';
     });
 
@@ -157,7 +158,7 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertTyp
     switch (insertType) {
         case 'endOfBook':
             let toc = wmutoc.tocTree;
-            let tocIndex = toc.getIndex();
+            let tocIndex = toc.getTocIndex();
 
             let result = [];
             const keys = Object.keys(tocIndex)
