@@ -5,7 +5,7 @@ import * as wmubase from "./wmu-base";
 import * as wmuparse from "./main-parse";
 import * as wmutoc from "./wmu-toc";
 import * as wmuNotes from "./wmu-notes";
-
+import * as wmuindex from './wmu-index';
 
 const defaultConfig: wmubase.IConfig = {
     createToc: false,
@@ -16,6 +16,7 @@ type IDocResult = {
     body: string;
     toc: string;
     allnotes: wmuNotes.IHtmlNotes;
+    index: wmuindex.IHtmlIndex;
 }
 function transformString(wmuString: string, config: wmubase.IConfig): IDocResult {
 
@@ -26,7 +27,10 @@ function transformString(wmuString: string, config: wmubase.IConfig): IDocResult
     let resultBody = wmuparse.parseWmu(wmuString, newConfig);
     // notesStore is gevuld
     let resultToc = newConfig.createToc ? wmutoc.tocTree.toHtml(newConfig.tocTitle) : '';
-    
+
+    resultBody = wmuindex.parse(resultBody, newConfig);
+    let index = wmuindex.indexStore.toHtml();
+
     resultBody = wmuNotes.parseInlineNoteIds(resultBody);
 
     let allnotes = wmuNotes.notesStore.toHtml();
@@ -35,7 +39,7 @@ function transformString(wmuString: string, config: wmubase.IConfig): IDocResult
         body: resultBody,
         toc: resultToc,
         allnotes: allnotes,
-        //index:
+        index: index
     };
 }
 
@@ -47,6 +51,7 @@ export function transformFragment(str: string, config: wmubase.IConfig): string 
         parsed.body + wmubase.eol + wmubase.eol;
 
     resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); // todo
+    resultHtml = wmuindex.insertIndex(resultHtml, parsed.index);
 
     return resultHtml;
 }
@@ -62,6 +67,7 @@ export function transformPage(wmustring: string, config: wmubase.IConfig): strin
         });
 
     resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); //endOfBook'); // todo
+    resultHtml = wmuindex.insertIndex(resultHtml, parsed.index);
 
     return resultHtml;
 }
@@ -130,6 +136,8 @@ ${vars.toc}
 ${vars.body}
 
 ${wmubase.EndOfBookPlaceholder()}
+
+${wmubase.IndexPlaceholder()}
 
     </body>
 </html>`;
