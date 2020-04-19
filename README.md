@@ -1,47 +1,61 @@
 # wmu
 
-More advanced then Markdown, simpler than LaTeX
+More advanced than Markdown, simpler than LaTeX
+
+## Roadmap
+
+#### PagedJS
+
+Render books using (CSS) Paged Media
+
+https://www.pagedjs.org/documentation/02-getting-started-with-paged-js/#starting-pagedjs  
+https://github.com/pagedjs/pagedjs  
+https://www.pagedmedia.org/paged-js/  
+
+#### JSON support
+
+Support for JSON blocks
+
+https://lihautan.com/json-parser-with-javascript/
+
+#### Text to Diagram support
+
+For instance:  
+
+https://github.com/mermaid-js/mermaid  
+https://www.diagram.codes/ (commercial)  
+https://modeling-languages.com/text-uml-tools-complete-list/  
 
 ## Code
 
 |folder|||
 |---|---|---|
 |`/src/`|source files (ts)||
-|`/dist/es5/`|output of tsc|node (ES5)|
-|`/dist/lib/`|output of webpack.config.js|browser umd (CommonJS, AMD, global variable)|
-|`/dist/lib_esm/`|tsc -m es6 --outDir dist/lib-esm|ES6/ES2015|
+|`/dist/es5/`|output of tsc|ES5|
+|`/dist/lib/`|output of webpack|umd for browser (CommonJS, AMD, global variable)|
+|`/dist/lib_esm/`|output of tsc (-m es6)/lib-esm|ES6/ES2015|
 
 ## Bugs
 
 - spaties: na tekst voor regeleinde, en op lege regel
 
-## Handig:
-
-- zie https://github.com/matteobruni/tsparticles/blob/master/webpack.config.js
-- idem voor packages scripts!
-
 ## Todo
+
+- niet alleen html teruggegeven maar ook errors en warnings
 - alternatieve-regex.js
 - todo: inline en block list?!
 - todo: markdown compatability?
 - adding |toc -> set createtoc to true
 - output list of all used css classes
-
 - footnotes, chapter endnotes, book endnotes
 - footnote: -> note
-
-
-
+- unescape inline markup etc. (for writing about wmu)
 - escape all characters
 - escape blocks: |par \|code
 - idee: **title** en daarna paragraaf tekst -> markdown-header-3
 
-- alle .css naar een css map? of hoe dit ditribueren? (unpkg)
-
 ## Todo - programmeren
 
-- `mode` in `webpack.config.js`
-- package.json:     "build": "./node_modules/.bin/tsc"
 - soms nog 'var' ipv 'let'?
 - ts: return types van function ed
-- ook css met webpack: https://webpack.js.org/loaders/css-loader/
+- ook css met webpack naar /dist/: https://webpack.js.org/loaders/css-loader/

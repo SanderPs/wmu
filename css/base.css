@@ -1,6 +1,6 @@
 
 html, body {
- 
+    font-family: sans-serif;
 }
 
 ul#toc {
@@ -16,12 +16,20 @@ div {
     */
 }
 
+figure {
+    margin-left: 0;
+}
+
 table {
     border-collapse: collapse;
     border-width: 1px;
     border-style: solid
 }
 
+table td {
+    border: 1px solid #888;
+    padding: 2px 3px;
+}
 .table-center {
     margin-left: auto;
     margin-right: auto;

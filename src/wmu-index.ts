@@ -80,7 +80,7 @@ class IndexStore {
 
                 for (let cnt2 = 0; cnt2 < crntItem.occurences.length; cnt2++) {
                     let crntOcc = crntItem.occurences[cnt2];
-                    let anchor = letterId + '_' + crntOcc.linkId;
+                    let anchor = crntOcc.linkId;
 
                     result.push(
                         '\t\t<span id="indx:' + anchor + '">' +
@@ -109,7 +109,7 @@ export function parse(body: string, config: wmubase.IConfig): string {
 
     result = result.replace(/\[\[(.+?)\]\]==(.+?)==/g, function (substring: string, ...args: string[]): string {
         let indexId: string = indexStore.add(args[1]);
-        return '<span class="index-term" id="indxref' + indexId + '">' + 
+        return '<span class="index-term" id="indxref:' + indexId + '">' + 
         '<a href="#indx:' + indexId + '">' + args[0] + '</a>' +
         '</span>';
     });

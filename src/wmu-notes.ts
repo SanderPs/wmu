@@ -64,6 +64,7 @@ class NotesStore{
     
             result.push(
                 '<div class="footnotes-chapter' + chapterId + '">' + wmubase.eol +
+                '<b>Voetnoten</b><br> ' + wmubase.eol + // todo
                 '\t<ol>' + wmubase.eol
             );
     

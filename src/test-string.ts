@@ -31,23 +31,29 @@ This is the note text
 
 |fn|id=2
 |=
-This is the seconde note text [[2.1]]
+This is the second note text
+
+|h1|=2 Overig
+
+In het 2e hoofdstuk... {{2.1}} ook een voettekst
 
 |fn|id=2.1
 Footnote for chapter 2
 
-|h1|=2 Overig
+|h1|=3 Tenslotte
 
 |code
 language=js
 |=
 function x() {
-   if (x) {
+   if (y) {
       // bla
    } else {
       // huh?
    }
 }
+|
+// commentaar
 
 |quote|-:
 caption=Figuur 1|
@@ -114,6 +120,7 @@ test
 Markdown header 2
 ----
 
+|h1|=Glossary (definitie lijst)
 
 |glossary
 |=
