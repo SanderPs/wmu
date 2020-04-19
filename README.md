@@ -1,17 +1,15 @@
 # wmu
 
-More advanced then Markdown, simpler then LaTeX
+More advanced then Markdown, simpler than LaTeX
 
 ## Code
 
 |folder|||
 |---|---|---|
 |`/src/`|source files (ts)||
-|`/lib/`|output of tsc|node (ES5)|
-|`/dist/`|output of webpack.config.js|browser umd (CommonJS, AMD, global variable)|
-|`/lib_esm/`|tsc -m es6 --outDir lib-esm|ES6/ES2015|
-
-NB: anders opzetten: alles in `/dist/` (zie notes-wmu/.../js-versions.wmu)
+|`/dist/es5/`|output of tsc|node (ES5)|
+|`/dist/lib/`|output of webpack.config.js|browser umd (CommonJS, AMD, global variable)|
+|`/dist/lib_esm/`|tsc -m es6 --outDir dist/lib-esm|ES6/ES2015|
 
 ## Bugs
 

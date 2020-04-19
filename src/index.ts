@@ -12,7 +12,7 @@ export {
 // wip tests
 
 import {transformPage} from "./main-transform";
-import * as teststrings from './../test/test-string';
+import * as teststrings from './test-string';
 
 if (typeof window === 'undefined') {
     // running in Node

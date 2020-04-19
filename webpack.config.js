@@ -4,7 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 var settings = {
   libraryName : 'wmu', // name
   entryPoint: path.resolve(__dirname, 'src/index.ts'), // start file 
-  bundles: path.resolve(__dirname, 'dist'), // output folder
+  bundles: path.resolve(__dirname, 'dist/lib'), // output folder
 }
 
 var config = {
