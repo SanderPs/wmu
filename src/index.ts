@@ -8,38 +8,24 @@ export {
     transformProject
 } from "./main-transform";
 
-import {parseWmu} from "./main-parse";
+
+// wip tests
+
 import {transformPage} from "./main-transform";
+import * as teststrings from './../test/test-string';
 
-console.log('WMU: ', 
-    //parseWmu
-    transformPage(
-`|config|toc=true
+if (typeof window === 'undefined') {
+    // running in Node
+    let isInTest = typeof global.it === 'function'; // Mocha running?
+    if (!isInTest) {
+        console.log('WMU: ', transformPage( teststrings.test1, {}));
+    }
+} else {
+    // running in browser
+}
+export let teststring: string = teststrings.test1;
 
-|h1|=1
 
-|h2|=1.2
+// todo:
+//    wmu.transformProject("./examples/project1/config.wmu", { outputPath: 'C:/testwmu/'});
 
-Text in **bold**
-
-Some text with index word: [[Jung]]==Jung, Carl== etc.
-
-Some text with index word: [[Jung]]==Jung, Carl== etc.
-
-Some text with index word: [[Freud]]==Freud, Sigmund== etc.
-
-With a link: [[Go to Wikipedia]]@@en.wikipedia.org@@
-
-Example of class: [[Some special styling]]##my-styling##
-
-Example of using{{1}} a note.
-
-|fn|id=1
-|=
-This is the note text
-
-|code
-|=
-if x> 10
-`, {})
-);

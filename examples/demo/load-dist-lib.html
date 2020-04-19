@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../dist/wmu-lib.js"></script>
+    <link href="../../css/base.css" rel="stylesheet">
+</head>
+
+<body>
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 50%;"><textarea style="width: 98%;" id="input" rows="30" cols="40"></textarea></td>
+            <td style="width: 50%; border: 1px solid #888;">
+                <div id="output" style="vertical-align: top; overflow-y: scroll; max-height: 465px !important "></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;"><button onclick="convert()">Convert</button></td>
+        </tr>
+    </table>
+
+    <script>
+        function convert() {
+            let x = wmu.transformFragment(document.getElementById('input').value, {});
+            document.getElementById("output").innerHTML = x;
+        }
+        window.onload = (event) => {
+            document.getElementById('input').value = wmu.teststring;
+        };
+    </script>
+</body>
+
+</html>

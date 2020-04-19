@@ -47,8 +47,12 @@ export function transformFragment(str: string, config: wmubase.IConfig): string 
 
     let parsed = transformString(str, config);
 
-    let resultHtml = parsed.toc + wmubase.eol + wmubase.eol +
-        parsed.body + wmubase.eol + wmubase.eol;
+    let resultHtml = fragmentHtml({
+        body: parsed.body,
+        head: '',
+        lang: '',
+        toc: parsed.toc
+    });
 
     resultHtml = wmuNotes.insertFootNotes(resultHtml, parsed.allnotes, 'endOfChapter'); // todo
     resultHtml = wmuindex.insertIndex(resultHtml, parsed.index);
@@ -141,6 +145,18 @@ ${wmubase.IndexPlaceholder()}
 
     </body>
 </html>`;
+
+    return templ;
+}
+
+function fragmentHtml(vars: IHtmlPositions): string {
+
+    let templ = `${vars.toc}
+
+${vars.body}
+
+${wmubase.IndexPlaceholder()}
+`;
 
     return templ;
 }
