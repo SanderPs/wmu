@@ -2,6 +2,8 @@
 
 More advanced than Markdown, simpler than LaTeX
 
+Read the [quick introduction](wmu.md)
+
 ## Roadmap
 
 #### PagedJS
