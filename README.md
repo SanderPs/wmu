@@ -2,7 +2,20 @@
 
 More advanced than Markdown, simpler than LaTeX
 
-Read the [quick introduction](wmu.md)
+This is a library that convert wmu to html.
+
+**Note** this repository is not ready yet for its first beta release!!! There are still many things that need to be finished, figured out or rewriten.
+
+Read the [quick introduction](wmu.md) to get an idea of wmu markup
+
+## Installation
+
+```
+> npm install
+> npm run build
+```
+
+Then open `/examples/demo/demo.html` in your browser!
 
 ## Roadmap
 
@@ -39,11 +52,11 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 
 ## Bugs
 
-- spaties: na tekst voor regeleinde, en op lege regel
+- whitespace problems: at the end and begining of lines and on empty lines!
 
 ## Todo
 
-- niet alleen html teruggegeven maar ook errors en warnings
+- not only return html, but also errors and warnings
 - alternatieve-regex.js
 - todo: inline en block list?!
 - todo: markdown compatability?
