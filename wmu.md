@@ -149,7 +149,7 @@ Cells in tables can also be aligned vertically:
 ||WMU markup|
 |---|---|
 |css class|`[[text]]##cssclass#`|
-|link|`[[text]]\\url\\`|
+|link|`[[text]]@@url@@`|
 |img|_todo_|
 
 ## Titles / headers
@@ -245,3 +245,7 @@ This is how it's done!
 |---|---|
 |h1 title|`title\n===`|
 |h2 title|`title\n---`|
+
+## Differences compated to Markdown
+
+- wmu respects newlines

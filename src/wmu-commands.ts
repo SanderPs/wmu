@@ -54,7 +54,7 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'inline-code',
         type: 'inline',
-        regex: /(?:`)(.+)(?:`)/g,
+        regex: /(?:``)(.+)(?:``)/g,
         to: '<code>$1</code>'
     },
     {
@@ -85,7 +85,7 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'hyperlink', 
         type: 'inline',
-        example: '[[$text]]\\$link\\',
+        example: '[[$text]]@@$link@@',
         regex: /(?:\[\[(.+)\]\])@@(.+)(?:@@)/g, 
         to: '<a href="$2">$1</a>' 
     },
