@@ -72,59 +72,56 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
     let isBlock = block1.charCodeAt(0) === 124;
     if (isBlock) {
         def = wmubase.parseDef(block1); // try catch
-    } else {
-        // a block that doesn't start with a pipe character is a paragraph:
-        def = {
-            'block-type': 'par'
-            };
-    }
 
-    switch(def['block-type']) {
-        case 'table':
-        case 't':
-            result.push( block.table.parse(def, block2, block3) );
-            break;
-        case 'header':
-        case 'h':
-            result.push( block.header.parse(def) );
-            break;
-        case 'quote':
-        case 'q':
-            result.push( block.quote.parse(def, block2, block3) );
-            break;
-        case 'code':
-        case 'c':
-            result.push( block.code.parse(def, block2) );
-            break;
-        case 'block':
-        case 'b':
-            result.push( block.block.parse(def, block2) );
-            break;
-        case 'image':
-        case 'img':
-        case 'i':
-            result.push( block.img.parse(def) );
-            break;
-        case 'list':
-        case 'l':
-            result.push( block.list.parse(def, block2) );
-            break;
-        case 'par':
-        case 'p':
-            result.push( block.par.parse(block1) );
-            break;
-        case 'footnote':
-        case 'fn':
-            result.push( block.note.parse(def, block2) );
-            break;
-        case 'glossary':
-        case 'g':
-            result.push( block.glossary.parse(def, block2) );
-            break;
-        case 'config':
-            result.push( block.config.parse(def, config) );
-            break;
-    }
-    
+        switch(def['block-type']) {
+            case 'table':
+            case 't':
+                result.push( block.table.parse(def, block2, block3) );
+                break;
+            case 'header':
+            case 'h':
+                result.push( block.header.parse(def) );
+                break;
+            case 'quote':
+            case 'q':
+                result.push( block.quote.parse(def, block2, block3) );
+                break;
+            case 'code':
+            case 'c':
+                result.push( block.code.parse(def, block2) );
+                break;
+            case 'block':
+            case 'b':
+                result.push( block.block.parse(def, block2) );
+                break;
+            case 'image':
+            case 'img':
+            case 'i':
+                result.push( block.img.parse(def) );
+                break;
+            case 'list':
+            case 'l':
+                result.push( block.list.parse(def, block2) );
+                break;
+            case 'par':
+            case 'p':
+                result.push( block.par.parse(def, block2,) );
+                break;
+            case 'footnote':
+            case 'fn':
+                result.push( block.note.parse(def, block2) );
+                break;
+            case 'glossary':
+            case 'g':
+                result.push( block.glossary.parse(def, block2) );
+                break;
+            case 'config':
+                result.push( block.config.parse(def, config) );
+                break;
+        }
+    } else {
+        // no | at beginning means: standard paragraph:
+        result.push( block.par.parse(<wmubase.IBlockDefinition>{}, block1,) );
+    }    
     return result.join('');
 }

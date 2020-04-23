@@ -11,7 +11,11 @@ Combinatie **//tekst//**
 
 En ^^superscript^^ maar ook ^_subscript_^
 
+Some \`\`inline code\`\`
 
+|par|format=xyz
+|=
+This is a paragraph with a css class called \`\`xyz\`\`
 
 Some text with index word: [[Jung]]==Jung, Carl== etc.
 
