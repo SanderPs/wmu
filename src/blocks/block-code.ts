@@ -11,7 +11,7 @@ export function parse(allVar: wmubase.IBlockDefinition, body: string) {
       allVar['format'] ?? '',
       allVar['language'] ? 'codelang-' + allVar['language']?.toLowerCase() : ''
     ) +
-    '><code>' + wmubase.eol);
+    '><code>'); // note: no eol here! will produce empty line
   
   result.push(body);
 
