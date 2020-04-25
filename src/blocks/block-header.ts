@@ -1,7 +1,7 @@
 import * as wmubase from "./../wmu-base";
 import * as wmutoc from "./../wmu-toc";
 
-export function parse(allVar: wmubase.IBlockDefinition) {
+export function parse(allVar: wmubase.IBlockDefinition, config: wmubase.IConfig) {
   let result = [];
 
   let toc = wmutoc.tocTree;
@@ -13,12 +13,19 @@ export function parse(allVar: wmubase.IBlockDefinition) {
     }
   }
 
-  let newHeaderId = toc.addSequential(allVar['title']!, allVar['level']);
+  let headerTocInfo = toc.addSequential(allVar['title']!, allVar['level']);
   
-  // create output
-  result.push('<h' + allVar['level'] + ' id="' + newHeaderId + '">' +
-          allVar['title'] + 
-          '</h' + allVar['level'] + '>' + wmubase.eol + wmubase.eol);
+  if (allVar['level']===0) {
+    result.push('<div class="page-part" id="' + headerTocInfo.id + '">' +
+            (config.autoNumbering! ? headerTocInfo.numbering + " " : "") +
+            allVar['title'] + 
+            '</div>' + wmubase.eol + wmubase.eol);
+  } else {
+    result.push('<h' + allVar['level'] + ' id="' + headerTocInfo.id + '">' +
+            (config.autoNumbering! ? headerTocInfo.numbering + " " : "") +
+            allVar['title'] + 
+            '</h' + allVar['level'] + '>' + wmubase.eol + wmubase.eol);
+  }
 
   return result.join('');
 }

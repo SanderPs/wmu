@@ -8,7 +8,9 @@ This is a library that convert wmu to html.
 
 Read the [quick introduction](wmu.md) to get an idea of wmu markup
 
-## Installation
+## Run the code
+
+### 1 In a browser
 
 ```
 > npm install
@@ -16,6 +18,10 @@ Read the [quick introduction](wmu.md) to get an idea of wmu markup
 ```
 
 Then open `/examples/demo/demo.html` in your browser!
+
+### 2 In VS Code
+
+Open in VS Code and run (F5)
 
 ## Roadmap
 

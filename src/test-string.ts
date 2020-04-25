@@ -1,9 +1,21 @@
 
 export let test1: string = `|config|toc=true|toctitle=Content
 
-|h1|=1 Intro
+|h0|=This is a part
 
-|h2|=1.2 Plus
+|h1|=Intro Hoofstuk (1)
+
+|h2|=Paragraaf (1.1)
+
+|h3|=Sub (1.1.1)
+
+|h4|=x
+
+|h5|=y
+
+|h6|=z
+
+|h2|=Paragraaf (1.2)
 
 Opmaak: **bold** //italics// __underline__ ~~striktrought~~
 
@@ -37,14 +49,14 @@ This is the note text
 |=
 This is the second note text
 
-|h1|=2 Overig
+|h1|=Overig
 
 In het 2e hoofdstuk... {{2.1}} ook een voettekst
 
 |fn|id=2.1
 Footnote for chapter 2
 
-|h1|=3 Tenslotte
+|h1|=Tenslotte
 
 |code
 language=js
@@ -133,5 +145,7 @@ Markdown header 2
 ||Cascading Style Sheets
 |html
 ||Hyper Text Markup Language
+
+|h0|=Deel II
 
 `;

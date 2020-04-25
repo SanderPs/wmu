@@ -10,6 +10,7 @@ import * as wmuindex from './wmu-index';
 const defaultConfig: wmubase.IConfig = {
     createToc: false,
     toBook: false,
+    autoNumbering: true,
 };
 
 type IDocResult = {
@@ -21,12 +22,12 @@ type IDocResult = {
 function transformString(wmuString: string, config: wmubase.IConfig): IDocResult {
 
     const newConfig = Object.assign(defaultConfig, config, {});
-    wmutoc.newTocTree();
+    wmutoc.newTocTree(); // todo: eigenlijk niet goed
     wmuNotes.reset();
 
     let resultBody = wmuparse.parseWmu(wmuString, newConfig);
     // notesStore is gevuld
-    let resultToc = newConfig.createToc ? wmutoc.tocTree.toHtml(newConfig.tocTitle) : '';
+    let resultToc = newConfig.createToc ? wmutoc.tocTree.toHtml(newConfig.tocTitle, newConfig) : '';
 
     resultBody = wmuindex.parse(resultBody, newConfig);
     let index = wmuindex.indexStore.toHtml();
@@ -45,6 +46,8 @@ function transformString(wmuString: string, config: wmubase.IConfig): IDocResult
 
 export function transformFragment(str: string, config: wmubase.IConfig): string {
 
+    // todo: practically same as transformPage (DRY)
+
     let parsed = transformString(str, config);
 
     let resultHtml = fragmentHtml({
@@ -61,6 +64,9 @@ export function transformFragment(str: string, config: wmubase.IConfig): string 
 }
 
 export function transformPage(wmustring: string, config: wmubase.IConfig): string {
+
+    // todo: practically same as transformFragment (DRY)
+
     let parsed = transformString(wmustring, config);
 
     let resultHtml = pageHtml(<IHtmlPositions>{

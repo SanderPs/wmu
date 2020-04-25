@@ -20,6 +20,7 @@ export interface IConfig {
   createToc?: boolean;
   tocTitle?: string;
   doctype?: string; // 'book', 'ebook', 'web'
+  autoNumbering?: boolean;
 }
 
 export interface IProject {

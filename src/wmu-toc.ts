@@ -7,6 +7,11 @@ interface IChapterIndex {
     }
 }
 
+interface headerTocInfo {
+    id: string;
+    numbering: string;
+}
+
 
 class TocNode {
     title: string;
@@ -14,6 +19,7 @@ class TocNode {
     id: string;
     index: number | null;
     parent: TocNode | null;
+    numbering: string;
     children: TocNode[];
 
     constructor(title: string, level: number, id: string, parent: TocNode | null) {
@@ -23,6 +29,20 @@ class TocNode {
         this.index = parent ? parent.children.length + 1 : null;
         this.parent = parent;
         this.children = [];
+        let numbering: string;
+        if (level === 0) {
+            // parts
+            numbering = (this.index - 1).toString(); // exclude first part node
+        } else if (level === 1) {
+            // chapters
+            numbering = this.index.toString();
+        } else if (level > 1) {
+            // paragraphs
+            numbering = parent.numbering + "." + this.index;
+        } else {
+            numbering = '';
+        }
+        this.numbering = numbering;
     }
 }
 
@@ -54,7 +74,7 @@ class TocTree {
         this.addSequential('parts', 0);
     }
 
-    addSequential(title: string, level: number) {
+    addSequential(title: string, level: number): headerTocInfo {
         let id = wmubase.newElementId(title! + level);
       
         let currentNode = this.lastAdded;
@@ -66,7 +86,10 @@ class TocTree {
         this.lastAdded = newChild;
         this.treeIndex!.add(id, newChild);
 
-        return id;
+        return <headerTocInfo>{
+            id: id,
+            numbering: newChild.numbering
+        };
     }
 
     getCurrentChapterId() {
@@ -79,30 +102,8 @@ class TocTree {
         return currentNode!.level === 1 ? currentNode!.id : null;
     }
 
-    toHtml(tocTitle: string) {
-        if (!this.hasContent())  return '';
-
-        let tocHtml = [];
-
-        if (tocTitle) {
-            tocHtml.push('<h1>' + tocTitle + '</h1>' + wmubase.eol + wmubase.eol);
-        }
-
-        tocHtml.push(
-            '<div id=\'tableofcontents\'>' + wmubase.eol +
-            this.recursiveHtml(
-                this.root!.children.length === 1 ?
-                    this.root!.children[0] // no Parts found, so start at H1 level
-                    :
-                    this.root! // start at the Parts level
-                , 0) +
-            '</div>' + wmubase.eol + wmubase.eol);
-
-        return tocHtml.join('');
-    }
-
     hasContent() {
-        return this.lastAdded!.level > 0;
+        return (this.root!.children.length > 1) || (this.root!.children[0].children.length > 0);
     }
 
     getTocIndex() {
@@ -122,20 +123,74 @@ class TocTree {
         return chapterIndex;
     }
 
-    recursiveHtml(element: TocNode, cnt: number) {
-        if (element.children.length === 0) {
-            return (element.level > 0) ? // > 0: exclude node titled 'parts'
-                "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + wmubase.eol : 
-                "";
+    toHtml(tocTitle: string, config: wmubase.IConfig) {
+        if (!this.hasContent())  return '';
+
+        let tocHtml = [];
+
+        if (tocTitle) {
+            tocHtml.push('<h1>' + tocTitle + '</h1>' + wmubase.eol + wmubase.eol);
+        }
+
+        let hasParts = this.root!.children.length > 1;
+        tocHtml.push(
+            '<div id="tableofcontents">' + wmubase.eol +
+            this.recursiveHtml(
+                hasParts ?
+                    this.root! : // start at the Parts level
+                    this.root!.children[0] // no Parts found, so start at H1 level
+                , 
+                0, 
+                "",
+                hasParts,
+                config
+            ) +
+            '</div>' + wmubase.eol + wmubase.eol);
+
+        return tocHtml.join('');
+    }
+
+    recursiveHtml(curNode: TocNode, cnt: number, numbering: string, hasParts: boolean, config: wmubase.IConfig) {
+
+        // h6 should not be part of table of contents:
+        if (curNode.level > 5) { 
+            return "";
+        }
+         
+        let nodeIsPart = (curNode.level === 0);
+
+        // the first 'part'-node only exists as parent of h1 nodes in text with no parts:
+        if (nodeIsPart && curNode.index === 1) {
+            return "";
+        }
+
+        let nodeNumbering: string;
+        if (curNode.level < 1) {
+            nodeNumbering='';
         }
         else {
+            nodeNumbering=numbering + (numbering.length ? "." : "") + curNode.index;
+        }
+
+        let currentEl = (nodeIsPart && !hasParts) ? 
+            "" : 
+            "\t".repeat(cnt) + "<li><span class='numbering'>" + 
+            (config.autoNumbering ? curNode.numbering : nodeNumbering) + // todo: numbering is done double
+            "</span> " + curNode.title + "</li>" + wmubase.eol;
+
+        if (curNode.children.length === 0) {
+            // endpoint
+            return currentEl;
+        }
+        else {
+            // node with children
             let result = "";
-            if (element.level > -1 && cnt > 0) {
-                result+= "\t".repeat(cnt) + "<li>" + element.title + " (" + element.id + ")</li>" + wmubase.eol;
+            if (curNode.level > -1) { // add this node before adding children, except when this is rootNode, or h6
+                result+= currentEl;
             }
-            result += "\t".repeat(cnt) + "<ul>" + wmubase.eol;
-            for (let i = 0; i < element.children.length; i++) {
-                result += this.recursiveHtml(element.children[i], cnt + 1);
+            result += "\t".repeat(cnt) + "<ul class='indexlevel-" + (curNode.level + 1) + "'>" + wmubase.eol;
+            for (let i = 0; i < curNode.children.length; i++) {
+                result += this.recursiveHtml(curNode.children[i], cnt + 1, nodeNumbering, hasParts, config);
             }
             return result + "\t".repeat(cnt) + "</ul>" + wmubase.eol;
         }

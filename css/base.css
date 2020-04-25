@@ -16,6 +16,38 @@ div {
     */
 }
 
+div#tableofcontents {
+    margin-bottom: 80px;
+}
+div#tableofcontents ul {
+    list-style-type: none;
+}
+
+div#tableofcontents ul.indexlevel-0 {
+    font-size: 1.6rem;
+    font-weight: bolder;
+}
+div#tableofcontents ul.indexlevel-0 > li {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+div#tableofcontents ul.indexlevel-1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+div#tableofcontents ul.indexlevel-2 {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+/* this class is used for h0, headers for a 'part' */
+div.page-part {
+    font-size: 3em;
+    font-weight: bolder;
+    margin-bottom: 180px;
+    margin-top: 60px;
+}
+
 pre, code {
     background-color: #e8e8e8;
 }

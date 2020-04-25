@@ -47,6 +47,8 @@ function postParse(str: string, config: wmubase.IConfig) {
 
     let result = str;
 
+    // add last chapter placeholder if there has been a chapter
+    // todo: not ideal this
     let toc = wmutoc.tocTree;
     let currentChapterId = toc.getCurrentChapterId();
     if (currentChapterId) {
@@ -80,7 +82,7 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
                 break;
             case 'header':
             case 'h':
-                result.push( block.header.parse(def) );
+                result.push( block.header.parse(def, config) );
                 break;
             case 'quote':
             case 'q':
