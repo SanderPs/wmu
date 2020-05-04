@@ -63,6 +63,7 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 ## Todo
 
 - not only return html, but also errors and warnings
+- in coding templating libraries already use double accolades `{{ ... }}` so using this for footnotes is maybe not the best idea
 - alternatieve-regex.js
 - todo: inline en block list?!
 - todo: markdown compatability?

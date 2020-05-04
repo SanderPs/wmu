@@ -29,7 +29,7 @@ class NotesStore{
     }
 
     find(chapterid: string, footnoteId: string) {
-        return this.store[chapterid].notes
+        return this.store[chapterid]?.notes // todo: '?' to not break when {{1}} is not found (as |fn|id=1)
             .find(item => item._footnoteGivenId === footnoteId);
     }
 

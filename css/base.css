@@ -55,7 +55,7 @@ pre {
     padding: 10px 13px;
 }
 code {
-    padding: 1px 6px;
+    padding: 0; /* because code is an inline element! */
 }
 
 figure {
