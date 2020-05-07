@@ -148,4 +148,24 @@ Markdown header 2
 
 |h0|=Deel II
 
+|bibjson
+|=
+@book{
+   "author": "Matthew Might",
+   "title": "Why parsing {{Bib}TeX} is hard",
+   "journal": "Journal of LaTeX",
+   "year": "2015",
+   "bibtexKey": "Might:2015:BibTeX" 
+}
+
+|bibjson
+|=
+@online{
+   "author" : "MultiMedia LLC",
+   "title" : "{{MS Windows NT} Kernel Description}",
+   "year" : 1999,
+   "url" : "{http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm}",
+   "urldate" : "2010-09-30"
+}
+
 `;

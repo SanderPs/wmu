@@ -109,6 +109,9 @@ function parseWmuBlock(config: wmubase.IConfig, block1: string, block2: string, 
             case 'p':
                 result.push( block.par.parse(def, block2,) );
                 break;
+            case 'bibjson':
+                result.push( block.bibjson.parse(def, block2,) );
+                break;
             case 'footnote':
             case 'fn':
                 result.push( block.note.parse(def, block2) );

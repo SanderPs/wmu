@@ -11,3 +11,4 @@ export * as note from './block-note';
 export * as par from './block-par';
 export * as quote from './block-quote';
 export * as table from './block-table';
+export * as bibjson from './block-bibjson';
