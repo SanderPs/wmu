@@ -168,11 +168,6 @@ class TocTree {
          
         let nodeIsPart = (curNode.level === 0);
 
-        // the first 'part'-node only exists as parent of h1 nodes in text with no parts:
-        if (nodeIsPart && curNode.index === 1) {
-            return "";
-        }
-
         let nodeNumbering: string;
         if (curNode.level < 1) {
             nodeNumbering='';
@@ -188,6 +183,12 @@ class TocTree {
             "</span> " + curNode.title + "</li>" + wmubase.eol;
 
         if (curNode.children.length === 0) {
+
+            // the first 'part'-node only exists as parent of h1 nodes in text with no parts:
+            if (nodeIsPart && curNode.index === 1) {
+                return "";
+            }
+                    
             // endpoint
             return currentEl;
         }
