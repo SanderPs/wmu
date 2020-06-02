@@ -2,35 +2,63 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>WMU - demo</title>
     <script src="../../dist/lib/wmu-lib.js"></script>
     <link href="../../css/base.css" rel="stylesheet">
+
+    <style>
+        .divtable {
+            display: table;
+            width: 100%;
+        }
+        .divrow {
+            display: table-row;
+        }
+        .divcell, .divhead {
+            display: table-cell;
+            padding: 5px;
+        }
+    </style>
 </head>
 
 <body>
-    <table style="width: 100%;">
-        <tr>
-            <td style="width: 50%;"><textarea style="width: 98%;" id="input" rows="30" cols="40"></textarea></td>
-            <td style="width: 50%; border: 1px solid #888;">
-                <div id="output" style="vertical-align: top; overflow-y: scroll; max-height: 465px !important "></div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align: center;"><button onclick="convert()">Convert</button></td>
-        </tr>
-    </table>
 
-    <script>
-        function convert() {
-            let x = wmu.transformFragment(document.getElementById('input').value, {});
-            document.getElementById("output").innerHTML = x;
-        }
-        window.onload = (event) => {
-            document.getElementById('input').value = wmu.teststring;
-        };
-    </script>
+    <div class="divtable">
+        <div class="divrow">
+            <div class="divcell" style="width: 50%;">
+                <textarea style="width: 100%" id="input" rows="30"></textarea>
+            </div>
+            <div class="divcell" style="width: 50%; vertical-align: top;">
+                <div id="output" style="overflow-y: scroll; min-height: 464px; max-height: 464px !important; border: 1px solid #999"></div>
+            </div>
+        </div>
+        <div class="divrow">
+            <div style="text-align: center;">
+                <button onclick="convertInput()">Convert</button>
+                <button onclick="clearOutput()">Clear</button>
+            </div>
+        </div>
+    </div>
+
 </body>
+
+<script>
+    
+    function convertInput() {
+        let result = wmu.transformFragment(document.getElementById('input').value, {});
+        document.getElementById("output").innerHTML = result;
+    }
+
+    function clearOutput() {
+        document.getElementById("output").innerHTML = "";
+    }
+
+    window.onload = (event) => {
+        document.getElementById('input').value = wmu.teststring;
+    };
+
+</script>
 
 </html>
