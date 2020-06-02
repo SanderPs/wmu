@@ -14,13 +14,13 @@ interface headerTocInfo {
 
 
 class TocNode {
-    title: string;
-    level: number;
-    id: string;
-    index: number | null;
-    parent: TocNode | null;
-    numbering: string;
-    children: TocNode[];
+    public title: string;
+    public level: number;
+    public id: string;
+    public index: number | null;
+    public parent: TocNode | null;
+    public numbering: string;
+    public children: TocNode[];
 
     constructor(title: string, level: number, id: string, parent: TocNode | null) {
         this.title = title;
@@ -47,23 +47,27 @@ class TocNode {
 }
 
 class TocIndex {
-    index: { [key: string]: TocNode };
+
+    private index: { [key: string]: TocNode };
 
     constructor() {
         this.index = {};
     }
-    add(id: string, node: TocNode) {
+
+    public add(id: string, node: TocNode): void {
         this.index[id] = node;
     }
-    get(id: string) {
+
+    public get(id: string): TocNode {
         return this.index[id];
     }
 }
 
 class TocTree {
-    root: TocNode | null;
-    lastAdded: TocNode | null;
-    treeIndex: TocIndex | null;
+
+    private root: TocNode | null;
+    private lastAdded: TocNode | null;
+    private treeIndex: TocIndex | null;
 
     constructor() {
         var rootNode = new TocNode('root', -1, 'id_root', null);
@@ -74,7 +78,7 @@ class TocTree {
         this.addSequential('parts', 0);
     }
 
-    addSequential(title: string, level: number): headerTocInfo {
+    public addSequential(title: string, level: number): headerTocInfo {
         let id = wmubase.newElementId(title! + level);
       
         let currentNode = this.lastAdded;
@@ -92,7 +96,7 @@ class TocTree {
         };
     }
 
-    getCurrentChapterId() {
+    public getCurrentChapterId(): string | null {
         // go back up the tree towards the h1:
         let currentNode = this.lastAdded;
 
@@ -102,13 +106,15 @@ class TocTree {
         return currentNode!.level === 1 ? currentNode!.id : null;
     }
 
-    hasContent() {
+    private hasContent(): boolean {
         return (this.root!.children.length > 1) || (this.root!.children[0].children.length > 0);
     }
 
-    getTocIndex() {
-        let chapterIndex : IChapterIndex = {};
+    public getTocIndex(): IChapterIndex {
+
+        let chapterIndex: IChapterIndex = {};
         let parts = this.root!.children;
+
         for (let x = 0; x < parts.length; x++) {
             let chapters = parts[x].children;
             for (let y = 0; y < chapters.length; y++) {
@@ -120,10 +126,12 @@ class TocTree {
                 chapterIndex[chapters[0].id].partTitle = parts[x].title;
             }
         }
+
         return chapterIndex;
     }
 
-    toHtml(tocTitle: string, config: wmubase.IConfig) {
+    public toHtml(tocTitle: string, config: wmubase.IConfig): string {
+
         if (!this.hasContent())  return '';
 
         let tocHtml = [];
@@ -150,7 +158,8 @@ class TocTree {
         return tocHtml.join('');
     }
 
-    recursiveHtml(curNode: TocNode, cnt: number, numbering: string, hasParts: boolean, config: wmubase.IConfig) {
+    private recursiveHtml(curNode: TocNode, cnt: number, numbering: string, 
+        hasParts: boolean, config: wmubase.IConfig): string {
 
         // h6 should not be part of table of contents:
         if (curNode.level > 5) { 

@@ -22,19 +22,21 @@ export interface IHtmlNotes {
 }
 
 class NotesStore{
-    store: INotesStore;
+
+    private store: INotesStore;
+
     constructor() {
-        this.store = {
-        };
+        this.store = {};
     }
 
-    find(chapterid: string, footnoteId: string) {
+    public find(chapterid: string, footnoteId: string): INotesStoreItem {
+        
         return this.store[chapterid]?.notes // todo: '?' to not break when {{1}} is not found (as |fn|id=1)
             .find(item => item._footnoteGivenId === footnoteId);
     }
 
     // should be 'add'
-    storeFootnoteText(givenId: string, body: string, chapterId: string) {
+    public storeFootnoteText(givenId: string, body: string, chapterId: string): void {
 
         let newFnid = wmubase.newElementId('footnote:' + givenId + chapterId);
 
@@ -54,7 +56,7 @@ class NotesStore{
         });
     }
 
-    toHtml() {
+    public toHtml(): IHtmlNotes { // todo: naming
 
         let htmlNotes: IHtmlNotes = {};
     
@@ -96,7 +98,7 @@ interface INotesChaptersList {
     chapterid: string;
 }
 
-export function parseInlineNoteIds(resultHtml: string) {
+export function parseInlineNoteIds(resultHtml: string): string {
 
     // 1. lookup Notes id's and connect them to chapterIds
     // 2. replace Notes ids's with link in superscript
@@ -154,7 +156,7 @@ export function parseInlineNoteIds(resultHtml: string) {
     return result;
 }
 
-export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertType: string) {
+export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertType: string): string {
 
     switch (insertType) {
         case 'endOfBook':

@@ -23,14 +23,14 @@ export interface IHtmlIndex {
 }
 
 class IndexStore {
-    store: IIndexStore;
+
+    private store: IIndexStore;
 
     constructor() {
-        this.store = {
-        };
+        this.store = {};
     }
 
-    add(givenId: string) {
+    public add(givenId: string): string {
         let indexLetter = givenId.charCodeAt(0);
 
         if (!this.store[indexLetter]) {
@@ -60,7 +60,7 @@ class IndexStore {
         return itemId;
     }
 
-    toHtml(): IHtmlIndex {
+    public toHtml(): IHtmlIndex { // todo: naming
         let htmlIndex: IHtmlIndex = {};
     
         for (let letterId in this.store) {
@@ -105,6 +105,7 @@ class IndexStore {
 
 
 export function parse(body: string, config: wmubase.IConfig): string {
+    
     let result = body;
 
     result = result.replace(/\[\[(.+?)\]\]==(.+?)==/g, function (substring: string, ...args: string[]): string {
@@ -117,15 +118,17 @@ export function parse(body: string, config: wmubase.IConfig): string {
     return result;
 }
 
-export function insertIndex(htmlResult: string, index: IHtmlIndex) {
+export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
 
     let result = [];
     const keys = Object.keys(index)
+
     for (let x = 0; x < keys.length; x++) {
         let node = index[keys[x]];
         result.push(
             node.indexAsHtml);
     }
+
     return htmlResult = htmlResult.replace(
         wmubase.IndexPlaceholder(),
         '<div class="book-index">' + wmubase.eol +
@@ -133,8 +136,6 @@ export function insertIndex(htmlResult: string, index: IHtmlIndex) {
         result.join('') +
         '</div>' + wmubase.eol + wmubase.eol
     );
-
-
 };
 
 export let indexStore = new IndexStore();

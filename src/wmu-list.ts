@@ -2,12 +2,12 @@ import * as wmubase from "./wmu-base";
 
 class ListNode {
 
-    title: string;
-    level: number; // number of pipe characters at beginning of line
-    type: string; // one of 'aAiI1', or else unordered; possibly followed by ':<value>'
-    index: string | null;
-    parent: ListNode | null;
-    children: ListNode[];
+    public title: string;
+    public level: number; // number of pipe characters at beginning of line
+    public type: string; // one of 'aAiI1', or else unordered; possibly followed by ':<value>'
+    public index: string | null;
+    public parent: ListNode | null;
+    public children: ListNode[];
 
     constructor(title: string, level: number, type: string, parent: ListNode | null) {
         let tv = level > -1 ? 
@@ -24,8 +24,8 @@ class ListNode {
 
 export class ListTree {
 
-    root: ListNode;
-    lastAdded: ListNode;
+    private root: ListNode;
+    private lastAdded: ListNode;
 
     constructor(body: string) {
 
@@ -45,11 +45,14 @@ export class ListTree {
         }
     }
 
-    addSequential(title: string, level: number, type: string) {
+    public addSequential(title: string, level: number, type: string) {
+
         let currentNode = this.lastAdded;
+
         while (level <= currentNode.level) {
             currentNode = currentNode.parent!; // todo: Non-Null Assertion Operator?
         }
+
         let newChild = new ListNode(title, level, type, currentNode);
         currentNode.children.push(newChild);
         this.lastAdded = newChild;
@@ -57,7 +60,10 @@ export class ListTree {
         return this.lastAdded;
     }
 
-    toHtml() {
+    public toHtml(): string {
+
+        if (!this.hasContent())  return '';
+
         return this.recursiveHtml(
             this.root.children.length === 1 ?
                 this.root.children[0] : // no Parts found, so start at H1 level
@@ -66,11 +72,12 @@ export class ListTree {
             ) + wmubase.eol;
     }
 
-    hasContent() {
+    private hasContent(): boolean {
         return this.lastAdded.level > 0;
     }
 
-    recursiveHtml(element: ListNode, cnt: number) {
+    private recursiveHtml(element: ListNode, cnt: number) {
+
         if (element.children.length === 0) {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
             '\t'.repeat(cnt-1) + '<li' +
