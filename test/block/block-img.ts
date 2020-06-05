@@ -4,9 +4,9 @@ import * as blockImage from '../../src/blocks/block-img';
 import { expect } from 'chai';
 import 'mocha';
 
-describe('Block image', () => {
+describe('Block image - simple', () => {
 
-  it('Block image - minimal', () => {
+  it('should convert to html', () => {
 
     let allVar: wmubase.IBlockDefinition = {
       'src': '/path/image.jpg',
@@ -21,7 +21,11 @@ describe('Block image', () => {
     );
   });
 
-  it('Block image - no source - fails', () => {
+});
+
+describe('Block image - no src', () => {
+
+  it('should return html error', () => {
 
     let allVar: wmubase.IBlockDefinition = {
     };

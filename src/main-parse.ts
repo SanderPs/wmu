@@ -13,7 +13,7 @@ export function parseWmu(str: string, config: wmubase.IConfig) {
     return result;
 }
 
-function parseTags(str: string, config: wmubase.IConfig) {
+export function parseTags(str: string, config: wmubase.IConfig) {
     let result = str;
 
     wmu_commands.forEach((cmd: IWMUCommands) => {

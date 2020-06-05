@@ -30,63 +30,63 @@ export const wmu_commands: IWMUCommands[] = [
     {
         description: 'bold', 
         type: 'inline',
-        regex: /(?:\*\*)(.+)(?:\*\*)/g, 
+        regex: /(?:\*\*)(.+?)(?:\*\*)/g, 
         to: '<b>$1</b>' 
     },
     {
         description: 'underscore', 
         type: 'inline',
-        regex: /(?:\_\_)(.+)(?:\_\_)/g, 
+        regex: /(?:\_\_)(.+?)(?:\_\_)/g, 
         to: '<u>$1</u>' 
     },
     {
         description: 'strike-trough', 
         type: 'inline',
-        regex: /(?:~~)(.+)(?:~~)/g, 
+        regex: /(?:~~)(.+?)(?:~~)/g, 
         to: '<del>$1</del>' 
     },
     {
         description: 'inline-quote', 
         type: 'inline',
-        regex: /(?:"")(.+)(?:"")/g, 
+        regex: /(?:"")(.+?)(?:"")/g, 
         to: '<q>$1</q>' 
     },
     {
         description: 'inline-code',
         type: 'inline',
-        regex: /(?:``)(.+)(?:``)/g,
+        regex: /(?:``)(.+?)(?:``)/g,
         to: '<code>$1</code>'
     },
     {
         description: 'italic',
         type: 'inline',
-        regex: /(?:\/\/)(.+)(?:\/\/)/g,
+        regex: /(?:\/\/)(.+?)(?:\/\/)/g,
         to: '<i>$1</i>'
     },
     {
         description: 'superscript', 
         type: 'inline',
-        regex: /(?:\^\^)(.+)(?:\^\^)/g, 
+        regex: /(?:\^\^)(.+?)(?:\^\^)/g, 
         to: '<sup>$1</sup>' 
     },
     {
         description: 'subscript', 
         type: 'inline',
-        regex: /(?:\^_)(.+)(?:_\^)/g, // spiegelen! = de regel
+        regex: /(?:\^_)(.+?)(?:_\^)/g, // spiegelen! = de regel
         to: '<sub>$1</sub>' 
     },
     {
         description: 'class', 
         type: 'inline',
         example: '[[$text]]##$class##',
-        regex: /(?:\[\[(.+)\]\])##(.+)(?:##)/g, 
+        regex: /(?:\[\[(.+?)\]\])##(.+?)(?:##)/g, 
         to: '<span class="$2">$1</span>' 
     },
     {
         description: 'hyperlink', 
         type: 'inline',
         example: '[[$text]]@@$link@@',
-        regex: /(?:\[\[(.+)\]\])@@(.+)(?:@@)/g, 
+        regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)/g, 
         to: '<a href="$2">$1</a>' 
     },
 
