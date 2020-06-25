@@ -17,12 +17,12 @@ export function parse(allVar: wmubase.IBlockDefinition, config: wmubase.IConfig)
   
   if (allVar['level']===0) {
     result.push('<div class="page-part" id="' + headerTocInfo.id + '">' +
-            (config.autoNumbering! ? headerTocInfo.numbering + " " : "") +
+            ((config.autoNumbering! && allVar['level'] < 6 ) ? headerTocInfo.numbering + " " : "") +
             allVar['title'] + 
             '</div>' + wmubase.eol + wmubase.eol);
   } else {
     result.push('<h' + allVar['level'] + ' id="' + headerTocInfo.id + '">' +
-            (config.autoNumbering! ? headerTocInfo.numbering + " " : "") +
+            ((config.autoNumbering! && allVar['level'] < 6 ) ? headerTocInfo.numbering + " " : "") +
             allVar['title'] + 
             '</h' + allVar['level'] + '>' + wmubase.eol + wmubase.eol);
   }
