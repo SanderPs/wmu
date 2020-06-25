@@ -4,7 +4,7 @@ import * as block from './blocks';
 import * as wmutoc from './wmu-toc';
 
 export function parseWmu(str: string, config: wmubase.IConfig) {
-    let result = str;
+    let result;
 
     result = parseTags(str, config);
     result = parseBlocks(result, config);
@@ -32,7 +32,7 @@ export function parseTags(str: string, config: wmubase.IConfig) {
 function parseBlocks(str: string, config: wmubase.IConfig) {
     let result = str;
 
-    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?(?:\r?\n)?(?:(?:\|=\r?\n)([\s\S]+?))?)(?:\r?\n[\r\n]+)/gm;
+    let regex_block = /(?:[\r\n]*([\s\S]+?)(?:[ \t]*\r?\n)?(?:(?:\|=[ \t]*\r?\n)([\s\S]+?))?(?:[ \t]*\r?\n)?(?:(?:\|=[ \t]*\r?\n)([\s\S]+?))?)(?:\r?\n(\s?[\r\n])+)/gm;
 
     result = (result + wmubase.eol + wmubase.eol).replace(regex_block, 
         function (substring: string, ...args: any[]): any { // todo: ts edgecase 'any'?
