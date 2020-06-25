@@ -120,9 +120,13 @@ export function parse(body: string, config: wmubase.IConfig): string {
 
 export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
 
-    let result = [];
     const keys = Object.keys(index)
-
+    
+    if (!keys.length) {
+        return htmlResult.replace( wmubase.IndexPlaceholder(), "" );
+    }
+    
+    let result = [];
     for (let x = 0; x < keys.length; x++) {
         let node = index[keys[x]];
         result.push(

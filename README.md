@@ -58,7 +58,7 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 
 ## Bugs
 
-- div 'book-index' is produced when there is no index
+(none)
 
 ## Todo
 
