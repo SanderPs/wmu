@@ -31,7 +31,7 @@ class NotesStore{
 
     public find(chapterid: string, footnoteId: string): INotesStoreItem {
         
-        return this.store[chapterid]?.notes // todo: '?' to not break when {{1}} is not found (as |fn|id=1)
+        return this.store[chapterid]?.notes // todo: '?' to not break when ((1)) is not found (as |fn|id=1)
             .find(item => item._footnoteGivenId === footnoteId);
     }
 
@@ -103,7 +103,7 @@ export function parseInlineNoteIds(resultHtml: string): string {
     // 1. lookup Notes id's and connect them to chapterIds
     // 2. replace Notes ids's with link in superscript
 
-    const notesRegex = '{{(.+?)}}';
+    const notesRegex = '\\(\\((.+?)\\)\\)';
     const rHeadersAndNotes = new RegExp('(<h1 .+?>|' + notesRegex + ')', 'g');
     const rNotes = new RegExp('(' + notesRegex + ')', 'g');
     // todo: groups zodat hieronder niet nog match moet worden gebruikt.
@@ -117,7 +117,7 @@ export function parseInlineNoteIds(resultHtml: string): string {
         //console.log(`Found ${matches[0]}. Next starts at ${rHeadersAndNotes.lastIndex}.`);
 
         let found = matches[0]; // todo: nothing found
-        if (found.charAt(0) === '{') {
+        if (found.charAt(0) === '(') {
             // found a footnote id (like [[1]]) inline:
             let footnoteId = found.match(notesRegex)![1]; // todo: Non-Null Assertion Operator?
 

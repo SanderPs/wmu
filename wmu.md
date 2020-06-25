@@ -200,7 +200,7 @@ This will result in an index with the letters J and F and the items `Jung, Carl`
 Wmu also supports notes:
 
 ```
-This text has a note{{1}}
+This text has a note((1))
 
 |fn|id=1
 |=

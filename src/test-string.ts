@@ -39,7 +39,7 @@ With a link: [[Go to Wikipedia]]@@https://en.wikipedia.org@@
 
 Example of class: [[Some special styling]]##my-styling##
 
-Example of using{{1}} a note. And another one{{2}}
+Example of using((1)) a note. And another one((2))
 
 |fn|id=1
 |=
@@ -51,9 +51,10 @@ This is the second note text
 
 |h1|=Overig
 
-In het 2e hoofdstuk... {{2.1}} ook een voettekst
+In het 2e hoofdstuk... ((2.1)) ook een voettekst
 
 |fn|id=2.1
+|=
 Footnote for chapter 2
 
 |h1|=Tenslotte

@@ -59,14 +59,12 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 ## Bugs
 
 - div 'book-index' is produced when there is no index
-- double accolades already used in html templates `{{ profileForm.status }}`, use doubles parentheses for footnotes
 
 ## Todo
 
 - `|cover`
 - `> npx wmu --watch`
 - not only return html, but also errors and warnings
-- in coding templating libraries already use double accolades `{{ ... }}` so using this for footnotes is maybe not the best idea
 - alternatieve-regex.js
 - in latex `{\"o}` is automatically converted to `ö`
 - todo: inline en block list?!
