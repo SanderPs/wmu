@@ -188,3 +188,8 @@ export function IndexPlaceholder() {
   return '<!-- # book-index # -->';
 }
 
+export function Encode(str: string) {
+  return str?.replace(/[<>]/gim, function(i) {
+    return '&#'+i.charCodeAt(0)+';';
+  });
+}
