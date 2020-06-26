@@ -12,7 +12,7 @@ export function parse(allVar: wmubase.IBlockDefinition, quote: string, source: s
         ) +
   '>' + wmubase.eol);
 
-  result.push('\t<p>' + wmubase.eol + quote + wmubase.eol + '\t</p>' + wmubase.eol);
+  result.push('\t<div>' + wmubase.eol + wmubase.NewlineToBr( quote ) + wmubase.eol + '\t</div>' + wmubase.eol);
 
   if (source) {
     result.push('\t<footer>' + source + '</footer>' + wmubase.eol);

@@ -11,10 +11,10 @@ export function parse(allVar: wmubase.IBlockDefinition, body: string) {
     //let bodyLists = body.replace(/^((?:-{1}[^-][\s\S]+?\r?\n?)+)(?:$)/gm, blockList.unorderedList);
 
     return '<p' + 
-    wmubase.classAttr(
-        allVar!['format'] ?? ''
-      )
-      + '>' + wmubase.eol +
-        body.replace(/(?:\r?\n)/g, '<br />') + wmubase.eol +
-        '</p>' + wmubase.eol + wmubase.eol;
+        wmubase.classAttr(
+          allVar!['format'] ?? ''
+        )
+        + '>' + wmubase.eol +
+        wmubase.NewlineToBr(body) + wmubase.eol +
+      '</p>' + wmubase.eol + wmubase.eol;
 }

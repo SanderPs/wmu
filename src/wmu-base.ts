@@ -1,5 +1,3 @@
-import { par } from "./blocks";
-
 export const eol = "\r\n";
 export const eolIn = /\r?\n/;
 export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
@@ -192,4 +190,8 @@ export function Encode(str: string) {
   return str?.replace(/[<>]/gim, function(i) {
     return '&#'+i.charCodeAt(0)+';';
   });
+}
+
+export function NewlineToBr(str: string) {
+  return str.replace(/\r?\n/g, '<br />' + this.eol);
 }
