@@ -2,11 +2,18 @@
 
 More advanced than Markdown, simpler than LaTeX
 
-This is a library that convert wmu to html.
+This is a library that converts wmu to html.
 
 **Note** this repository is not ready yet for its first beta release!!! There are still many things that need to be finished, figured out or rewriten.
 
 Read the [quick introduction](wmu.md) to get an idea of wmu markup
+
+## Main issues
+
+- using JS find and replace is fast but doesn't result in clean/solid code
+- started as proof-of-concept js code, so it's not really clean and solid everywhere (yet!)
+- i am still figuring out what wmu should be like, so some code is a bit experimetal/temporary
+- css files are also just to make it work and/or temporary
 
 ## Run the code
 
