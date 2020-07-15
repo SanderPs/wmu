@@ -64,12 +64,7 @@ export class ListTree {
 
         if (!this.hasContent())  return '';
 
-        return this.recursiveHtml(
-            this.root.children.length === 1 ?
-                this.root.children[0] : // no Parts found, so start at H1 level
-                this.root // start at the Parts level
-            , 0
-            ) + wmubase.eol;
+        return this.recursiveHtml( this.root, 0 ) + wmubase.eol;
     }
 
     private hasContent(): boolean {
