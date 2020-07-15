@@ -40,6 +40,7 @@ export interface IHtmlPositions {
   toc: string;
   body: string;
   head: string;
+  index: string;
 }
 export function pageHtml(vars: IHtmlPositions): string {
 
@@ -64,7 +65,7 @@ ${vars.body}
 
 ${this.EndOfBookPlaceholder()}
 
-${this.IndexPlaceholder()}
+${vars.index}
 
   </body>
 </html>`;
@@ -78,7 +79,7 @@ export function fragmentHtml(vars: IHtmlPositions): string {
 
 ${vars.body}
 
-${this.IndexPlaceholder()}
+${vars.index}
 `;
 
   return templ;
@@ -221,10 +222,6 @@ export function createNotesPlaceholder(el: string) {
 
 export function EndOfBookPlaceholder() {
   return '<!-- # notes-endofbook # -->';
-}
-
-export function IndexPlaceholder() {
-  return '<!-- # book-index # -->';
 }
 
 export function Encode(str: string) {

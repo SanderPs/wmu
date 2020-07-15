@@ -143,6 +143,7 @@ export class WmuDocument{
                 head: '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol,
                 body: body,
                 toc: toc,
+                index: index,
             });
         }
 
@@ -152,6 +153,7 @@ export class WmuDocument{
                 head: '',
                 body: body,
                 toc: toc,
+                index: index,
             });
         }
 

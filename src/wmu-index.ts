@@ -140,12 +140,12 @@ export function parse(body: string, indexStore: IndexStore, config: IConfig): st
     return result;
 }
 
-export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
+export function insertIndex(index: IHtmlIndex): string {
 
     const keys = Object.keys(index)
     
     if (!keys.length) {
-        return htmlResult.replace( wmubase.IndexPlaceholder(), "" );
+        return "";
     }
     
     let result = [];
@@ -155,11 +155,8 @@ export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
             node.indexAsHtml);
     }
 
-    return htmlResult.replace(
-        wmubase.IndexPlaceholder(),
-        '<div class="book-index">' + wmubase.eol +
+    return '<div class="book-index">' + wmubase.eol +
             '<h1>Index</h1>' + wmubase.eol +
         result.join('') +
-        '</div>' + wmubase.eol + wmubase.eol
-    );
+        '</div>' + wmubase.eol + wmubase.eol;
 };
