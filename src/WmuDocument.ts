@@ -10,6 +10,7 @@ const defaultConfig: IConfig = {
     createToc: false,
     toBook: false,
     autoNumbering: true,
+    keepComments: false,
 };
 
 export class WmuDocument{
@@ -17,9 +18,10 @@ export class WmuDocument{
     private config: IConfig;
     private blocks: Array<IParsedBlock>;
     private result: string[];
-    private toc: wmutoc.TocTree;
-    private index: wmuindex.IndexStore;
-    private notes: wmunotes.NotesStore;
+
+    private tocTree: wmutoc.TocTree;
+    private indexStore: wmuindex.IndexStore;
+    private notesStore: wmunotes.NotesStore;
 
     constructor(str: string, config: IConfig) {
         this.config = Object.assign({}, defaultConfig, config);
@@ -27,12 +29,12 @@ export class WmuDocument{
 
         str = parseTags(str, config);
 
-        this.index = new wmuindex.IndexStore();
-        str = wmuindex.parse(str, this.index, this.config);
+        this.indexStore = new wmuindex.IndexStore();
+        str = wmuindex.parse(str, this.indexStore, this.config);
         
-        this.notes = new wmunotes.NotesStore();
+        this.notesStore = new wmunotes.NotesStore();
 
-        this.toc = new wmutoc.TocTree();
+        this.tocTree = new wmutoc.TocTree();
         
         this.blocks = splitBlocks(str);
         this.parse();
@@ -50,13 +52,23 @@ export class WmuDocument{
 
             let isBlock = block.part1.charCodeAt(0) === 124;
             if (!isBlock) {
-                // no | at beginning means: standard paragraph:
-                this.result[indx] = blocks.par.parse(<wmubase.IBlockDefinition>{}, block.part1);
+                
+                if (/(^-\ |^\d\.\ )/.test(block.part1)) {
+                    this.result[indx] = blocks.list.parse({}, block.part1);
+                } else if (/^<!--\ /.test(block.part1)) {
+                    if (this.config.keepComments) {
+                        this.result[indx] = block.part1;
+                    }
+                } else {
+                    // it's a paragraph
+                    this.result[indx] = blocks.par.parse(<wmubase.IBlockDefinition>{}, block.part1);
+                }
+
             } else {
                 let part1: wmubase.IBlockDefinition;
                 part1 = wmubase.parseDef(block.part1); // todo: try catch
 
-                    // always remove any pipe characters at the beginning of each line:
+                // always remove any pipe characters at the beginning of each line:
                 if (block.part2) {
                     block.part2 = block.part2.replace(/^\|/gm, '');
                 }
@@ -71,7 +83,7 @@ export class WmuDocument{
                         break;
                     case 'header':
                     case 'h':
-                        this.result[indx] = blocks.header.parse(part1, this.toc, this.config);
+                        this.result[indx] = blocks.header.parse(part1, this.tocTree, this.config);
                         break;
                     case 'quote':
                     case 'q':
@@ -100,7 +112,7 @@ export class WmuDocument{
                         break;
                     case 'footnote':
                     case 'fn':
-                        this.result[indx] = blocks.note.parse(part1, this.notes, this.toc, block.part2);
+                        this.result[indx] = blocks.note.parse(part1, this.notesStore, this.tocTree, block.part2);
                         break;
                     case 'glossary':
                     case 'g':
@@ -120,7 +132,7 @@ export class WmuDocument{
         if (this.config.createToc) {
             // add last chapter placeholder if there has been a chapter
             // todo: not ideal this
-            let currentChapterId = this.toc.getCurrentChapterId();
+            let currentChapterId = this.tocTree.getCurrentChapterId();
             if (currentChapterId) {
                 this.result.push(wmubase.createNotesPlaceholder(currentChapterId)); // todo: push()?
             }
@@ -131,11 +143,11 @@ export class WmuDocument{
 
         let result: string;
         let body = this.result.join('');
-        body = wmunotes.parseInlineNoteIds(body, this.notes);
+        body = wmunotes.parseInlineNoteIds(body, this.notesStore);
         
-        let toc = (this.config.createToc ? this.toc.toHtml(this.config.tocTitle, this.config) : '');
-        let notesList: wmunotes.IHtmlNotes = this.notes.toHtml();
-        let index = this.index.toHtmlIndex();
+        let toc = (this.config.createToc ? this.tocTree.toHtml(this.config.tocTitle, this.config) : '');
+        let notesList: wmunotes.IHtmlNotes = this.notesStore.toHtml();
+        let index =  wmuindex.insertIndex(this.indexStore.toHtmlIndex());
 
         if (format === 'page') {
             result = wmubase.pageHtml(<wmubase.IHtmlPositions>{
@@ -157,9 +169,7 @@ export class WmuDocument{
             });
         }
 
-        // todo: not ideal
-        result = wmunotes.insertFootNotes(result, notesList, this.toc, 'endOfChapter'); // todo
-        result = wmuindex.insertIndex(result, index);
+        result = wmunotes.insertFootNotes(result, notesList, this.tocTree, 'endOfChapter'); // todo
         
         return result;
     }
