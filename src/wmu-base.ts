@@ -19,6 +19,7 @@ export interface IConfig {
   tocTitle?: string;
   doctype?: string; // 'book', 'ebook', 'web'
   autoNumbering?: boolean;
+  format?: string
 }
 
 export interface IProject {
@@ -41,6 +42,55 @@ export interface IBlockDefinition {
   'start'?: string;
   'id'?: string;
   [key: string]: any; // todo: why type any and not type string?
+}
+
+export interface IHtmlPositions {
+  lang: string;
+  toc: string;
+  body: string;
+  head: string;
+}
+export function pageHtml(vars: IHtmlPositions): string {
+
+  let templ = `<!doctype html>
+<html lang='${vars.lang}'>
+  <head>
+      <meta charset="utf-8">
+      <title>boek</title>
+
+      <link rel="stylesheet" href="../book-imitate.css">
+      <link rel="stylesheet" href="../base.css">
+${vars.head}
+  </head>
+
+  <body class="multipage">
+
+<div class="bookpage">
+${vars.toc}
+</div>
+  
+${vars.body}
+
+${this.EndOfBookPlaceholder()}
+
+${this.IndexPlaceholder()}
+
+  </body>
+</html>`;
+
+  return templ;
+}
+
+export function fragmentHtml(vars: IHtmlPositions): string {
+
+  let templ = `${vars.toc}
+
+${vars.body}
+
+${this.IndexPlaceholder()}
+`;
+
+  return templ;
 }
 
 export function parseDef(str: string) {

@@ -1,5 +1,5 @@
 import * as wmubase from "./wmu-base";
-import * as wmutoc from "./wmu-toc";
+import { TocTree } from "./wmu-toc";
 
 interface INotesStoreItem {
     // todo: allemaal gebruikt?
@@ -21,7 +21,7 @@ export interface IHtmlNotes {
     }
 }
 
-class NotesStore{
+export class NotesStore{
 
     private store: INotesStore;
 
@@ -72,7 +72,7 @@ class NotesStore{
     
             for (let cnt = 0; cnt < this.store[chapterId].notes.length; cnt++) {
                 let item = this.store[chapterId].notes[cnt];
-                let anchor = chapterId + '_' + item.footnoteId;
+                let anchor = chapterId + '_' + item._footnoteGivenId;
                 result.push(
                     '\t\t<li id="fn:' + anchor + '">' + wmubase.eol +
                     '\t\t\t<p>' + item.footnoteText + wmubase.eol +
@@ -98,7 +98,8 @@ interface INotesChaptersList {
     chapterid: string;
 }
 
-export function parseInlineNoteIds(resultHtml: string): string {
+// todo: temp hack for notesStore
+export function parseInlineNoteIds(resultHtml: string, notesStore: NotesStore): string {
 
     // 1. lookup Notes id's and connect them to chapterIds
     // 2. replace Notes ids's with link in superscript
@@ -156,12 +157,11 @@ export function parseInlineNoteIds(resultHtml: string): string {
     return result;
 }
 
-export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertType: string): string {
+export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, tocTree: TocTree, insertType: string): string { // todo: insertType -> enum
 
     switch (insertType) {
         case 'endOfBook':
-            let toc = wmutoc.tocTree;
-            let tocIndex = toc.getTocIndex();
+            let tocIndex = tocTree.getTocIndex();
 
             let result = [];
             const keys = Object.keys(tocIndex)
@@ -204,10 +204,6 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, insertTyp
     }
 };
 
-export let notesStore = new NotesStore();
+// todo: put somewhere else
 let currentChapterId: string | null;
 
-export function reset() {
-    notesStore = new NotesStore();
-    currentChapterId = null;
-};

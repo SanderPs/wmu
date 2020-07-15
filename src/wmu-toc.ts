@@ -63,7 +63,7 @@ class TocIndex {
     }
 }
 
-class TocTree {
+export class TocTree {
 
     private root: TocNode | null;
     private lastAdded: TocNode | null;
@@ -206,9 +206,3 @@ class TocTree {
         }
     }
 }
-
-export function newTocTree() {
-    tocTree = new TocTree();
-};
-
-export let tocTree = new TocTree();

@@ -1,19 +1,19 @@
 import * as wmubase from "./../wmu-base";
-import * as wmutoc from "./../wmu-toc";
 
-export function parse(allVar: wmubase.IBlockDefinition, config: wmubase.IConfig) {
+import { TocTree } from "./../wmu-toc";
+
+export function parse(allVar: wmubase.IBlockDefinition, tocTree: TocTree, config: wmubase.IConfig) {
   let result = [];
 
-  let toc = wmutoc.tocTree;
   if (allVar['level']===1) { // todo2: werkt niet met parts!
     // if we have found a new h1, insert a comment with id of last/previous h1, for footnotes
-    let currentChapterId=toc.getCurrentChapterId();
+    let currentChapterId=tocTree.getCurrentChapterId();
     if (currentChapterId) {
       result.push( wmubase.createNotesPlaceholder(currentChapterId) )
     }
   }
 
-  let headerTocInfo = toc.addSequential(allVar['title']!, allVar['level']);
+  let headerTocInfo = tocTree.addSequential(allVar['title']!, allVar['level']);
   
   if (allVar['level']===0) {
     result.push('<div class="page-part" id="' + headerTocInfo.id + '">' +

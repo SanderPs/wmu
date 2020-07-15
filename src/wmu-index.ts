@@ -22,7 +22,7 @@ export interface IHtmlIndex {
     }
 }
 
-class IndexStore {
+export class IndexStore {
 
     private store: IIndexStore;
 
@@ -60,7 +60,28 @@ class IndexStore {
         return itemId;
     }
 
-    public toHtml(): IHtmlIndex { // todo: naming
+    public toHtml(): string {
+
+        const htmlIndex = this.toHtmlIndex();
+        const keys = Object.keys(htmlIndex)
+        
+        if (!keys.length) {
+            return '';
+        }
+        
+        let result = [];
+        for (let x = 0; x < keys.length; x++) {
+            let node = htmlIndex[keys[x]];
+            result.push(node.indexAsHtml);
+        }
+    
+        return '<div class="book-index">' + wmubase.eol +
+                '<h1>Index</h1>' + wmubase.eol +
+            result.join('') +
+            '</div>' + wmubase.eol + wmubase.eol;
+    };
+
+    public toHtmlIndex(): IHtmlIndex { // todo: naming
         let htmlIndex: IHtmlIndex = {};
     
         for (let letterId in this.store) {
@@ -104,7 +125,7 @@ class IndexStore {
 }
 
 
-export function parse(body: string, config: wmubase.IConfig): string {
+export function parse(body: string, indexStore: IndexStore, config: wmubase.IConfig): string {
     
     let result = body;
 
@@ -133,7 +154,7 @@ export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
             node.indexAsHtml);
     }
 
-    return htmlResult = htmlResult.replace(
+    return htmlResult.replace(
         wmubase.IndexPlaceholder(),
         '<div class="book-index">' + wmubase.eol +
             '<h1>Index</h1>' + wmubase.eol +
@@ -141,5 +162,3 @@ export function insertIndex(htmlResult: string, index: IHtmlIndex): string {
         '</div>' + wmubase.eol + wmubase.eol
     );
 };
-
-export let indexStore = new IndexStore();

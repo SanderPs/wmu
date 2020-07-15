@@ -1,4 +1,4 @@
-import * as parse from '../../src/main-parse';
+import * as parse from '../../src/WmuDocument';
 
 import { expect } from 'chai';
 import 'mocha';
