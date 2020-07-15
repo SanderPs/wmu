@@ -2,27 +2,28 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as wmubase from "./wmu-base";
+import { IConfig } from "./types";
 import { WmuDocument } from "./WmuDocument";
 
-export function transformFragment(wmustring: string, config: wmubase.IConfig): string {
+export function transformFragment(wmustring: string, config: IConfig): string {
 
     return new WmuDocument(
         wmustring, 
-        Object.assign({}, config, <wmubase.IConfig>{format : 'fragment'})
+        Object.assign({}, config, <IConfig>{format : 'fragment'})
     ).toHtml();
 }
 
-export function transformPage(wmustring: string, config: wmubase.IConfig): string {
+export function transformPage(wmustring: string, config: IConfig): string {
 
     return new WmuDocument(
         wmustring, 
-        Object.assign({}, config, <wmubase.IConfig>{format : 'page'})
+        Object.assign({}, config, <IConfig>{format : 'page'})
     ).toHtml();
 }
 
 export function transformProject(filepath, config) {
 
-    const newConfig = Object.assign({}, config, <wmubase.IConfig>{format : 'page'});
+    const newConfig = Object.assign({}, config, <IConfig>{format : 'page'});
     let _wmuproject: wmubase.IProject = wmubase.init();
 
     let projectFile = path.parse(filepath);

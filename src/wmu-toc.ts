@@ -1,4 +1,5 @@
 import * as wmubase from "./wmu-base";
+import { IConfig } from "./types";
 
 interface IChapterIndex {
     [key: string]: {
@@ -130,7 +131,7 @@ export class TocTree {
         return chapterIndex;
     }
 
-    public toHtml(tocTitle: string, config: wmubase.IConfig): string {
+    public toHtml(tocTitle: string, config: IConfig): string {
 
         if (!this.hasContent())  return '';
 
@@ -159,7 +160,7 @@ export class TocTree {
     }
 
     private recursiveHtml(curNode: TocNode, cnt: number, numbering: string, 
-        hasParts: boolean, config: wmubase.IConfig): string {
+        hasParts: boolean, config: IConfig): string {
 
         // h6 should not be part of table of contents:
         if (curNode.level > 5) { 

@@ -1,32 +1,27 @@
 import * as wmubase from "./wmu-base";
+import { IConfig, IParsedBlock } from "./types";
 import { wmu_commands, IWMUCommands } from "./wmu-commands";
 import * as blocks from './blocks';
 import * as wmutoc from "./wmu-toc";
 import * as wmuindex from './wmu-index';
 import * as wmunotes from './wmu-notes';
 
-const defaultConfig: wmubase.IConfig = {
+const defaultConfig: IConfig = {
     createToc: false,
     toBook: false,
     autoNumbering: true,
 };
 
-interface IParsedBlock {
-    part1: string;
-    part2: string | undefined;
-    part3: string | undefined;
-}
-
 export class WmuDocument{
 
-    private config: wmubase.IConfig;
+    private config: IConfig;
     private blocks: Array<IParsedBlock>;
     private result: string[];
     private toc: wmutoc.TocTree;
     private index: wmuindex.IndexStore;
     private notes: wmunotes.NotesStore;
 
-    constructor(str: string, config: wmubase.IConfig) {
+    constructor(str: string, config: IConfig) {
         this.config = Object.assign({}, defaultConfig, config);
         this.result = [];
 
@@ -187,7 +182,7 @@ export function splitBlocks(str: string): Array<IParsedBlock> {
 }
 
 
-export function parseTags(str: string, config: wmubase.IConfig): string {
+export function parseTags(str: string, config: IConfig): string {
     let result = str;
 
     wmu_commands.forEach((cmd: IWMUCommands) => {

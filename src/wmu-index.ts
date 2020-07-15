@@ -1,4 +1,5 @@
 import * as wmubase from "./wmu-base";
+import { IConfig } from "./types";
 
 interface IIndexStoreOccurence {
     linkId: string;
@@ -125,7 +126,7 @@ export class IndexStore {
 }
 
 
-export function parse(body: string, indexStore: IndexStore, config: wmubase.IConfig): string {
+export function parse(body: string, indexStore: IndexStore, config: IConfig): string {
     
     let result = body;
 

@@ -13,15 +13,6 @@ export function init() {
   return _wmu_project;
 }
 
-export interface IConfig {
-  toBook?: boolean;
-  createToc?: boolean;
-  tocTitle?: string;
-  doctype?: string; // 'book', 'ebook', 'web'
-  autoNumbering?: boolean;
-  format?: string
-}
-
 export interface IProject {
   files?: string;
 }
