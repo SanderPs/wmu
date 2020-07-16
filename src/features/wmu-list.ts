@@ -1,4 +1,4 @@
-import * as wmubase from "./wmu-base";
+import * as wmubase from "./../wmu-base";
 
 class ListNode {
 

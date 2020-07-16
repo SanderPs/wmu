@@ -1,4 +1,4 @@
-import * as wmubase from "./wmu-base";
+import * as wmubase from "./../wmu-base";
 import { TocTree } from "./wmu-toc";
 
 interface INotesStoreItem {

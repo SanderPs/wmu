@@ -1,7 +1,7 @@
 import * as wmubase from "./../wmu-base";
 import { IBlockDefinition } from "./../types";
-import { TocTree } from "./../wmu-toc";
-import { NotesStore } from "./../wmu-notes";
+import { TocTree } from "./../features/wmu-toc";
+import { NotesStore } from "./../features/wmu-notes";
 
 export function parse(allVar: IBlockDefinition, notesStore: NotesStore, tocStore: TocTree, body: string): string {
 

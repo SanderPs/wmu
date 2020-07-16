@@ -1,5 +1,5 @@
-import * as wmubase from "./wmu-base";
-import { IConfig } from "./types";
+import * as wmubase from "./../wmu-base";
+import { IConfig } from "./../types";
 
 interface IChapterIndex {
     [key: string]: {

@@ -2,9 +2,9 @@ import * as wmubase from "./wmu-base";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions } from "./types";
 import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import * as blocks from './blocks';
-import * as wmutoc from "./wmu-toc";
-import * as wmuindex from './wmu-index';
-import * as wmunotes from './wmu-notes';
+import * as wmutoc from "./features/wmu-toc";
+import * as wmuindex from './features/wmu-index';
+import * as wmunotes from './features/wmu-notes';
 
 const defaultConfig: IConfig = {
     createToc: false,
