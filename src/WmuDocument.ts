@@ -1,6 +1,6 @@
 import * as wmubase from "./wmu-base";
-import { wmu_commands, IWMUCommands } from "./wmu-commands";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions } from "./types";
+import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import * as blocks from './blocks';
 import * as wmutoc from "./wmu-toc";
 import * as wmuindex from './wmu-index';
