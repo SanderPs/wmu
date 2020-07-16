@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WMU - demo</title>
     <script src="../../dist/lib/wmu-lib.js"></script>
+    <script defer src="demo-wmu.js" onload="initWmu()"></script>
     <link href="../../css/base.css" rel="stylesheet">
 
     <style>
@@ -55,9 +56,9 @@
         document.getElementById("output").innerHTML = "";
     }
 
-    window.onload = (event) => {
-        document.getElementById('input').value = wmu.teststring;
-    };
+    function initWmu() {
+        document.getElementById('input').value = demoWmuString;
+    }
 
 </script>
 
