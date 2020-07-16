@@ -171,7 +171,7 @@ export class WmuDocument{
 
         result = wmunotes.insertFootNotes(result, notesList, this.tocTree, 'endOfChapter'); // todo
         
-        return result;
+        return result.trim();
     }
 }
 

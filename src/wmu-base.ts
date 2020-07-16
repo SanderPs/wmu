@@ -216,3 +216,7 @@ export function Encode(str: string) {
 export function NewlineToBr(str: string) {
   return str.replace(/\r?\n/g, '<br />' + this.eol);
 }
+
+export function NormalizeNewline(str: string) {
+  return str.replace(/\r?\n/g, this.eol);
+}

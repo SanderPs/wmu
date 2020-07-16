@@ -1,6 +1,6 @@
 import * as wmubase from "./../wmu-base";
 import { IConfig, IBlockDefinition } from "./../types";
-import { TocTree } from "./../wmu-toc";
+import { TocTree } from "./../features/wmu-toc";
 
 export function parse(allVar: IBlockDefinition, tocTree: TocTree, config: IConfig) {
   let result = [];

@@ -14,7 +14,7 @@ export function parse(allVar: IBlockDefinition, body: string) {
     ) +
     '><code>'); // note: no eol here! will produce empty line
   
-  result.push( body ? wmubase.Encode( body ) : '[Warning: no code found]' );
+  result.push( body ? wmubase.Encode( wmubase.NormalizeNewline(body) ) : '[Warning: no code found]' );
 
   result.push(wmubase.eol + '</code></pre>' + wmubase.eol + wmubase.eol);
 
