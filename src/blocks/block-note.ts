@@ -1,9 +1,9 @@
 import * as wmubase from "./../wmu-base";
-
+import { IBlockDefinition } from "./../types";
 import { TocTree } from "./../wmu-toc";
 import { NotesStore } from "./../wmu-notes";
 
-export function parse(allVar: wmubase.IBlockDefinition, notesStore: NotesStore, tocStore: TocTree, body: string): string {
+export function parse(allVar: IBlockDefinition, notesStore: NotesStore, tocStore: TocTree, body: string): string {
 
   // get the current 'context', the chapter where the footnote is found
   let currentChapterId = tocStore.getCurrentChapterId();

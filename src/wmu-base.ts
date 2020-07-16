@@ -1,3 +1,5 @@
+import { IBlockDefinition, IHtmlPositions } from "./types";
+
 export const eol = "\r\n";
 export const eolIn = /\r?\n/;
 export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
@@ -21,27 +23,8 @@ export function getAll() {
   return _wmu_project;
 };
 
-export interface IBlockDefinition {
-  'block-type'?: string;
-  'level'?: number;
-  'number'?: number;
-  'block-align'? : string;
-  'title'?: string;
-  'language'?: string;
-  'format'?: string;
-  'src'?: string;
-  'start'?: string;
-  'id'?: string;
-  [key: string]: any; // todo: why type any and not type string?
-}
 
-export interface IHtmlPositions {
-  lang: string;
-  toc: string;
-  body: string;
-  head: string;
-  index: string;
-}
+
 export function pageHtml(vars: IHtmlPositions): string {
 
   let templ = `<!doctype html>

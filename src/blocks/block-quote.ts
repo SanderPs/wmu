@@ -1,6 +1,7 @@
 import * as wmubase from "./../wmu-base";
+import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: wmubase.IBlockDefinition, quote: string, source: string) {
+export function parse(allVar: IBlockDefinition, quote: string, source: string) {
 
   let result: string[] = [];
 

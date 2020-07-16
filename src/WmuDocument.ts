@@ -1,6 +1,6 @@
 import * as wmubase from "./wmu-base";
-import { IConfig, IParsedBlock } from "./types";
 import { wmu_commands, IWMUCommands } from "./wmu-commands";
+import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions } from "./types";
 import * as blocks from './blocks';
 import * as wmutoc from "./wmu-toc";
 import * as wmuindex from './wmu-index';
@@ -61,11 +61,11 @@ export class WmuDocument{
                     }
                 } else {
                     // it's a paragraph
-                    this.result[indx] = blocks.par.parse(<wmubase.IBlockDefinition>{}, block.part1);
+                    this.result[indx] = blocks.par.parse(<IBlockDefinition>{}, block.part1);
                 }
 
             } else {
-                let part1: wmubase.IBlockDefinition;
+                let part1: IBlockDefinition;
                 part1 = wmubase.parseDef(block.part1); // todo: try catch
 
                 // always remove any pipe characters at the beginning of each line:
@@ -150,7 +150,7 @@ export class WmuDocument{
         let index =  wmuindex.insertIndex(this.indexStore.toHtmlIndex());
 
         if (format === 'page') {
-            result = wmubase.pageHtml(<wmubase.IHtmlPositions>{
+            result = wmubase.pageHtml(<IHtmlPositions>{
                 lang: "nl",
                 head: '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol,
                 body: body,
@@ -160,7 +160,7 @@ export class WmuDocument{
         }
 
         if (format === 'fragment') {
-            result = wmubase.fragmentHtml(<wmubase.IHtmlPositions>{
+            result = wmubase.fragmentHtml(<IHtmlPositions>{
                 lang: '',
                 head: '',
                 body: body,

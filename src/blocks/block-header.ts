@@ -1,9 +1,8 @@
 import * as wmubase from "./../wmu-base";
-import { IConfig } from "./../types";
-
+import { IConfig, IBlockDefinition } from "./../types";
 import { TocTree } from "./../wmu-toc";
 
-export function parse(allVar: wmubase.IBlockDefinition, tocTree: TocTree, config: IConfig) {
+export function parse(allVar: IBlockDefinition, tocTree: TocTree, config: IConfig) {
   let result = [];
 
   if (allVar['level']===1) { // todo2: werkt niet met parts!

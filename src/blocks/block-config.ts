@@ -1,7 +1,7 @@
 import * as wmubase from "./../wmu-base";
-import { IConfig } from "./../types";
+import { IConfig, IBlockDefinition } from "./../types";
 
-export function parse(allVar: wmubase.IBlockDefinition, config: IConfig) {
+export function parse(allVar: IBlockDefinition, config: IConfig) {
 
     let result = [];
 
