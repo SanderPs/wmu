@@ -1,5 +1,5 @@
 import * as wmubase from "./wmu-base";
-import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions } from "./types";
+import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions, IWmuProject } from "./types";
 import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import * as blocks from './blocks';
 import * as wmutoc from "./features/wmu-toc";
@@ -16,6 +16,7 @@ const defaultConfig: IConfig = {
 export class WmuDocument{
 
     private config: IConfig;
+    private project: IWmuProject;
     private blocks: Array<IParsedBlock>;
     private result: string[];
 
@@ -23,8 +24,10 @@ export class WmuDocument{
     private indexStore: wmuindex.IndexStore;
     private notesStore: wmunotes.NotesStore;
 
-    constructor(str: string, config: IConfig) {
+    constructor( str: string, config: IConfig, projectData: IWmuProject ) {
+
         this.config = Object.assign({}, defaultConfig, config);
+        this.project = projectData;
         this.result = [];
 
         str = parseTags(str, config);
@@ -139,8 +142,10 @@ export class WmuDocument{
         }
     }
 
-    public toHtml(format: string = 'fragment'): string { // todo: format -> enum
+    public toHtml(): string { // todo: format -> enum
 
+        let format: string = this.config.format?.length ? this.config.format : 'fragment';
+        
         let result: string;
         let body = this.result.join('');
         body = wmunotes.parseInlineNoteIds(body, this.notesStore);
@@ -149,10 +154,15 @@ export class WmuDocument{
         let notesList: wmunotes.IHtmlNotes = this.notesStore.toHtml();
         let index =  wmuindex.insertIndex(this.indexStore.toHtmlIndex());
 
+        let css = (this.project.css?.length) ?
+            '\t\t<link rel="stylesheet" href="' + this.project.css + '">' + wmubase.eol :
+            '';
+
+
         if (format === 'page') {
             result = wmubase.pageHtml(<IHtmlPositions>{
                 lang: "nl",
-                head: '\t\t<link rel="stylesheet" href="../test.css">' + wmubase.eol,
+                head: css,
                 body: body,
                 toc: toc,
                 index: index,

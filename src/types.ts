@@ -8,6 +8,12 @@ export interface IConfig {
     keepComments?: boolean;
 }
 
+export interface IWmuProject {
+    files?: string;
+    css?: string;
+    outputPath?: string; // current folder = './'
+}
+
 export interface IParsedBlock {
     part1: string;
     part2: string | undefined;

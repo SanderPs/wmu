@@ -4,41 +4,20 @@ export const eol = "\r\n";
 export const eolIn = /\r?\n/;
 export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
-var _wmu_project: object;
-
-
-export function init() {
-
-  _wmu_project = {
-  };
-
-  return _wmu_project;
-}
-
-export interface IProject {
-  files?: string;
-}
-
-export function getAll() {
-  return _wmu_project;
-};
-
-
-
 export function pageHtml(vars: IHtmlPositions): string {
 
   let templ = `<!doctype html>
 <html lang='${vars.lang}'>
-  <head>
-      <meta charset="utf-8">
-      <title>boek</title>
+\t<head>
+\t\t<meta charset="utf-8">
+\t\t<title>boek</title>
 
-      <link rel="stylesheet" href="../book-imitate.css">
-      <link rel="stylesheet" href="../base.css">
+\t\t<link rel="stylesheet" href="css/book-imitate.css">
+\t\t<link rel="stylesheet" href="css/base.css">
 ${vars.head}
-  </head>
+\t</head>
 
-  <body class="multipage">
+\t<body class="multipage">
 
 <div class="bookpage">
 ${vars.toc}
@@ -50,7 +29,7 @@ ${this.EndOfBookPlaceholder()}
 
 ${vars.index}
 
-  </body>
+\t</body>
 </html>`;
 
   return templ;

@@ -65,7 +65,7 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 
 ## Bugs
 
-(none)
+- when using a project file, copy .css files to project folder
 
 ## Todo
 

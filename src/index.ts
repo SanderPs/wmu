@@ -11,7 +11,7 @@ export {
 
 // wip tests
 
-import {transformPage} from "./main-transform";
+import {transformPage, transformProject} from "./main-transform";
 
 let WmuTestString = ``;
 
@@ -19,7 +19,8 @@ if (typeof window === 'undefined') {
     // running in Node
     let isInTest = typeof global.it === 'function'; // Mocha running?
     if (!isInTest) {
-        console.log('WMU: ', transformPage( WmuTestString, {}));
+        // console.log('WMU: ', transformPage( WmuTestString, {}));
+        transformProject("./examples/project1/config.wmu", {}, { outputPath: './'});
     }
 } else {
     // running in browser
