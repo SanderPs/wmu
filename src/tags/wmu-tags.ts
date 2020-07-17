@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 
 export interface IWMUCommands {
     description: string; 
@@ -95,13 +95,13 @@ export const wmu_commands: IWMUCommands[] = [
         type: 'markdown',
         example: `$1\n===$`,
         regex: /^(.+?)\r?\n={3,}$/gm, 
-        to: '|h1|$1' + wmubase.eol + wmubase.eol 
+        to: '|h1|$1' + WmuLib.eol + WmuLib.eol 
     },
     {
         description: 'markdown-header-2', 
         type: 'markdown',
         example: `$1\n---$`,
         regex: /^(.+?)\r?\n-{3,}$/gm, 
-        to: '|h2|$1' + wmubase.eol + wmubase.eol 
+        to: '|h2|$1' + WmuLib.eol + WmuLib.eol 
     }
 ];

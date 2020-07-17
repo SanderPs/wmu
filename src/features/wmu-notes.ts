@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { TocTree } from "./wmu-toc";
 
 interface INotesStoreItem {
@@ -38,7 +38,7 @@ export class NotesStore{
     // should be 'add'
     public storeFootnoteText(givenId: string, body: string, chapterId: string): void {
 
-        let newFnid = wmubase.newElementId('footnote:' + givenId + chapterId);
+        let newFnid = WmuLib.newElementId('footnote:' + givenId + chapterId);
 
         if (chapterId === null) {
             chapterId = 'unasigned' // todo gebeurt dit ooit?
@@ -65,25 +65,25 @@ export class NotesStore{
             let result = [];
     
             result.push(
-                '<div class="footnotes-chapter' + chapterId + '">' + wmubase.eol +
-                '<b>Voetnoten</b><br> ' + wmubase.eol + // todo
-                '\t<ol>' + wmubase.eol
+                '<div class="footnotes-chapter' + chapterId + '">' + WmuLib.eol +
+                '<b>Voetnoten</b><br> ' + WmuLib.eol + // todo
+                '\t<ol>' + WmuLib.eol
             );
     
             for (let cnt = 0; cnt < this.store[chapterId].notes.length; cnt++) {
                 let item = this.store[chapterId].notes[cnt];
                 let anchor = chapterId + '_' + item._footnoteGivenId;
                 result.push(
-                    '\t\t<li id="fn:' + anchor + '">' + wmubase.eol +
-                    '\t\t\t<p>' + item.footnoteText + wmubase.eol +
-                    '&nbsp;<a href="#fnref:' + anchor + '" class="reversefootnote">&#8593;</a></p>' + wmubase.eol +
-                    '\t\t</li>' + wmubase.eol
+                    '\t\t<li id="fn:' + anchor + '">' + WmuLib.eol +
+                    '\t\t\t<p>' + item.footnoteText + WmuLib.eol +
+                    '&nbsp;<a href="#fnref:' + anchor + '" class="reversefootnote">&#8593;</a></p>' + WmuLib.eol +
+                    '\t\t</li>' + WmuLib.eol
                 );
             }
     
             result.push(
-                '\t</ol>' + wmubase.eol +
-                '</div>' + wmubase.eol + wmubase.eol
+                '\t</ol>' + WmuLib.eol +
+                '</div>' + WmuLib.eol + WmuLib.eol
             );
     
             htmlNotes[chapterId] = { notesAsHtml: result.join('') };
@@ -168,16 +168,16 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, tocTree: 
             for (let x=0; x < keys.length; x++) {
                 let node = tocIndex[keys[x]];
                 if (node.partTitle) {
-                    result.push('<div>' + node.partTitle + '</div>' + wmubase.eol);
+                    result.push('<div>' + node.partTitle + '</div>' + WmuLib.eol);
                 }
                 if (notes[node.tocChapter.id]) {
-                    result.push('<div>' + node.tocChapter.title + '</div>' + wmubase.eol);
-                    result.push('<div>' + notes[node.tocChapter.id].notesAsHtml + '</div>' + wmubase.eol);
+                    result.push('<div>' + node.tocChapter.title + '</div>' + WmuLib.eol);
+                    result.push('<div>' + notes[node.tocChapter.id].notesAsHtml + '</div>' + WmuLib.eol);
                 }
             }
    // todo: also add 'unassigned'
             return htmlResult = htmlResult.replace(
-                    wmubase.EndOfBookPlaceholder(),
+                WmuLib.EndOfBookPlaceholder(),
                     '<div class="start-page-notes-endofbook">' +
                     result.join('') +
                     '</div>'
@@ -185,7 +185,7 @@ export function insertFootNotes(htmlResult: string, notes: IHtmlNotes, tocTree: 
 
         case 'endOfChapter':
             Object.keys(notes).map(function(elem){
-                let ph = wmubase.createNotesPlaceholder(elem);
+                let ph = WmuLib.createNotesPlaceholder(elem);
                 if (htmlResult.indexOf(ph) > -1) {
                     htmlResult = htmlResult.replace(ph, notes[elem].notesAsHtml);
                 } else{

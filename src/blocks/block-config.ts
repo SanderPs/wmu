@@ -1,24 +1,24 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IConfig, IBlockDefinition } from "./../types";
 
 export function parse(allVar: IBlockDefinition, config: IConfig) {
 
     let result = [];
 
-    result.push('<!-- config: ' + wmubase.eol);
+    result.push('<!-- config: ' + WmuLib.eol);
 
     if (allVar['toc'] && (!allVar['toc']===false) || (allVar['toctitle'] && allVar['toctitle'].length)) {
 
         config.createToc = true;
-        result.push('createToc = true; ' + wmubase.eol)
+        result.push('createToc = true; ' + WmuLib.eol)
 
         if (allVar['toctitle'] && allVar['toctitle'].length) {
             config.tocTitle = allVar['toctitle']
-            result.push('tocTitle = ' + allVar['toctitle'] + '; ' + wmubase.eol)
+            result.push('tocTitle = ' + allVar['toctitle'] + '; ' + WmuLib.eol)
         }
     }
 
-    result.push(' -->' + wmubase.eol + wmubase.eol);
+    result.push(' -->' + WmuLib.eol + WmuLib.eol);
 
     return result.join('');
 }

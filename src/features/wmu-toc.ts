@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IConfig } from "./../types";
 
 interface IChapterIndex {
@@ -80,7 +80,7 @@ export class TocTree {
     }
 
     public addSequential(title: string, level: number): headerTocInfo {
-        let id = wmubase.newElementId(title! + level);
+        let id = WmuLib.newElementId(title! + level);
       
         let currentNode = this.lastAdded;
         while (level <= currentNode!.level) { // todo: Non-Null Assertion Operator?
@@ -138,12 +138,12 @@ export class TocTree {
         let tocHtml = [];
 
         if (tocTitle) {
-            tocHtml.push('<h1>' + tocTitle + '</h1>' + wmubase.eol + wmubase.eol);
+            tocHtml.push('<h1>' + tocTitle + '</h1>' + WmuLib.eol + WmuLib.eol);
         }
 
         let hasParts = this.root!.children.length > 1;
         tocHtml.push(
-            '<div id="tableofcontents">' + wmubase.eol +
+            '<div id="tableofcontents">' + WmuLib.eol +
             this.recursiveHtml(
                 hasParts ?
                     this.root! : // start at the Parts level
@@ -154,7 +154,7 @@ export class TocTree {
                 hasParts,
                 config
             ) +
-            '</div>' + wmubase.eol + wmubase.eol);
+            '</div>' + WmuLib.eol + WmuLib.eol);
 
         return tocHtml.join('');
     }
@@ -181,7 +181,7 @@ export class TocTree {
             "" : 
             "\t".repeat(cnt) + "<li><span class='numbering'>" + 
             (config.autoNumbering ? curNode.numbering : nodeNumbering) + // todo: numbering is done double
-            "</span> " + curNode.title + "</li>" + wmubase.eol;
+            "</span> " + curNode.title + "</li>" + WmuLib.eol;
 
         if (curNode.children.length === 0) {
 
@@ -199,11 +199,11 @@ export class TocTree {
             if (curNode.level > -1) { // add this node before adding children, except when this is rootNode, or h6
                 result+= currentEl;
             }
-            result += "\t".repeat(cnt) + "<ul class='indexlevel-" + (curNode.level + 1) + "'>" + wmubase.eol;
+            result += "\t".repeat(cnt) + "<ul class='indexlevel-" + (curNode.level + 1) + "'>" + WmuLib.eol;
             for (let i = 0; i < curNode.children.length; i++) {
                 result += this.recursiveHtml(curNode.children[i], cnt + 1, nodeNumbering, hasParts, config);
             }
-            return result + "\t".repeat(cnt) + "</ul>" + wmubase.eol;
+            return result + "\t".repeat(cnt) + "</ul>" + WmuLib.eol;
         }
     }
 }

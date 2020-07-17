@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
 export function parse(allVar: IBlockDefinition) {
@@ -10,21 +10,21 @@ export function parse(allVar: IBlockDefinition) {
 
   let result = [];
 
-  result.push('<figure>' + wmubase.eol);
+  result.push('<figure>' + WmuLib.eol);
 
   result.push(
     '<img' +
-    wmubase.classAttr(
-      wmubase.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
+    WmuLib.classAttr(
+      WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
       allVar['format'] ?? ''
     ) +
-    ' src="' + allVar['src'] + '" />' + wmubase.eol);
+    ' src="' + allVar['src'] + '" />' + WmuLib.eol);
 
   if (allVar['title']) {
-      result.push('<figcaption>' + allVar['title'] + '</figcaption>' + wmubase.eol);
+      result.push('<figcaption>' + allVar['title'] + '</figcaption>' + WmuLib.eol);
   }
 
-  result.push('</figure>' + wmubase.eol + wmubase.eol);
+  result.push('</figure>' + WmuLib.eol + WmuLib.eol);
 
   return result.join('');
 }

@@ -1,4 +1,4 @@
-import * as wmubase from "../../src/wmu-base";
+import * as WmuLib from "../../src/WmuLib";
 import { transformFragment } from '../../src/';
 
 import { expect } from 'chai';
@@ -19,16 +19,16 @@ describe('Block glossary', () => {
     const result = transformFragment(str, {});
 
     expect(result).to.equal(
-      '<dl>' + wmubase.eol +
-      '\t<div>' + wmubase.eol +
-      '\t\t<dt>css</dt>' + wmubase.eol +
-      '\t\t<dt>css3</dt>' + wmubase.eol +
-      '\t\t<dd>Cascading Style Sheets</dd>' + wmubase.eol +
-      '\t<div>' + wmubase.eol +
-      '\t</div>' + wmubase.eol +
-      '\t\t<dt>html</dt>' + wmubase.eol +
-      '\t\t<dd>Hyper Text Markup Language</dd>' + wmubase.eol +
-      '\t</div>' + wmubase.eol +
+      '<dl>' + WmuLib.eol +
+      '\t<div>' + WmuLib.eol +
+      '\t\t<dt>css</dt>' + WmuLib.eol +
+      '\t\t<dt>css3</dt>' + WmuLib.eol +
+      '\t\t<dd>Cascading Style Sheets</dd>' + WmuLib.eol +
+      '\t<div>' + WmuLib.eol +
+      '\t</div>' + WmuLib.eol +
+      '\t\t<dt>html</dt>' + WmuLib.eol +
+      '\t\t<dd>Hyper Text Markup Language</dd>' + WmuLib.eol +
+      '\t</div>' + WmuLib.eol +
       '</dl>'
     );
   });

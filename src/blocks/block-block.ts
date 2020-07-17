@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
 export function parse(allVar: IBlockDefinition, body: string) {
@@ -7,15 +7,15 @@ export function parse(allVar: IBlockDefinition, body: string) {
 
   result.push(
     '<div' +
-    wmubase.classAttr(
-      wmubase.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
+    WmuLib.classAttr(
+      WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
       allVar['format'] ?? ''
     ) +
-    '>' + wmubase.eol);
+    '>' + WmuLib.eol);
   
   result.push(body);
 
-  result.push(wmubase.eol + '</div>' + wmubase.eol + wmubase.eol);
+  result.push(WmuLib.eol + '</div>' + WmuLib.eol + WmuLib.eol);
 
   return result.join('');
 }

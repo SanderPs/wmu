@@ -1,27 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import * as wmubase from "./wmu-base";
 import { IConfig, IWmuProject } from "./types";
-import { WmuDocument } from "./WmuDocument";
-
-export function transformFragment(wmustring: string, config: IConfig): string {
-
-    return new WmuDocument(
-        wmustring, 
-        Object.assign({}, config, <IConfig>{format : 'fragment'}),
-        {} as IWmuProject
-    ).toHtml();
-}
-
-export function transformPage(wmustring: string, config: IConfig, projectData: IWmuProject): string {
-
-    return new WmuDocument(
-        wmustring, 
-        Object.assign({}, config, <IConfig>{format : 'page'}),
-        projectData
-    ).toHtml();
-}
+import * as WmuLib from "./WmuLib";
+import { transformPage } from "./WmuTransformSingle";
 
 export function transformProject(filepath: string, config: IConfig, projectSettings?: IWmuProject): string | undefined {
 
@@ -84,5 +66,5 @@ function concatFiles(files: string, location: string): string {
 
     });
 
-    return contentArray.join(wmubase.eol + wmubase.eol) + wmubase.eol + wmubase.eol;
+    return contentArray.join(WmuLib.eol + WmuLib.eol) + WmuLib.eol + WmuLib.eol;
 }

@@ -1,4 +1,4 @@
-import * as wmubase from "./wmu-base";
+import * as WmuLib from "./WmuLib";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions, IWmuProject } from "./types";
 import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import * as blocks from './blocks';
@@ -69,7 +69,7 @@ export class WmuDocument{
 
             } else {
                 let part1: IBlockDefinition;
-                part1 = wmubase.parseDef(block.part1); // todo: try catch
+                part1 = WmuLib.parseDef(block.part1); // todo: try catch
 
                 // always remove any pipe characters at the beginning of each line:
                 if (block.part2) {
@@ -137,7 +137,7 @@ export class WmuDocument{
             // todo: not ideal this
             let currentChapterId = this.tocTree.getCurrentChapterId();
             if (currentChapterId) {
-                this.result.push(wmubase.createNotesPlaceholder(currentChapterId)); // todo: push()?
+                this.result.push(WmuLib.createNotesPlaceholder(currentChapterId)); // todo: push()?
             }
         }
     }
@@ -145,7 +145,7 @@ export class WmuDocument{
     public toHtml(): string { // todo: format -> enum
 
         let format: string = this.config.format?.length ? this.config.format : 'fragment';
-        
+
         let result: string;
         let body = this.result.join('');
         body = wmunotes.parseInlineNoteIds(body, this.notesStore);
@@ -155,12 +155,12 @@ export class WmuDocument{
         let index =  wmuindex.insertIndex(this.indexStore.toHtmlIndex());
 
         let css = (this.project.css?.length) ?
-            '\t\t<link rel="stylesheet" href="' + this.project.css + '">' + wmubase.eol :
+            '\t\t<link rel="stylesheet" href="' + this.project.css + '">' + WmuLib.eol :
             '';
 
 
         if (format === 'page') {
-            result = wmubase.pageHtml(<IHtmlPositions>{
+            result = WmuLib.pageHtml(<IHtmlPositions>{
                 lang: "nl",
                 head: css,
                 body: body,
@@ -170,7 +170,7 @@ export class WmuDocument{
         }
 
         if (format === 'fragment') {
-            result = wmubase.fragmentHtml(<IHtmlPositions>{
+            result = WmuLib.fragmentHtml(<IHtmlPositions>{
                 lang: '',
                 head: '',
                 body: body,

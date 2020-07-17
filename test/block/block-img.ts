@@ -1,4 +1,4 @@
-import * as wmubase from "../../src/wmu-base";
+import * as WmuLib from "../../src/WmuLib";
 import { IBlockDefinition } from "../../src/types";
 
 import { transformFragment } from '../../src/';
@@ -17,9 +17,9 @@ describe('Block image - simple', () => {
     const result = transformFragment(str, {});
 
     expect(result).to.equal(
-      '<figure>' + wmubase.eol +
-      '<img src="https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg" />' + wmubase.eol +
-      '<figcaption>Image that explains it all</figcaption>' + wmubase.eol +
+      '<figure>' + WmuLib.eol +
+      '<img src="https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg" />' + WmuLib.eol +
+      '<figcaption>Image that explains it all</figcaption>' + WmuLib.eol +
       '</figure>'
     );
   });
@@ -34,10 +34,10 @@ describe('Block image - simple', () => {
     const result = blockImage.parse(allVar);
 
     expect(result).to.equal(
-      '<figure>' + wmubase.eol +
-      '<img src="' + allVar['src'] + '" />' + wmubase.eol +
-      '<figcaption>' + allVar['title'] + '</figcaption>' + wmubase.eol +
-      '</figure>' + wmubase.eol + wmubase.eol
+      '<figure>' + WmuLib.eol +
+      '<img src="' + allVar['src'] + '" />' + WmuLib.eol +
+      '<figcaption>' + allVar['title'] + '</figcaption>' + WmuLib.eol +
+      '</figure>' + WmuLib.eol + WmuLib.eol
     );
   });
 

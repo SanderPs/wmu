@@ -1,4 +1,4 @@
-import * as wmubase from "../../src/wmu-base";
+import * as WmuLib from "../../src/WmuLib";
 import { transformFragment } from '../../src/';
 
 import { expect } from 'chai';
@@ -17,11 +17,11 @@ Door iemand`;
     const result = transformFragment(str, {});
 
     expect(result).to.equal(
-      '<blockquote class="block-right abc">' + wmubase.eol +
-      '\t<div>' + wmubase.eol +
-      'Dit is een interessante quote' + wmubase.eol +
-      '\t</div>' + wmubase.eol +
-      '\t<footer>Door iemand</footer>' + wmubase.eol +
+      '<blockquote class="block-right abc">' + WmuLib.eol +
+      '\t<div>' + WmuLib.eol +
+      'Dit is een interessante quote' + WmuLib.eol +
+      '\t</div>' + WmuLib.eol +
+      '\t<footer>Door iemand</footer>' + WmuLib.eol +
       '</blockquote>'
     );
   });

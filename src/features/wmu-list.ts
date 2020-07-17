@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 
 class ListNode {
 
@@ -29,7 +29,7 @@ export class ListTree {
 
     constructor(body: string) {
 
-        let items = body.split(wmubase.eolIn);
+        let items = body.split(WmuLib.eolIn);
 
         var rootNode = new ListNode('root', -1, 'id_root', null);
         this.root = rootNode;
@@ -64,7 +64,7 @@ export class ListTree {
 
         if (!this.hasContent())  return '';
 
-        return this.recursiveHtml( this.root, 0 ) + wmubase.eol;
+        return this.recursiveHtml( this.root, 0 ) + WmuLib.eol;
     }
 
     private hasContent(): boolean {
@@ -77,25 +77,25 @@ export class ListTree {
             return (element.level > 0) ? // > 0: exclude node titled 'parts'
             '\t'.repeat(cnt-1) + '<li' +
             (element.index ? ' value="' + element.index + '"' : '') +
-            '>' + element.title + '</li>' + wmubase.eol : 
+            '>' + element.title + '</li>' + WmuLib.eol : 
             '';
         }
         else {
             let result = '';
             if (element.level > -1 && cnt > 0) {
-                result+= '\t'.repeat(cnt-1) + '<li>' + element.title + wmubase.eol;
+                result+= '\t'.repeat(cnt-1) + '<li>' + element.title + WmuLib.eol;
             }
             let listTypeOrdered = 'aAiI1'.indexOf(element.children[0].type) > -1;
             result += '\t'.repeat(cnt) + 
             '<' + (listTypeOrdered ? 'ol' : 'ul') +
             (listTypeOrdered ? ' type="' + element.children[0].type + '"' : '') +
-            '>' + wmubase.eol;
+            '>' + WmuLib.eol;
             for (let i = 0; i < element.children.length; i++) {
                 result += this.recursiveHtml(element.children[i], cnt + 2);
             }
-            result = result + '\t'.repeat(cnt) + '</' + (listTypeOrdered ? 'ol' : 'ul') + '>' + wmubase.eol;
+            result = result + '\t'.repeat(cnt) + '</' + (listTypeOrdered ? 'ol' : 'ul') + '>' + WmuLib.eol;
             if (element.level > -1 && cnt > 0) {
-                result = result + '\t'.repeat(cnt-1) + '</li>' + wmubase.eol;
+                result = result + '\t'.repeat(cnt-1) + '</li>' + WmuLib.eol;
             }
             return result;
         }

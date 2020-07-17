@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
 export function parse(allVar: IBlockDefinition, header: string, body: string) {
@@ -6,21 +6,21 @@ export function parse(allVar: IBlockDefinition, header: string, body: string) {
   let result: string[] = [];
 
   result.push('<table' +
-    wmubase.classAttr(
-      wmubase.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
+  WmuLib.classAttr(
+    WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
       allVar['format'] ?? ''
     ) +
-    '>' + wmubase.eol);
+    '>' + WmuLib.eol);
 
   if (allVar['caption']) {
-    result.push('<caption>' + allVar['caption'] + '</caption>' + wmubase.eol);
+    result.push('<caption>' + allVar['caption'] + '</caption>' + WmuLib.eol);
   }
 
   result.push(parse_header(header));
 
   result.push(parse_body(body));
 
-  result.push('</table>' + wmubase.eol + wmubase.eol);
+  result.push('</table>' + WmuLib.eol + WmuLib.eol);
 
   return result.join('');
 }
@@ -30,7 +30,7 @@ function parse_body(body: string) {
   let result = [];
 
   if (body) {
-    let rows: string[] = body.split(wmubase.eolIn);
+    let rows: string[] = body.split(WmuLib.eolIn);
 
     for (let i = 0; i < rows.length; i++) {
       result.push(
@@ -38,12 +38,12 @@ function parse_body(body: string) {
           // first the beginning and end of a row:
           .replace( 
             /(.+)\|$/gm,
-            '<tr>' + wmubase.eol +
-            '\t<td>$1</td>' + wmubase.eol +
-            '</tr>' + wmubase.eol
+            '<tr>' + WmuLib.eol +
+            '\t<td>$1</td>' + WmuLib.eol +
+            '</tr>' + WmuLib.eol
           )
           // then each pipe character:
-          .replace(/\|/g, '</td>' + wmubase.eol + '\t<td>')
+          .replace(/\|/g, '</td>' + WmuLib.eol + '\t<td>')
       );
     }
   }
@@ -53,7 +53,7 @@ function parse_body(body: string) {
 
 function parse_header(header: string) {
 
-  let rows: string[] = header.split(wmubase.eolIn); // todo: prevent error when not present
+  let rows: string[] = header.split(WmuLib.eolIn); // todo: prevent error when not present
   let headerrow: string[] = rows[0].slice(0, -1).split(/ *\| */);
   
   let alignrow: string[] = []; // per column a css class for horizontal alignment
@@ -72,33 +72,33 @@ function parse_header(header: string) {
 
     if (alignrow.length) {
       for (let i = 0; i < alignrow.length; i++) {
-        alignrow[i] = wmubase.alignmentClass(alignrow[i], false) ?? '';
+        alignrow[i] = WmuLib.alignmentClass(alignrow[i], false) ?? '';
       }
     }
 
     if (valignrow.length) {
       for (let i = 0; i < valignrow.length; i++) {
-        valignrow[i] = wmubase.valignmentClass(valignrow[i]);
+        valignrow[i] = WmuLib.valignmentClass(valignrow[i]);
       }
     }
   }
 
   let result = [];
 
-  result.push('<tr>' + wmubase.eol);
+  result.push('<tr>' + WmuLib.eol);
 
   for (let i = 0; i < headerrow.length; i++) {
     result.push(
       '\t<th' +
-      wmubase.classAttr(alignrow[i], valignrow[i]) +
+      WmuLib.classAttr(alignrow[i], valignrow[i]) +
       '>' +
       headerrow[i] +
       '</th>' +
-      wmubase.eol
+      WmuLib.eol
     );
   }
 
-  result.push('</tr>' + wmubase.eol);
+  result.push('</tr>' + WmuLib.eol);
 
   return result.join('');
 }

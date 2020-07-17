@@ -1,4 +1,4 @@
-import * as wmubase from "../../src/wmu-base";
+import * as WmuLib from "../../src/WmuLib";
 import { transformFragment } from '../../src/';
 
 import { expect } from 'chai';
@@ -25,15 +25,15 @@ function x() {
     const result = transformFragment(str, {});
 
     expect(result).to.equal(
-      '<pre class="codelang-js"><code>// some comment' + wmubase.eol +
-       wmubase.eol +
-       'function x() {' + wmubase.eol +
-      '   if (y) {' + wmubase.eol +
-      '      doThing(1);' + wmubase.eol +
-      '   } else {' + wmubase.eol +
-      '      doThing(2);' + wmubase.eol +
-      '   }' + wmubase.eol +
-      '}'  + wmubase.eol + 
+      '<pre class="codelang-js"><code>// some comment' + WmuLib.eol +
+      WmuLib.eol +
+       'function x() {' + WmuLib.eol +
+      '   if (y) {' + WmuLib.eol +
+      '      doThing(1);' + WmuLib.eol +
+      '   } else {' + WmuLib.eol +
+      '      doThing(2);' + WmuLib.eol +
+      '   }' + WmuLib.eol +
+      '}'  + WmuLib.eol + 
       '</code></pre>'
     );
   });

@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IConfig } from "./../types";
 
 interface IIndexStoreOccurence {
@@ -76,10 +76,10 @@ export class IndexStore {
             result.push(node.indexAsHtml);
         }
     
-        return '<div class="book-index">' + wmubase.eol +
-                '<h1>Index</h1>' + wmubase.eol +
+        return '<div class="book-index">' + WmuLib.eol +
+                '<h1>Index</h1>' + WmuLib.eol +
             result.join('') +
-            '</div>' + wmubase.eol + wmubase.eol;
+            '</div>' + WmuLib.eol + WmuLib.eol;
     };
 
     public toHtmlIndex(): IHtmlIndex { // todo: naming
@@ -89,15 +89,15 @@ export class IndexStore {
             let result = [];
     
             result.push(
-                '<div class="index-for-' + letterId + '">' + wmubase.eol +
-                    '<div class="index-header">' + String.fromCharCode(parseInt(letterId)) + '</div>' + wmubase.eol
+                '<div class="index-for-' + letterId + '">' + WmuLib.eol +
+                    '<div class="index-header">' + String.fromCharCode(parseInt(letterId)) + '</div>' + WmuLib.eol
             );
     
             for (let cnt = 0; cnt < this.store[letterId].items.length; cnt++) {
                 let crntItem = this.store[letterId].items[cnt];
 
                 result.push(
-                    '\t<div>' + crntItem.indexTerm + '&nbsp;&nbsp;'+ wmubase.eol
+                    '\t<div>' + crntItem.indexTerm + '&nbsp;&nbsp;'+ WmuLib.eol
                 );
 
                 for (let cnt2 = 0; cnt2 < crntItem.occurences.length; cnt2++) {
@@ -107,15 +107,15 @@ export class IndexStore {
                     result.push(
                         '\t\t<span id="indx:' + anchor + '">' +
                         '<a href="#indxref:' + anchor + '" class="reverseindex">' + crntOcc.index + '</a>' +
-                        '</span>' + wmubase.eol
+                        '</span>' + WmuLib.eol
                     );
                 }
 
-                result.push('\t</div>' + wmubase.eol);
+                result.push('\t</div>' + WmuLib.eol);
             }
     
             result.push(
-                '</div>' + wmubase.eol + wmubase.eol
+                '</div>' + WmuLib.eol + WmuLib.eol
             );
     
             htmlIndex[letterId] = { indexAsHtml: result.join('') };
@@ -155,8 +155,8 @@ export function insertIndex(index: IHtmlIndex): string {
             node.indexAsHtml);
     }
 
-    return '<div class="book-index">' + wmubase.eol +
-            '<h1>Index</h1>' + wmubase.eol +
+    return '<div class="book-index">' + WmuLib.eol +
+            '<h1>Index</h1>' + WmuLib.eol +
         result.join('') +
-        '</div>' + wmubase.eol + wmubase.eol;
+        '</div>' + WmuLib.eol + WmuLib.eol;
 };

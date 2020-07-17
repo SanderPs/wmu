@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 import * as wmulist from "./../features/wmu-list";
 
@@ -8,8 +8,8 @@ export function parse(allVar: IBlockDefinition, body: string) {
 
 export function unorderedList(unused: string, ul: string) {
   return '' +
-    '<ul>' + wmubase.eol + 
-      listItems(ul) + wmubase.eol +
+    '<ul>' + WmuLib.eol + 
+      listItems(ul) + WmuLib.eol +
     '</ul>';
 }
 
@@ -19,7 +19,7 @@ export function listItems(li: string) {
       li.replace(/^- */gm,'')
         .replace(/\r?\n?$/,'')
         .split(/[\r\n]+/)
-        .join('</li>' + wmubase.eol + '\t<li>') +
+        .join('</li>' + WmuLib.eol + '\t<li>') +
     '</li>';
 }
   

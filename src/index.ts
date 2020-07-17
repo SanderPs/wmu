@@ -4,14 +4,18 @@ export {
 
 export {
     transformFragment,
-    transformPage,
+    transformPage
+} from "./WmuTransformSingle";
+
+export {
     transformProject
-} from "./main-transform";
+} from "./WmuTransformProject";
 
 
 // wip tests
 
-import {transformPage, transformProject} from "./main-transform";
+import {transformPage} from "./WmuTransformSingle";
+import {transformProject} from "./WmuTransformProject";
 
 let WmuTestString = ``;
 

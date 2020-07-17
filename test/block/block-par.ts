@@ -1,4 +1,4 @@
-import * as wmubase from "../../src/wmu-base";
+import * as WmuLib from "../../src/WmuLib";
 import { transformFragment } from '../../src/';
 
 import { expect } from 'chai';
@@ -15,8 +15,8 @@ This is a paragraph with a css class`;
     const result = transformFragment(str, {});
 
     expect(result).to.equal(
-      '<p class="css-class-xyz">' + wmubase.eol +
-      'This is a paragraph with a css class' + wmubase.eol +
+      '<p class="css-class-xyz">' + WmuLib.eol +
+      'This is a paragraph with a css class' + WmuLib.eol +
       '</p>'
     );
   });

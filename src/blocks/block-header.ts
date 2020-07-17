@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IConfig, IBlockDefinition } from "./../types";
 import { TocTree } from "./../features/wmu-toc";
 
@@ -9,7 +9,7 @@ export function parse(allVar: IBlockDefinition, tocTree: TocTree, config: IConfi
     // if we have found a new h1, insert a comment with id of last/previous h1, for footnotes
     let currentChapterId=tocTree.getCurrentChapterId();
     if (currentChapterId) {
-      result.push( wmubase.createNotesPlaceholder(currentChapterId) )
+      result.push( WmuLib.createNotesPlaceholder(currentChapterId) )
     }
   }
 
@@ -19,12 +19,12 @@ export function parse(allVar: IBlockDefinition, tocTree: TocTree, config: IConfi
     result.push('<div class="page-part" id="' + headerTocInfo.id + '">' +
             ((config.autoNumbering! && allVar['level'] < 6 ) ? headerTocInfo.numbering + " " : "") +
             allVar['title'] + 
-            '</div>' + wmubase.eol + wmubase.eol);
+            '</div>' + WmuLib.eol + WmuLib.eol);
   } else {
     result.push('<h' + allVar['level'] + ' id="' + headerTocInfo.id + '">' +
             ((config.autoNumbering! && allVar['level'] < 6 ) ? headerTocInfo.numbering + " " : "") +
             allVar['title'] + 
-            '</h' + allVar['level'] + '>' + wmubase.eol + wmubase.eol);
+            '</h' + allVar['level'] + '>' + WmuLib.eol + WmuLib.eol);
   }
 
   return result.join('');

@@ -1,4 +1,4 @@
-import * as wmubase from "./../wmu-base";
+import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 // todo: verplaatsen?
 import * as blockList from "./block-list";
@@ -11,10 +11,10 @@ export function parse(allVar: IBlockDefinition, body: string) {
     //let bodyLists = body.replace(/^((?:-{1}[^-][\s\S]+?\r?\n?)+)(?:$)/gm, blockList.unorderedList);
 
     return '<p' + 
-        wmubase.classAttr(
+    WmuLib.classAttr(
           allVar!['format'] ?? ''
         )
-        + '>' + wmubase.eol +
-        wmubase.NewlineToBr(body) + wmubase.eol +
-      '</p>' + wmubase.eol + wmubase.eol;
+        + '>' + WmuLib.eol +
+        WmuLib.NewlineToBr(body) + WmuLib.eol +
+      '</p>' + WmuLib.eol + WmuLib.eol;
 }
