@@ -32,17 +32,22 @@ export class WmuDocument{
 
         str = parseTags(str, config);
 
-        this.indexStore = new wmuindex.IndexStore();
+        this.preParse();
         str = wmuindex.parse(str, this.indexStore, this.config);
+
+        this.blocks = splitBlocks(str);
+        this.parse();
+
+        this.postParse();
+    }
+
+    private preParse(): void {
+        
+        this.indexStore = new wmuindex.IndexStore();
         
         this.notesStore = new wmunotes.NotesStore();
 
         this.tocTree = new wmutoc.TocTree();
-        
-        this.blocks = splitBlocks(str);
-        this.parse();
-        this.postParse();
-        
     }
 
     private parse(): void {
