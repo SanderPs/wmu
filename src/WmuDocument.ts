@@ -86,7 +86,9 @@ export class WmuDocument{
                         break;
                     case 'header':
                     case 'h':
-                        this.result[indx] = blocks.header.parse(part1, this.tocTree, this.config);
+                        let result = blocks.header.parse(part1, this.tocTree, this.config);
+                        this.result[indx] = result.html;
+                        block.tocNode = result.tocNode;
                         break;
                     case 'quote':
                     case 'q':
@@ -132,14 +134,8 @@ export class WmuDocument{
 
     private postParse() {
 
-        if (this.config.createToc) {
-            // add last chapter placeholder if there has been a chapter
-            // todo: not ideal this
-            let currentChapterId = this.tocTree.getCurrentChapterId();
-            if (currentChapterId) {
-                this.result.push(WmuLib.createNotesPlaceholder(currentChapterId)); // todo: push()?
-            }
-        }
+        AddFootnotePlaceholders(this.config, this.blocks, this.result);
+
     }
 
     public toHtml(): string { // todo: format -> enum
@@ -218,4 +214,29 @@ export function parseTags(str: string, config: IConfig): string {
     });
 
     return result;
+}
+
+// add a footnotes placeholder at the end of a chapter/header1:
+export function AddFootnotePlaceholders(config: IConfig, blocks: IParsedBlock[], result: string[]) {
+
+    if (!config.createToc) 
+        return;
+
+    let lastH1 = -1;
+    for (let indx=0; indx < blocks.length; indx ++) {
+        let block: IParsedBlock = blocks[indx];
+
+        if (block.tocNode?.level === 1) {
+            if (lastH1 > -1) {
+                result[indx] = 
+                    WmuLib.createNotesPlaceholder( blocks[lastH1].tocNode.id ) +
+                    result[indx];
+            }
+            lastH1 = indx;
+        }
+    }
+    if (lastH1 > -1 && lastH1 !== (blocks.length - 1)) {
+        result[blocks.length - 1] += WmuLib.createNotesPlaceholder( blocks[lastH1].tocNode?.id );
+    }
+
 }

@@ -14,7 +14,7 @@ interface headerTocInfo {
 }
 
 
-class TocNode {
+export class TocNode {
     public title: string;
     public level: number;
     public id: string;
@@ -79,7 +79,7 @@ export class TocTree {
         this.addSequential('parts', 0);
     }
 
-    public addSequential(title: string, level: number): headerTocInfo {
+    public addSequential(title: string, level: number): TocNode {
         let id = WmuLib.newElementId(title! + level);
       
         let currentNode = this.lastAdded;
@@ -91,10 +91,7 @@ export class TocTree {
         this.lastAdded = newChild;
         this.treeIndex!.add(id, newChild);
 
-        return <headerTocInfo>{
-            id: id,
-            numbering: newChild.numbering
-        };
+        return newChild;
     }
 
     public getCurrentChapterId(): string | null {

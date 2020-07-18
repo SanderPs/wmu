@@ -1,3 +1,5 @@
+import { TocNode } from "./features/wmu-toc";
+
 export interface IConfig {
     toBook?: boolean;
     createToc?: boolean;
@@ -18,6 +20,7 @@ export interface IParsedBlock {
     part1: string;
     part2: string | undefined;
     part3: string | undefined;
+    tocNode?: TocNode;
 }
 
 export interface IBlockDefinition {
