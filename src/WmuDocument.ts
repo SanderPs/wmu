@@ -2,9 +2,9 @@ import * as WmuLib from "./WmuLib";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions, IWmuProject } from "./types";
 import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import * as blocks from './blocks';
-import * as wmutoc from "./features/wmu-toc";
-import * as wmuindex from './features/wmu-index';
-import * as wmunotes from './features/wmu-notes';
+import * as wmuToc from "./features/wmu-toc";
+import * as wmuIndex from './features/wmu-index';
+import * as wmuNotes from './features/wmu-notes';
 
 const defaultConfig: IConfig = {
     createToc: false,
@@ -20,9 +20,11 @@ export class WmuDocument{
     private blocks: Array<IParsedBlock>;
     private result: string[];
 
-    private tocTree: wmutoc.TocTree;
-    private indexStore: wmuindex.IndexStore;
-    private notesStore: wmunotes.NotesStore;
+    private tocTree: wmuToc.TocTree;
+    private indexStore: wmuIndex.IndexStore;
+    private notesStore: wmuNotes.NotesStore;
+
+    private html: string = '';
 
     constructor( str: string, config: IConfig, projectData: IWmuProject ) {
 
@@ -33,7 +35,7 @@ export class WmuDocument{
         str = parseTags(str, config);
 
         this.preParse();
-        str = wmuindex.parse(str, this.indexStore, this.config);
+        str = wmuIndex.parse(str, this.indexStore, this.config);
 
         this.blocks = splitBlocks(str);
         this.parse();
@@ -43,11 +45,11 @@ export class WmuDocument{
 
     private preParse(): void {
         
-        this.indexStore = new wmuindex.IndexStore();
+        this.indexStore = new wmuIndex.IndexStore();
         
-        this.notesStore = new wmunotes.NotesStore();
+        this.notesStore = new wmuNotes.NotesStore();
 
-        this.tocTree = new wmutoc.TocTree();
+        this.tocTree = new wmuToc.TocTree();
     }
 
     private parse(): void {
@@ -141,6 +143,13 @@ export class WmuDocument{
 
         AddFootnotePlaceholders(this.config, this.blocks, this.result);
 
+        let body = this.result.join('');
+
+        body = wmuNotes.parseInlineNoteIds(body, this.notesStore); // todo: code smell
+        let notesList: wmuNotes.IHtmlNotes = this.notesStore.toHtml();
+        this.html = wmuNotes.insertFootNotes(body, notesList, this.tocTree, // todo: code smell
+            'endOfChapter' // todo
+            );
     }
 
     public toHtml(): string { // todo: format -> enum
@@ -148,12 +157,9 @@ export class WmuDocument{
         let format: string = this.config.format?.length ? this.config.format : 'fragment';
 
         let result: string;
-        let body = this.result.join('');
-        body = wmunotes.parseInlineNoteIds(body, this.notesStore);
-        
+
         let toc = (this.config.createToc ? this.tocTree.toHtml(this.config.tocTitle, this.config) : '');
-        let notesList: wmunotes.IHtmlNotes = this.notesStore.toHtml();
-        let index =  wmuindex.insertIndex(this.indexStore.toHtmlIndex());
+        let index =  wmuIndex.insertIndex(this.indexStore.toHtmlIndex());
 
         let css = (this.project.css?.length) ?
             '\t\t<link rel="stylesheet" href="' + this.project.css + '">' + WmuLib.eol :
@@ -164,7 +170,7 @@ export class WmuDocument{
             result = WmuLib.pageHtml(<IHtmlPositions>{
                 lang: "nl",
                 head: css,
-                body: body,
+                body: this.html,
                 toc: toc,
                 index: index,
             });
@@ -174,14 +180,12 @@ export class WmuDocument{
             result = WmuLib.fragmentHtml(<IHtmlPositions>{
                 lang: '',
                 head: '',
-                body: body,
+                body: this.html,
                 toc: toc,
                 index: index,
             });
         }
 
-        result = wmunotes.insertFootNotes(result, notesList, this.tocTree, 'endOfChapter'); // todo
-        
         return result.trim();
     }
 }
