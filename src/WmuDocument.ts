@@ -63,7 +63,7 @@ export class WmuDocument{
             let isBlock = block.part1.charCodeAt(0) === 124;
             if (!isBlock) {
                 
-                if (/(^-\ |^\d\.\ )/.test(block.part1)) {
+                if (/(^-\ |^\d(?::\d)?\.\ )/.test(block.part1)) {
                     this.result[indx] = blocks.list.parse({}, block.part1);
                 } else if (/^<!--\ /.test(block.part1)) {
                     if (this.config.keepComments) {

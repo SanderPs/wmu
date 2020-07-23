@@ -36,7 +36,7 @@ export class ListTree {
         this.lastAdded = rootNode;
       
         for (let x=0; x < items.length;  x++) {
-          let row = items[x].match(/^(\|*)(.*?(?: +))(.*)$/);
+          let row = items[x].match(/^(\|*)(?:(.+?)(?:\.?[\t ]+))(.*)$/);
 
           // row[1] = the number of pipe characters at the beginning of the line
           // row[2] = the list-item marker (-1IaA etc)
@@ -50,7 +50,7 @@ export class ListTree {
         let currentNode = this.lastAdded;
 
         while (level <= currentNode.level) {
-            currentNode = currentNode.parent!; // todo: Non-Null Assertion Operator?
+            currentNode = currentNode.parent!;
         }
 
         let newChild = new ListNode(title, level, type, currentNode);
@@ -74,7 +74,7 @@ export class ListTree {
     private recursiveHtml(element: ListNode, cnt: number) {
 
         if (element.children.length === 0) {
-            return (element.level > 0) ? // > 0: exclude node titled 'parts'
+            return (element.level > 0) ?
             '\t'.repeat(cnt-1) + '<li' +
             (element.index ? ' value="' + element.index + '"' : '') +
             '>' + element.title + '</li>' + WmuLib.eol : 
