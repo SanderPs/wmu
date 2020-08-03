@@ -4,6 +4,8 @@ export const eol = "\r\n";
 export const eolIn = /\r?\n/;
 export const eolInStr = '\r?\n'; // todo: hieronder in regexs vervangen
 
+export const DefaultProjectFileName: string = 'config.wmu';
+
 export function pageHtml(vars: IHtmlPositions): string {
 
   let templ = `<!doctype html>
