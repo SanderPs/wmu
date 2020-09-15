@@ -122,19 +122,6 @@ table td {
     width: 100%;
 }
 
-.text-left {
-    text-align: left;
-}
-.text-right {
-    text-align: right;
-}
-.text-center {
-    text-align: center;
-}
-.text-fill {
-    text-align: justify;
-}
-
 dl {
     margin: 1rem 0;
 }
@@ -149,6 +136,7 @@ dd {
 }
 
 
+/* todo: nodig? */
 /* uit bash manual */
 /* https://tiswww.case.edu/php/chet/bash/bashref.html */
 
@@ -165,8 +153,8 @@ ul ul {
 ul {
     display: block;
     list-style-type: disc;
-    margin-block-start: 1rem;
-    margin-block-end: 1rem;
+    margin-block-start: 0;
+    margin-block-end: 0;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     padding-inline-start: 40px;
@@ -213,4 +201,34 @@ blockquote>footer {
 blockquote>footer::before {
     content: '— ';
     padding: 0 4px 0 31px;
+}
+
+
+.block-right {
+    margin-right: 0;
+    margin-left: auto;
+}
+.block-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+.block-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+.block-fill {
+    width: 100%;
+}
+
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+.text-left {
+    text-align: left;
+}
+.text-fill {
+    text-align: justify;
 }

@@ -20,11 +20,18 @@ import {transformProject} from "./WmuTransformProject";
 let WmuTestString = `
 |h1|=test hst 1
 
-|h2|=par 1.1
+|img|src=https://bla.com/hoi.jpg
 
-|h1|=test hst 2
+|list
+|=
+- item 1
+- item 2
 
-|h2|=par 2.1
+|list
+|=
+1. item 1
+2. item 2
+
 `;
 
 if (typeof window === 'undefined') {

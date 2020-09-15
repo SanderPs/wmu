@@ -218,6 +218,8 @@ You can put notes everywhere you want (usually right after it is used like the e
 2 should be C
 3 should be D
 ```
+Nested lists should always have | at the start of the line where the number of | determines the depth:
+
 
 ## Glossary
 
