@@ -39,7 +39,8 @@ if (typeof window === 'undefined') {
     let isInTest = typeof global.it === 'function'; // Mocha running?
     if (!isInTest) {
         // console.log('WMU: ', transformFragment( WmuTestString, {}));
-        // transformProject("./examples/project1/config.wmu", {}, { outputPath: './'});
+        // transformProjectFile("./examples/project1/config.wmu", {}, { outputPath: './'});
+        console.log(transformProject("./examples/project2/", {}, { outputPath: './'}) );
     }
 } else {
     // running in browser

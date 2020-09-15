@@ -4,7 +4,7 @@ More advanced than Markdown, simpler than LaTeX
 
 This is a library that converts wmu to html.
 
-**Note** this repository is not ready yet for its first beta release!!! There are still many things that need to be finished, figured out or rewriten.
+**Note** this repository is a proof-of-concept / prototype! It is not ready yet for its first beta release!!! There are still many things that need to be finished, figured out or rewriten.
 
 Read the [quick introduction](wmu.md) to get an idea of wmu markup
 
@@ -69,6 +69,7 @@ https://modeling-languages.com/text-uml-tools-complete-list/
 
 ## Todo
 
+- |config: `type=web` and `type=book`
 - `|cover`
 - `> npx wmu --watch`
 - not only return html, but also errors and warnings
