@@ -1,6 +1,7 @@
 import * as WmuLib from "./WmuLib";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions, IWmuProject } from "./types";
 import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
+import { determineBlockType } from "./blocks/no-type-blocks";
 import * as blocks from './blocks';
 import * as wmuToc from "./features/wmu-toc";
 import * as wmuIndex from './features/wmu-index';
@@ -60,81 +61,84 @@ export class WmuDocument{
         for (let indx=0; indx < this.blocks.length; indx ++) {
             let block: IParsedBlock = this.blocks[indx];
 
-            let isBlock = block.part1.charCodeAt(0) === 124;
-            if (!isBlock) {
-                
-                if (/(^-\ |^\d(?::\d)?\.\ )/.test(block.part1)) {
-                    this.result[indx] = blocks.list.parse({}, block.part1);
-                } else if (/^<!--\ /.test(block.part1)) {
+            let hasTag = block.part1.charCodeAt(0) === 124;
+
+            if (!hasTag) {
+                let determinedType = determineBlockType(block.part1);
+
+                block.part2 = block.part1;
+                block.part1 = "|" + determinedType;
+            }
+            
+            let blockVars: IBlockDefinition;
+            blockVars = WmuLib.parseDef(block.part1); // todo: try catch
+
+            // always remove any pipe characters at the beginning of 
+            // each line of part2 and 3:
+            if (block.part2) {
+                block.part2 = block.part2.replace(/^\|/gm, '');
+            }
+            if (block.part3) {
+                block.part3 = block.part3.replace(/^\|/gm, '');
+            }
+
+            switch( blockVars['block-type'] ) {
+                case 'table':
+                case 't':
+                    this.result[indx] = blocks.table.parse(blockVars, block.part2, block.part3);
+                    break;
+                case 'header':
+                case 'h':
+                    let result = blocks.header.parse(blockVars, this.tocTree, this.config);
+                    this.result[indx] = result.html;
+                    block.tocNode = result.tocNode;
+                    break;
+                case 'quote':
+                case 'q':
+                    this.result[indx] = blocks.quote.parse(blockVars, block.part2, block.part3);
+                    break;
+                case 'code':
+                case 'c':
+                    this.result[indx] = blocks.code.parse(blockVars, block.part2);
+                    break;
+                case 'block':
+                case 'b':
+                    this.result[indx] = blocks.block.parse(blockVars, block.part2);
+                    break;
+                case 'image':
+                case 'img':
+                case 'i':
+                    this.result[indx] = blocks.img.parse(blockVars);
+                    break;
+                case 'list':
+                case 'l':
+                    this.result[indx] = blocks.list.parse(blockVars, block.part2);
+                    break;
+                case 'par':
+                case 'p':
+                    this.result[indx] = blocks.par.parse(blockVars, block.part2);
+                    break;
+                case 'footnote':
+                case 'fn':
+                    this.result[indx] = blocks.note.parse(blockVars, this.notesStore, this.tocTree, block.part2);
+                    break;
+                case 'glossary':
+                case 'g':
+                    this.result[indx] = blocks.glossary.parse(blockVars, block.part2);
+                    break;
+                case 'config':
+                    this.result[indx] = blocks.config.parse(blockVars, this.config);
+                    break;
+                case 'htmlComment':
                     if (this.config.keepComments) {
                         this.result[indx] = block.part1;
                     }
-                } else {
-                    // it's a paragraph
-                    this.result[indx] = blocks.par.parse(<IBlockDefinition>{}, block.part1);
-                }
-
-            } else {
-                let part1: IBlockDefinition;
-                part1 = WmuLib.parseDef(block.part1); // todo: try catch
-
-                // always remove any pipe characters at the beginning of each line:
-                if (block.part2) {
-                    block.part2 = block.part2.replace(/^\|/gm, '');
-                }
-                if (block.part3) {
-                    block.part3 = block.part3.replace(/^\|/gm, '');
-                }
-
-                switch( part1['block-type'] ) {
-                    case 'table':
-                    case 't':
-                        this.result[indx] = blocks.table.parse(part1, block.part2, block.part3);
-                        break;
-                    case 'header':
-                    case 'h':
-                        let result = blocks.header.parse(part1, this.tocTree, this.config);
-                        this.result[indx] = result.html;
-                        block.tocNode = result.tocNode;
-                        break;
-                    case 'quote':
-                    case 'q':
-                        this.result[indx] = blocks.quote.parse(part1, block.part2, block.part3);
-                        break;
-                    case 'code':
-                    case 'c':
-                        this.result[indx] = blocks.code.parse(part1, block.part2);
-                        break;
-                    case 'block':
-                    case 'b':
-                        this.result[indx] = blocks.block.parse(part1, block.part2);
-                        break;
-                    case 'image':
-                    case 'img':
-                    case 'i':
-                        this.result[indx] = blocks.img.parse(part1);
-                        break;
-                    case 'list':
-                    case 'l':
-                        this.result[indx] = blocks.list.parse(part1, block.part2);
-                        break;
-                    case 'par':
-                    case 'p':
-                        this.result[indx] = blocks.par.parse(part1, block.part2);
-                        break;
-                    case 'footnote':
-                    case 'fn':
-                        this.result[indx] = blocks.note.parse(part1, this.notesStore, this.tocTree, block.part2);
-                        break;
-                    case 'glossary':
-                    case 'g':
-                        this.result[indx] = blocks.glossary.parse(part1, block.part2);
-                        break;
-                    case 'config':
-                        this.result[indx] = blocks.config.parse(part1, this.config);
-                        break;
-                }
+                    break;
+                default:
+                    // throw
+                    break;
             }
+
         }
 
     }
@@ -191,7 +195,7 @@ export class WmuDocument{
 }
 
 const partLabel = ['part1', 'part2', 'part3'];
-const regex_block = /(?:\r?\n(?:\r?\n)+)/g;
+const regex_block = /(?:\r?\n(?:[ \t]*\r?\n)+)/g;
 const regex_part = /(?:\r?\n\|=[ \t]*\r?\n)/g;
 
 export function splitBlocks(str: string): Array<IParsedBlock> {
