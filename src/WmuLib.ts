@@ -118,16 +118,17 @@ export function parseDef(str: string) {
 
 export function alignmentClass(str: string, isBlock: boolean): string | null {
   let prefix = isBlock ? 'block-' : 'text-';
-  if (/^-+:$/.test(str)) {
+  if (/^-+:$|r/.test(str)) {
     return prefix + 'right';
-  } else if (/^-+:-+$/.test(str)) {
+  } else if (/^-+:-+$|c/.test(str)) {
     return prefix + 'center';
-  } else if (/^:-+$/.test(str)) {
+  } else if (/^:-+$|l/.test(str)) {
     return prefix + 'left';
-  } else if (/^:-+:$/.test(str)) {
+  } else if (/^:-+:$|f|c/.test(str)) {
     return prefix + 'fill'; // :-: fill = table: 100%, cell: justify
+    // todo: justify alleen bij meerdere regels
   }
-  return null;
+  return ''; // todo: throw
 }
 
 export function classAttr(...args: string[]) {

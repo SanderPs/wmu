@@ -124,11 +124,16 @@ Cells in tables can also be aligned vertically:
 ```
 |table|:-:
 |=
-|th 1|th 2|th 3|th 4|th 5|
-|:---|---:|:---:|-:-|---|
-|v=T||-||_|
-|=
-|This|is|a|table|!|
+::header::
+th 1|=|th 2|=|th 3|=|th 4|=|th 5
+|==|
+::align::
+:---|=|---:|=|:---:|=|-:-|=|---
+|==|
+::valign::
+T|=| |=|-|=| |=|_
+|==|
+cell 1 |=| cell 2 |=| cell 3 |=| cell 4 |=| cell 5
 ```
 
 ## Standard Markup

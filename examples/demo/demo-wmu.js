@@ -77,19 +77,25 @@ caption=Figuur 1|
 format=abc
 |=
 Dit is een interessante quote
-|=
+|=|
 Door iemand
 
-|table|:-:
+|table|:-:|multiline=yes
 |class=specialcss
 |=
-|1|2|3|4|5|
-|:---|---:|:---:|-:-|---|
-|v=T||-||_|
-|=
-|This|is|a|table|!|
+::align:::
+---|=|---:|=|:---:|=|-:-|=|---
+|==|
+::header::
+1|=|2|=|3|=|4|=|5
+|==|
+This|=|is|=|a|=|table|=|!
+
+Commentaar blok:
 
 <!-- Lijsten -->
+
+|h2|=Lijsten 
 
 - lijst inline
 

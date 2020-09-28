@@ -13,7 +13,6 @@ describe('WmuDocument - footnotes', () => {
         { 
             part1: '|h1|=test hst 1', 
             part2: '', 
-            part3: '',
             tocNode: {
                 title: '',
                 level: 1,
@@ -27,12 +26,10 @@ describe('WmuDocument - footnotes', () => {
         { 
             part1: '|h2|=par 1.1', 
             part2: '', 
-            part3: ''
         },
         { 
             part1: '|h1|=test hst 2', 
             part2: '', 
-            part3: '',
             tocNode: {
                 title: '',
                 level: 1,
@@ -46,7 +43,6 @@ describe('WmuDocument - footnotes', () => {
         { 
             part1: '|h2|=par 2.1', 
             part2: '', 
-            part3: ''
         },
     ];
     let result: string[] = [

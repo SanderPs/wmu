@@ -19,7 +19,6 @@ export interface IWmuProject {
 export interface IParsedBlock {
     part1: string;
     part2: string | undefined;
-    part3: string | undefined;
     tocNode?: TocNode;
 }
 
@@ -32,6 +31,7 @@ export interface IBlockDefinition {
     'language'?: string;
     'format'?: string;
     'src'?: string;
+    'multiline'?: string;
     'start'?: string;
     'id'?: string;
     [key: string]: any; // todo: why type any and not type string?

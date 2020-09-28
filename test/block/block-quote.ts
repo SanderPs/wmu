@@ -11,7 +11,7 @@ describe('Block quote', () => {
     let str: string = `|quote|-:|format=abc
 |=
 Dit is een interessante quote
-|=
+|=|
 Door iemand`;
 
     const result = transformFragment(str, {});

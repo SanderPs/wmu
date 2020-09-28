@@ -73,19 +73,15 @@ export class WmuDocument{
             let blockVars: IBlockDefinition;
             blockVars = WmuLib.parseDef(block.part1); // todo: try catch
 
-            // always remove any pipe characters at the beginning of 
-            // each line of part2 and 3:
+            // always remove the pipe character on an empty line 
             if (block.part2) {
-                block.part2 = block.part2.replace(/^\|/gm, '');
-            }
-            if (block.part3) {
-                block.part3 = block.part3.replace(/^\|/gm, '');
+                block.part2 = block.part2.replace(/^\|[ \t]*$/gm, '');
             }
 
             switch( blockVars['block-type'] ) {
                 case 'table':
                 case 't':
-                    this.result[indx] = blocks.table.parse(blockVars, block.part2, block.part3);
+                    this.result[indx] = blocks.table.parse(blockVars, block.part2);
                     break;
                 case 'header':
                 case 'h':
@@ -95,7 +91,7 @@ export class WmuDocument{
                     break;
                 case 'quote':
                 case 'q':
-                    this.result[indx] = blocks.quote.parse(blockVars, block.part2, block.part3);
+                    this.result[indx] = blocks.quote.parse(blockVars, block.part2);
                     break;
                 case 'code':
                 case 'c':
@@ -194,7 +190,7 @@ export class WmuDocument{
     }
 }
 
-const partLabel = ['part1', 'part2', 'part3'];
+const partLabel = ['part1', 'part2'];
 const regex_block = /(?:\r?\n(?:[ \t]*\r?\n)+)/g;
 const regex_part = /(?:\r?\n\|=[ \t]*\r?\n)/g;
 

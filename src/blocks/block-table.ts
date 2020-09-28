@@ -1,13 +1,13 @@
 import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: IBlockDefinition, header: string, body: string) {
+export function parse(allVar: IBlockDefinition, body: string) {
 
   let result: string[] = [];
 
   result.push('<table' +
-  WmuLib.classAttr(
-    WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
+    WmuLib.classAttr(
+      WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
       allVar['format'] ?? ''
     ) +
     '>' + WmuLib.eol);
@@ -16,89 +16,85 @@ export function parse(allVar: IBlockDefinition, header: string, body: string) {
     result.push('<caption>' + allVar['caption'] + '</caption>' + WmuLib.eol);
   }
 
-  result.push(parse_header(header));
-
-  result.push(parse_body(body));
+  result.push(parse_body(allVar, body));
 
   result.push('</table>' + WmuLib.eol + WmuLib.eol);
 
   return result.join('');
 }
 
-function parse_body(body: string) {
+function parse_body(allVar: IBlockDefinition, body: string) {
 
   let result = [];
+
+  let regex_header = /[ \t\r\n]*::header::[ \t\r\n]*/; // todo
+  let regex_HAlign = /[ \t\r\n]*::h?align::[ \t\r\n]*/;
+  let regex_VAlign = /[ \t\r\n]*::valign::[ \t\r\n]*/;
+
+  let regex_cell = /[ \t\r\n]*\|=\|[ \t\r\n]*/gm;
+  let HAlignCells: string[];
 
   if (body) {
-    let rows: string[] = body.split(WmuLib.eolIn);
+
+    // todo: multiline???
+    let regex_splitrows = /\|/gm;
+    if (allVar.multiline === 'yes') {
+      regex_splitrows = /[ \r\n]*\|==\|[ \r\n]*/gm;
+    }
+    let rows: string[] = body.split(regex_splitrows);
 
     for (let i = 0; i < rows.length; i++) {
-      result.push(
-        rows[i]
+
+      let j = 0;
+
+      let isHeader = regex_header.test(rows[i]);
+      if (isHeader) {
+        rows[i] = rows[i].replace(regex_header, '');
+      }
+
+      let isHAlign = regex_HAlign.test(rows[i]);
+      if (isHAlign) {
+        rows[i] = rows[i].replace(regex_HAlign, '');
+        HAlignCells = rows[i].split(regex_cell);
+      }
+
+      let isVAlign = regex_VAlign.test(rows[i]);
+      if (isVAlign) {
+        rows[i] = rows[i].replace(regex_VAlign, '');
+      }
+
+      if (!isHAlign && !isVAlign) {
+        let cellType = isHeader ? 'th' : 'td';
+
+        result.push(
           // first the beginning and end of a row:
-          .replace( 
-            /(.+)\|$/gm,
-            '<tr>' + WmuLib.eol +
-            '\t<td>$1</td>' + WmuLib.eol +
-            '</tr>' + WmuLib.eol
-          )
-          // then each pipe character:
-          .replace(/\|/g, '</td>' + WmuLib.eol + '\t<td>')
-      );
-    }
-  }
-
-  return result.join('');
-}
-
-function parse_header(header: string) {
-
-  let rows: string[] = header.split(WmuLib.eolIn); // todo: prevent error when not present
-  let headerrow: string[] = rows[0].slice(0, -1).split(/ *\| */);
-  
-  let alignrow: string[] = []; // per column a css class for horizontal alignment
-  let valignrow: string[] = []; // per column a css class for vertical alignment
-
-  if (rows.length > 1) {
-    for (let x = 1; x < rows.length; x++) {
-      if (/^v=/.test(rows[x])) {
-        // vertical align
-        valignrow = rows[x].slice(2, -1).split(/ *\| */);
-      } else {
-        // horizontal align
-        alignrow = rows[x].slice(0, -1).split(/ *\| */);
-      }
-    }
-
-    if (alignrow.length) {
-      for (let i = 0; i < alignrow.length; i++) {
-        alignrow[i] = WmuLib.alignmentClass(alignrow[i], false) ?? '';
-      }
-    }
-
-    if (valignrow.length) {
-      for (let i = 0; i < valignrow.length; i++) {
-        valignrow[i] = WmuLib.valignmentClass(valignrow[i]);
+          ('\t<tr>' + WmuLib.eol +
+            '\t\t<' + cellType +
+            (HAlignCells?.[0] ?
+              ' class="' + WmuLib.alignmentClass(HAlignCells?.[0], false) + '"' :
+              ''
+            ) +
+            '>' +
+            rows[i] +
+            '</' + cellType + '>' + WmuLib.eol +
+            '\t</tr>' + WmuLib.eol)
+            // then all inside seprators:
+            .replace(/[ \t\r\n]*\|=\|[ \t\r\n]*/gm,
+              function () {
+                return '' +
+                  '</' + cellType + '>' + WmuLib.eol +
+                  '\t\t<' + cellType +
+                  (HAlignCells?.[++j] ?
+                    ' class="' + WmuLib.alignmentClass(HAlignCells?.[j], false) + '"' :
+                    ''
+                  ) +
+                  '>'
+              }
+            )
+        );
       }
     }
   }
-
-  let result = [];
-
-  result.push('<tr>' + WmuLib.eol);
-
-  for (let i = 0; i < headerrow.length; i++) {
-    result.push(
-      '\t<th' +
-      WmuLib.classAttr(alignrow[i], valignrow[i]) +
-      '>' +
-      headerrow[i] +
-      '</th>' +
-      WmuLib.eol
-    );
-  }
-
-  result.push('</tr>' + WmuLib.eol);
 
   return result.join('');
 }

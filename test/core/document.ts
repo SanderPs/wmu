@@ -11,20 +11,13 @@ describe('WmuDocument', () => {
 
 |block2
 |=
-block2-part2
-
-|block3
-|=
-block3-part2
-|=
-block3-part3`
+block2-part2`
     )
 
     expect(result).to.eql(
         [
             {part1: '|block1'},
             {part1: '|block2', part2: 'block2-part2'},
-            {part1: '|block3', part2: 'block3-part2', part3: 'block3-part3'}
         ]
         );
   });
@@ -35,14 +28,12 @@ block3-part3`
 |block1
 |=
 block1-part2
-|=
-block1-part3
  \t
 `)
 
     expect(result).to.eql(
         [
-            {part1: '|block1', part2: 'block1-part2', part3: 'block1-part3'}
+            {part1: '|block1', part2: 'block1-part2'}
         ]
         );
   });
