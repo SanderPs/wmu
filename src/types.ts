@@ -17,8 +17,8 @@ export interface IWmuProject {
 }
 
 export interface IParsedBlock {
-    part1: string;
-    part2: string | undefined;
+    header: string;
+    body: string[] | undefined;
     tocNode?: TocNode;
 }
 

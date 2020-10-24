@@ -1,7 +1,7 @@
 import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: IBlockDefinition, body: string) {
+export function parse(allVar: IBlockDefinition, body: string[]) {
 
   let result: string[] = [];
 
@@ -23,7 +23,7 @@ export function parse(allVar: IBlockDefinition, body: string) {
   return result.join('');
 }
 
-function parse_body(allVar: IBlockDefinition, body: string) {
+function parse_body(allVar: IBlockDefinition, body: string[]) {
 
   let result = [];
 
@@ -34,33 +34,26 @@ function parse_body(allVar: IBlockDefinition, body: string) {
   let regex_cell = /[ \t\r\n]*\|=\|[ \t\r\n]*/gm;
   let HAlignCells: string[];
 
-  if (body) {
+  if (body?.length) {
 
-    // todo: multiline???
-    let regex_splitrows = /\|/gm;
-    if (allVar.multiline === 'yes') {
-      regex_splitrows = /[ \r\n]*\|==\|[ \r\n]*/gm;
-    }
-    let rows: string[] = body.split(regex_splitrows);
-
-    for (let i = 0; i < rows.length; i++) {
+    for (let i = 0; i < body.length; i++) {
 
       let j = 0;
 
-      let isHeader = regex_header.test(rows[i]);
+      let isHeader = regex_header.test(body[i]);
       if (isHeader) {
-        rows[i] = rows[i].replace(regex_header, '');
+        body[i] = body[i].replace(regex_header, '');
       }
 
-      let isHAlign = regex_HAlign.test(rows[i]);
+      let isHAlign = regex_HAlign.test(body[i]);
       if (isHAlign) {
-        rows[i] = rows[i].replace(regex_HAlign, '');
-        HAlignCells = rows[i].split(regex_cell);
+        body[i] = body[i].replace(regex_HAlign, '');
+        HAlignCells = body[i].split(regex_cell);
       }
 
-      let isVAlign = regex_VAlign.test(rows[i]);
+      let isVAlign = regex_VAlign.test(body[i]);
       if (isVAlign) {
-        rows[i] = rows[i].replace(regex_VAlign, '');
+        body[i] = body[i].replace(regex_VAlign, '');
       }
 
       if (!isHAlign && !isVAlign) {
@@ -75,7 +68,7 @@ function parse_body(allVar: IBlockDefinition, body: string) {
               ''
             ) +
             '>' +
-            rows[i] +
+            body[i] +
             '</' + cellType + '>' + WmuLib.eol +
             '\t</tr>' + WmuLib.eol)
             // then all inside seprators:
@@ -94,6 +87,9 @@ function parse_body(allVar: IBlockDefinition, body: string) {
         );
       }
     }
+  }
+  else {
+    result.push( '[Warning: no table found]' );
   }
 
   return result.join('');

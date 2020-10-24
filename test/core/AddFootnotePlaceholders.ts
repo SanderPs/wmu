@@ -11,8 +11,8 @@ describe('WmuDocument - footnotes', () => {
     let config: IConfig = { createToc: true };
     let blocks: IParsedBlock[] = [
         { 
-            part1: '|h1|=test hst 1', 
-            part2: '', 
+            header: '|h1|=test hst 1', 
+            body: [''], 
             tocNode: {
                 title: '',
                 level: 1,
@@ -24,12 +24,12 @@ describe('WmuDocument - footnotes', () => {
             }
         },
         { 
-            part1: '|h2|=par 1.1', 
-            part2: '', 
+            header: '|h2|=par 1.1', 
+            body: [''], 
         },
         { 
-            part1: '|h1|=test hst 2', 
-            part2: '', 
+            header: '|h1|=test hst 2', 
+            body: [''], 
             tocNode: {
                 title: '',
                 level: 1,
@@ -41,8 +41,8 @@ describe('WmuDocument - footnotes', () => {
             }
         },
         { 
-            part1: '|h2|=par 2.1', 
-            part2: '', 
+            header: '|h2|=par 2.1', 
+            body: [''], 
         },
     ];
     let result: string[] = [

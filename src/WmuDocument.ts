@@ -61,27 +61,22 @@ export class WmuDocument{
         for (let indx=0; indx < this.blocks.length; indx ++) {
             let block: IParsedBlock = this.blocks[indx];
 
-            let hasTag = block.part1.charCodeAt(0) === 124;
+            let hasTag = block.header.charCodeAt(0) === 124;
 
             if (!hasTag) {
-                let determinedType = determineBlockType(block.part1);
+                let determinedType = determineBlockType(block.header);
 
-                block.part2 = block.part1;
-                block.part1 = "|" + determinedType;
+                block.body = [block.header];
+                block.header = "|" + determinedType;
             }
             
             let blockVars: IBlockDefinition;
-            blockVars = WmuLib.parseDef(block.part1); // todo: try catch
-
-            // always remove the pipe character on an empty line 
-            if (block.part2) {
-                block.part2 = block.part2.replace(/^\|[ \t]*$/gm, '');
-            }
+            blockVars = WmuLib.parseDef(block.header); // todo: try catch
 
             switch( blockVars['block-type'] ) {
                 case 'table':
                 case 't':
-                    this.result[indx] = blocks.table.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.table.parse(blockVars, block.body);
                     break;
                 case 'header':
                 case 'h':
@@ -91,15 +86,15 @@ export class WmuDocument{
                     break;
                 case 'quote':
                 case 'q':
-                    this.result[indx] = blocks.quote.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.quote.parse(blockVars, block.body);
                     break;
                 case 'code':
                 case 'c':
-                    this.result[indx] = blocks.code.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.code.parse(blockVars, block.body);
                     break;
                 case 'block':
                 case 'b':
-                    this.result[indx] = blocks.block.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.block.parse(blockVars, block.body);
                     break;
                 case 'image':
                 case 'img':
@@ -108,26 +103,26 @@ export class WmuDocument{
                     break;
                 case 'list':
                 case 'l':
-                    this.result[indx] = blocks.list.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.list.parse(blockVars, block.body);
                     break;
                 case 'par':
                 case 'p':
-                    this.result[indx] = blocks.par.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.par.parse(blockVars, block.body);
                     break;
                 case 'footnote':
                 case 'fn':
-                    this.result[indx] = blocks.note.parse(blockVars, this.notesStore, this.tocTree, block.part2);
+                    this.result[indx] = blocks.note.parse(blockVars, this.notesStore, this.tocTree, block.body);
                     break;
                 case 'glossary':
                 case 'g':
-                    this.result[indx] = blocks.glossary.parse(blockVars, block.part2);
+                    this.result[indx] = blocks.glossary.parse(blockVars, block.body);
                     break;
                 case 'config':
                     this.result[indx] = blocks.config.parse(blockVars, this.config);
                     break;
                 case 'htmlComment':
                     if (this.config.keepComments) {
-                        this.result[indx] = block.part1;
+                        this.result[indx] = block.header;
                     }
                     break;
                 default:
@@ -190,24 +185,27 @@ export class WmuDocument{
     }
 }
 
-const partLabel = ['part1', 'part2'];
 const regex_block = /(?:\r?\n(?:[ \t]*\r?\n)+)/g;
 const regex_part = /(?:\r?\n\|=[ \t]*\r?\n)/g;
+
+const partReducer = (acc: IParsedBlock, part: string, i: number): IParsedBlock => {
+    if (i > 0) {
+        acc.body.push(part.replace(/^\|[ \t]*$/gm, ''))
+        return acc;
+    }
+    else {
+        return ({...acc, 'header': part, 'body': []} as IParsedBlock);
+    }
+};
 
 export function splitBlocks(str: string): Array<IParsedBlock> {
 
     return (str.trim())
-        .split(regex_block)
+        .split( regex_block )
         .map(block =>
-            block.split(regex_part)
-                .reduce(
-                    (acc, part, i) => ({ ...acc, [partLabel[i]]: part }),
-                    {} as IParsedBlock
-                )
+            block.split( regex_part ).reduce( partReducer, {} as IParsedBlock )
         );
-
 }
-
 
 export function parseTags(str: string, config: IConfig): string {
     let result = str;

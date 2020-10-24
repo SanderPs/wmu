@@ -15,9 +15,9 @@ describe('Block table', () => {
 			`|table|multiline=yes` + WmuLib.eol +
 			`|=` + WmuLib.eol +
 			`::header::header 1|=|header 2|=|header 3` + WmuLib.eol +
-			`|==|` + WmuLib.eol +
+			`|=` + WmuLib.eol +
 			`cell 1|=|cell 2|=|cell 3` + WmuLib.eol +
-			`|==|` + WmuLib.eol +
+			`|=` + WmuLib.eol +
 			`cell 4|=|cell 5|=|cell 6`;
 
 		const result = transformFragment(str, {});

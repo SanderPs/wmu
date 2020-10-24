@@ -1,11 +1,9 @@
 import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: IBlockDefinition, quote: string) {
+export function parse(allVar: IBlockDefinition, body: string[]) {
 
   let result: string[] = [];
-
-  let text = quote.split(/[ \t\r\n]*\|=\|[ \t\r\n]*/m);
 
   result.push(
     '<blockquote' +
@@ -15,10 +13,10 @@ export function parse(allVar: IBlockDefinition, quote: string) {
         ) +
   '>' + WmuLib.eol);
 
-  result.push('\t<div>' + WmuLib.eol + WmuLib.NewlineToBr( text[0] ) + WmuLib.eol + '\t</div>' + WmuLib.eol);
+  result.push('\t<div>' + WmuLib.eol + WmuLib.NewlineToBr( body[0] ) + WmuLib.eol + '\t</div>' + WmuLib.eol);
 
-  if (text?.[1]?.length) {
-    result.push('\t<footer>' + WmuLib.NewlineToBr( text[1] ) + '</footer>' + WmuLib.eol);
+  if (body?.[1]?.length) {
+    result.push('\t<footer>' + WmuLib.NewlineToBr( body[1] ) + '</footer>' + WmuLib.eol);
   }
 
   result.push('</blockquote>' + WmuLib.eol + WmuLib.eol);

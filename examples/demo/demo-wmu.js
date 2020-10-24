@@ -85,10 +85,10 @@ Door iemand
 |=
 ::align:::
 ---|=|---:|=|:---:|=|-:-|=|---
-|==|
+|=
 ::header::
 1|=|2|=|3|=|4|=|5
-|==|
+|=
 This|=|is|=|a|=|table|=|!
 
 Commentaar blok:

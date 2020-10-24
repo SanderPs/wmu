@@ -1,7 +1,7 @@
 import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: IBlockDefinition, body: string) {
+export function parse(allVar: IBlockDefinition, body: string[]) {
 
     let result = [];
 
@@ -9,7 +9,7 @@ export function parse(allVar: IBlockDefinition, body: string) {
     //    <dt>
     //    <dd>
 
-    let items = body.split(WmuLib.eolIn);
+    let items = body[0].split(WmuLib.eolIn);
 
     if (items.length) {
 
