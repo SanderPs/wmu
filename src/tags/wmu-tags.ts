@@ -91,6 +91,21 @@ export const wmu_commands: IWMUCommands[] = [
     },
 
     {
+        description: 'diff ins', 
+        type: 'inline',
+        example: '[[$text]]::$link::',
+        regex: /(?:\[\[(.+?)\]\])::ins::/g, 
+        to: '<span class="code-ins">$1</span>' 
+    },
+    {
+        description: 'diff del', 
+        type: 'inline',
+        example: '[[$text]]::$link::',
+        regex: /(?:\[\[(.+?)\]\])::del::/g, 
+        to: '<span class="code-del">$1</span>' 
+    },
+
+    {
         description: 'markdown-header-1', 
         type: 'markdown',
         example: `$1\n===$`,

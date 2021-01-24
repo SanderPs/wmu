@@ -7,6 +7,7 @@ export function parse(allVar: IBlockDefinition, body: string[]) {
 
   result.push('<table' +
     WmuLib.classAttr(
+      'default',
       WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
       allVar['format'] ?? ''
     ) +

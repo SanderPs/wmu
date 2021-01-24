@@ -62,12 +62,13 @@ Footnote for chapter 2
 |code
 language=js
 |=
-function x() {
+function [[x()]]::ins:: [[y()]]::del:: {
    if (y) {
-      // bla
+      // bla::ins::
    } else {
-      // huh?
+      // huh?::del::
    }
+   return [[result]]::ins::::ins::
 }
 |
 // commentaar

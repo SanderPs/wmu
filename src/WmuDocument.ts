@@ -33,15 +33,17 @@ export class WmuDocument{
         this.project = projectData;
         this.result = [];
 
-        str = parseTags(str, config);
-
+        
         this.preParse();
         str = wmuIndex.parse(str, this.indexStore, this.config);
-
+        
         this.blocks = splitBlocks(str);
         this.parse();
-
+        
         this.postParse();
+
+        
+        this.html = parseTags(this.html, config);
     }
 
     private preParse(): void {

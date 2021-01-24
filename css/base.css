@@ -92,17 +92,54 @@ pre > code {
     padding: 0; /* for a code block (inside a pre) */
 }
 
+div.code-default {
+    margin-bottom: 1rem;
+    width: 90%;
+    margin-left: 3%;
+
+}
+div.code-default table {
+    padding: 10px 14px;
+    border-spacing: 0;
+    font-family: monospace;
+    background-color: #f8f8f8;
+    border: 1px solid #f0f0f0;
+    width: 100%;
+}
+div.code-default table td {
+    white-space: pre-wrap;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 0;
+}
+div.code-default table tr.ins {
+    background-color: #dfd; 
+}
+div.code-default table tr.del {
+    background-color: #fee8e9;
+}
+div.code-default table td del, .code-del {
+    background-color: #ffb6ba;
+    line-height: 1.5;
+    padding: 2px;
+}
+div.code-default table td ins, .code-ins {
+    background-color: #97f295;
+    line-height: 1.5;
+    padding: 2px;
+}
+
 figure {
     margin-left: 0;
 }
 
-table {
+table.default {
     border-collapse: collapse;
     border-width: 1px;
     border-style: solid
 }
 
-table td {
+table.default td {
     border: 1px solid #888;
     padding: 2px 3px;
 }

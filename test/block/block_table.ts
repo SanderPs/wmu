@@ -23,7 +23,7 @@ describe('Block table', () => {
 		const result = transformFragment(str, {});
 
 		expect(result).to.equal(
-			`<table>` + WmuLib.eol +
+			`<table class="default">` + WmuLib.eol +
 			`	<tr>` + WmuLib.eol +
 			`		<th>header 1</th>` + WmuLib.eol +
 			`		<th>header 2</th>` + WmuLib.eol +
@@ -54,7 +54,7 @@ describe('Block table', () => {
 		const result = transformFragment(str, {});
 
 		expect(result).to.equal(
-			`<table>` + WmuLib.eol +
+			`<table class="default">` + WmuLib.eol +
 			`<caption>Title of the table</caption>` + WmuLib.eol +
 			`	<tr>` + WmuLib.eol +
 			`		<td>cell 1</td>` + WmuLib.eol +
