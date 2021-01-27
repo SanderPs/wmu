@@ -71,7 +71,7 @@ function [[x()]]::ins:: [[y()]]::del:: {
    return [[result]]::ins::::ins::
 }
 |
-// commentaar
+// comment [[on this piece of code]]::note::::note::
 
 |quote|-:
 caption=Figuur 1|

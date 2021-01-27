@@ -2,13 +2,13 @@ import { stringify } from "querystring";
 import * as WmuLib from "../WmuLib";
 import { IBlockDefinition } from "./../types";
 
-export function parse(allVar: IBlockDefinition, body: string[]) {
+export function parse(allVar: IBlockDefinition, body: string[], output: string) {
 
   let result = [];
-  let tmp_output = 'table'; // or 'code-pre' (the old way)
+  let output_codepre = (output === 'code-pre'); // otherwise: 'table'
 
   result.push(
-    tmp_output === 'code-pre' ? '<pre' : '<div class="code-default">' + WmuLib.eol + '\t<table'
+    output_codepre ? '<pre' : '<div class="code-default">' + WmuLib.eol + '\t<table'
   );
 
   result.push(
@@ -20,11 +20,11 @@ export function parse(allVar: IBlockDefinition, body: string[]) {
   );
 
   result.push(
-    (tmp_output === 'code-pre') ? '><code>' + WmuLib.eol : '>' + WmuLib.eol // note: no eol between <pre> and <code>; this will produce empty line
+    output_codepre ? '><code>' + WmuLib.eol : '>' + WmuLib.eol // note: no eol between <pre> and <code>; this will produce empty line
   );
 
   result.push( body?.length ? 
-    (tmp_output === 'code-pre') ?
+    output_codepre ?
       WmuLib.Encode( WmuLib.NormalizeNewline( body[0] ) )
       :
       parseCode( body[0] )
@@ -32,7 +32,7 @@ export function parse(allVar: IBlockDefinition, body: string[]) {
   );
 
   result.push(
-    (tmp_output === 'code-pre') ? 
+    output_codepre ? 
     '\t</code>' + WmuLib.eol + '</pre>' 
     : 
     '\t</table>' + WmuLib.eol + '</div>' + WmuLib.eol + WmuLib.eol
@@ -43,7 +43,7 @@ export function parse(allVar: IBlockDefinition, body: string[]) {
 
 function parseCode(code: string): string {
   let result = [];
-  let regex = /([\s\S]*?)(?:::([^:]*?)::)?(?:\r?\n|$)/g; // TODO: uses "negative lookbehind", browser support?
+  let regex = /([\s\S]*?)(?:(?<!\])::(ins|del|note)::)?(?:\r?\n|$)/g; // TODO: uses "negative lookbehind", browser support?
   let res: RegExpExecArray;
 
   while (( res = regex.exec( code )) !== null) {

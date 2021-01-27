@@ -118,16 +118,25 @@ div.code-default table tr.ins {
 div.code-default table tr.del {
     background-color: #fee8e9;
 }
-div.code-default table td del, .code-del {
+div.code-default table tr.note {
+    background-color: #e4e4e4;
+}
+.code-del {
     background-color: #ffb6ba;
     line-height: 1.5;
-    padding: 2px;
+    padding: 2px 4px;
 }
-div.code-default table td ins, .code-ins {
+.code-ins {
     background-color: #97f295;
     line-height: 1.5;
-    padding: 2px;
+    padding: 2px 4px;
 }
+.code-note {
+    background-color: #c2c0c0;
+    line-height: 1.5;
+    padding: 2px 4px;
+}
+
 
 figure {
     margin-left: 0;

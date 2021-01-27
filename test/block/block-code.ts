@@ -47,7 +47,7 @@ function x() {
 |code
 |=
 function z() {
-// do something with 'result'
+// do something with [['result']]::note::
 |
     return [[result]]::ins::::ins::
 }
@@ -59,7 +59,7 @@ function z() {
       `<div class="code-default">` + WmuLib.eol +
       `\t<table>` + WmuLib.eol +
       `\t\t<tr><td>function z() {</td></tr>` + WmuLib.eol +
-      `\t\t<tr><td>// do something with 'result'</td></tr>` + WmuLib.eol +
+      `\t\t<tr><td>// do something with <span class="code-note">'result'</span></td></tr>` + WmuLib.eol +
       `\t\t<tr><td>&nbsp;</td></tr>` + WmuLib.eol +
       `\t\t<tr class="ins"><td>    return <span class="code-ins">result</span></td></tr>` + WmuLib.eol +
       `\t\t<tr><td>}</td></tr>` + WmuLib.eol +
@@ -69,19 +69,38 @@ function z() {
   });
 
 
-  // TODO: output code with 'pre' and 'code' tags
-  //
-  // expect(result).to.equal(
-  //   '<pre class="codelang-js"><code>// some comment' + WmuLib.eol +
-  //   WmuLib.eol +
-  //    'function x() {' + WmuLib.eol +
-  //   '   if (y) {' + WmuLib.eol +
-  //   '      doThing(1);' + WmuLib.eol +
-  //   '   } else {' + WmuLib.eol +
-  //   '      doThing(2);' + WmuLib.eol +
-  //   '   }' + WmuLib.eol +
-  //   '}'  + WmuLib.eol + 
-  //   '</code></pre>'
-  // );
+  it('should convert to html - using transform - output code-pre', () => {
+
+    let str: string = `
+|code
+|language=js
+|=
+// some comment
+|
+function x() {
+	if (y) {
+		doThing(1);
+	} else {
+		doThing(2);
+	}
+}`;
+
+    const result = transformFragment(str, { codeOutputFormat: 'code-pre' });
+
+    expect(result).to.equal(
+      `<pre class="codelang-js"><code>` + WmuLib.eol +
+      `// some comment` + WmuLib.eol +
+      WmuLib.eol +
+      `function x() {` + WmuLib.eol +
+      `\tif (y) {` + WmuLib.eol +
+      `\t\tdoThing(1);` + WmuLib.eol +
+      `\t} else {` + WmuLib.eol +
+      `\t\tdoThing(2);` + WmuLib.eol +
+      `\t}` + WmuLib.eol +
+      `}\t</code>` + WmuLib.eol +
+      `</pre>`
+    );
+  });
+
 
 });

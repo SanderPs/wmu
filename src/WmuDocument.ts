@@ -12,6 +12,7 @@ const defaultConfig: IConfig = {
     toBook: false,
     autoNumbering: true,
     keepComments: false,
+    codeOutputFormat: 'table'
 };
 
 export class WmuDocument{
@@ -92,7 +93,7 @@ export class WmuDocument{
                     break;
                 case 'code':
                 case 'c':
-                    this.result[indx] = blocks.code.parse(blockVars, block.body);
+                    this.result[indx] = blocks.code.parse(blockVars, block.body, this.config.codeOutputFormat);
                     break;
                 case 'block':
                 case 'b':

@@ -91,11 +91,11 @@ export const wmu_commands: IWMUCommands[] = [
     },
 
     {
-        description: 'diff ins', 
+        description: 'diff ins, del, note', 
         type: 'inline',
-        example: '[[$text]]::$link::',
-        regex: /(?:\[\[(.+?)\]\])::ins::/g, 
-        to: '<span class="code-ins">$1</span>' 
+        example: '[[$text]]::ins|del|note::',
+        regex: /(?:\[\[(.+?)\]\])::(ins|del|note)::/g, 
+        to: '<span class="code-$2">$1</span>' 
     },
     {
         description: 'diff del', 

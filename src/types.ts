@@ -8,6 +8,7 @@ export interface IConfig {
     autoNumbering?: boolean;
     format?: string;
     keepComments?: boolean;
+    codeOutputFormat?: string;
 }
 
 export interface IWmuProject {
