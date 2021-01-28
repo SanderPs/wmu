@@ -69,7 +69,11 @@ export class WmuDocument{
             if (!hasTag) {
                 let determinedType = determineBlockType(block.header);
 
-                block.body = [block.header];
+                if (determinedType == 'htmlComment') {
+                  block.body = [ /<!--\s+(.*?)\s+-->/gm.exec(block.header)[1] ];
+                } else {
+                  block.body = [block.header];
+                }
                 block.header = "|" + determinedType;
             }
             
@@ -125,7 +129,7 @@ export class WmuDocument{
                     break;
                 case 'htmlComment':
                     if (this.config.keepComments) {
-                        this.result[indx] = block.header;
+                        this.result[indx] = "<!-- " + block.body[0] + " -->" + WmuLib.eol + WmuLib.eol;
                     }
                     break;
                 default:

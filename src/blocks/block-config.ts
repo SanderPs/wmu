@@ -17,6 +17,10 @@ export function parse(allVar: IBlockDefinition, config: IConfig) {
             result.push('tocTitle = ' + allVar['toctitle'] + '; ' + WmuLib.eol)
         }
     }
+    if (allVar['keepComments'] == 'yes') {
+      config.keepComments = true;
+      result.push('keepComments = true; ' + WmuLib.eol)
+    }
 
     result.push(' -->' + WmuLib.eol + WmuLib.eol);
 
