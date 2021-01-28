@@ -1,55 +1,41 @@
 
-let demoWmuString = `|config|toc=true|toctitle=Content
+let demoWmuString = `|config|toc=true|toctitle=Content|keepComments=yes
 
-|h0|=This is a part
-
-|h1|=Intro Hoofstuk (1)
-
-|h2|=Paragraaf (1.1)
-
-|h3|=Sub (1.1.1)
-
-|h4|=x
-
-|h5|=y
-
-|h6|=z
-
-|h2|=Paragraaf (1.2)
-
-Opmaak: **bold** //italics// __underline__ ~~striktrought~~
-
-Combinatie **//tekst//**
-
-En ^^superscript^^ maar ook ^_subscript_^
-
-Some \`\`inline code\`\`
-
-|par|format=xyz
+|htmlComment
 |=
-This is a paragraph with a css class called \`\`xyz\`\`
+\|config|toc=true|toctitle=Content
 
-Some text with index word: [[Jung]]==Jung, Carl== etc.
+|h1|=Basics
 
-Some text with index word: [[Jung]]==Jung, Carl== etc.
 
-Some text with index word: [[Freud]]==Freud, Sigmund== etc.
+
+|h2|=Inline
+
+|h3|=Text formatting
+
+**bold** //italics// __underline__ ~~striktrought~~
+
+Combination: __**//tekst//**__
+
+^^superscript^^ and ^_subscript_^
+
+Example inline code \`\`if () then x else y \`\`.
+
+|h3|=Inline quotes
+
+Someone said ""something"" sometime ago
+
+|h3|=Hyperlinks
 
 With a link: [[Go to Wikipedia]]@@https://en.wikipedia.org@@
 
-Example of class: [[Some special styling]]##my-styling##
+|h3|=Inline styling
 
-Example of using((1)) a note. And another one((2))
+Example of an inline class: [[Some special styling]]##smallcaps##
 
-|fn|id=1
-|=
-This is the note text
 
-|fn|id=2
-|=
-This is the second note text
 
-|h1|=Overig
+|h2|=Blocks
 
 In het 2e hoofdstuk... ((2.1)) ook een voettekst
 
@@ -72,31 +58,16 @@ function [[x()]]::ins:: [[y()]]::del:: {
 }
 |
 // comment [[on this piece of code]]::note::::note::
+|h3|=Paragraphs
 
-|quote|-:
-caption=Figuur 1|
-format=abc
+Default paragraph, no need for a \`\`\|par\`\` tag.
+
+|par|format=smallcaps
 |=
-Dit is een interessante quote
-|=|
-Door iemand
+This is a paragraph with a css class called ""smallcaps""
 
-|table|:-:|multiline=yes
-|class=specialcss
-|=
-::align:::
----|=|---:|=|:---:|=|-:-|=|---
-|=
-::header::
-1|=|2|=|3|=|4|=|5
-|=
-This|=|is|=|a|=|table|=|!
 
-Commentaar blok:
-
-<!-- Lijsten -->
-
-|h2|=Lijsten 
+|h3|=Lists
 
 - lijst inline
 
@@ -128,23 +99,43 @@ En weer verder
 |||||1 indicates numbers (default)
 |- should be 'c'
 
+|h3|=Tables
+
+|table|:-:|multiline=yes
+|class=specialcss
+|=
+::align:::
+---|=|---:|=|:---:|=|-:-|=|---
+|=
+::header::
+1|=|2|=|3|=|4|=|5
+|=
+This|=|is|=|a|=|table|=|!
+
+|h3|=Code block
+
+|code
+language=js
+|=
+// example of a function
+|
+function x() {
+   if (y) {
+      // bla
+   } else {
+      // huh?
+   }
+}
+|
+// commenting the code
+
+|h3|=Images
 
 |img|=https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg
 |title=Image that explains it all
 
-|block|=thumbsup-class
-|=
-Heel goed gedaan!
 
-
-Markdown header 1
-===
-test
-
-Markdown header 2
-----
-
-|h1|=Glossary (definitie lijst)
+|h3|=Glossary
 
 |glossary
 |=
@@ -154,6 +145,67 @@ Markdown header 2
 |html
 ||Hyper Text Markup Language
 
-|h0|=Deel II
+|h3|=Quotes
+
+|quote|-:
+caption=Figuur 1|
+format=abc
+|=
+Everything should be made as simple as possible, but no simpler.
+|=
+Albert Einstein
+
+|h3|=Blocks
+
+|block|=thumbsup-class
+|=
+Different from paragraph?
+
+
+|h2|=Features
+
+|h3|=Index words
+
+Some text with index word: [[Jung]]==Jung, Carl== etc.
+
+Some text with index word: [[Jung]]==Jung, Carl== etc.
+
+Some text with index word: [[Freud]]==Freud, Sigmund== etc.
+
+|h3|=Footnotes
+
+Example of using((1)) a note. And another one((2))
+
+|fn|id=1
+|=
+This is the note text
+
+|fn|id=2
+|=
+This is the second note text
+
+In het 2e hoofdstuk... ((2.1)) ook een voettekst
+
+|fn|id=2.1
+|=
+Footnote for chapter 2
+
+
+
+|h2|=Markdown support
+
+|h3|=Header 1
+
+|code
+|=
+|Markdown header 1
+|===
+|Text
+
+|h3|=Header 2
+
+Markdown header 2
+----
+Text
 
 `;

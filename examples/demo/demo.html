@@ -6,39 +6,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WMU - demo</title>
     <script src="../../dist/lib/wmu-lib.js"></script>
-    <script defer src="demo-wmu.js" onload="initWmu()"></script>
     <link href="../../css/base.css" rel="stylesheet">
 
     <style>
-        .divtable {
-            display: table;
-            width: 100%;
+        body {
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
         }
-        .divrow {
-            display: table-row;
+        .wrapper {
+          width: 98vw;
+          height: 90vh;
+          background-color: rgb(236, 236, 227);
+          position: relative;
+          margin: auto;
         }
-        .divcell, .divhead {
-            display: table-cell;
-            padding: 5px;
+        #wrapper-left, #wrapper-right {
+          top: 0;
+          position: absolute;
+          box-sizing: border-box;
+          width: 50%;
+          padding: 10px;
+          height: 100%;
+        }
+        #wrapper-left {
+          left: 0;
+          outline: 1px solid red;
+        }
+        #wrapper-right {
+          outline: 1px solid blue;
+          right: 0;
+        }
+        #input, #output, #output_code {
+          outline: 1px solid grey;
+          position: relative;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto auto;
+          padding: 0;
+          border: 0;
+          width: 100%;
+          max-height: 100%;
+        }
+        textarea.input {
+          background-color: white;
+          padding: 0;
+          border: 0;
+          margin: 0;
+        }
+        div#output {
+          background-color: white;
+          overflow: auto;
+        }
+        div#output_code {
+          background-color: black;
+          overflow: auto;
+          color: white;
+          font-size: 0.7rem;
+          padding: 5px;
+          bottom: 0;
+          top: auto;
+          position: absolute;
+          white-space: pre-wrap;
+          tab-size: 2;
+        }
+        div#settings{
+          padding: 1%;
+          font-size: 0.9rem;
+          position: absolute; 
+          bottom: 0;
+          min-height: 13px;
         }
     </style>
 </head>
 
 <body>
 
+  <div class="wrapper">
+
+    <div id="wrapper-left"> 
+      <textarea id="input" style="height: 95%;"></textarea>
+      <div id="settings" style="height: 3%;">
+        <label>
+          <input type="checkbox" id="output_as_code" onclick="clicked_output_as_code(event)"> Code
+        </label>
+      </div>
+    </div>
+
+    <div id="wrapper-right">
+      <div id="output"></div>
+      <div id="output_code" style="visibility: hidden;"></div>
+    </div>
+
+  </div>
+
+
     <div class="divtable">
         <div class="divrow">
             <div class="divcell" style="width: 49vw; max-width: 49vw">
-                <textarea style="width: 100%" id="input" rows="30"></textarea>
+                <!-- <textarea style="width: 100%" id="input2" rows="30"></textarea> -->
             </div>
             <div class="divcell" style="width: 49vw; max-width: 49vw; vertical-align: top;">
-                <div id="output" style="overflow-y: scroll; min-height: 464px; max-height: 464px !important; border: 1px solid #999"></div>
-            </div>
-        </div>
-        <div class="divrow">
-            <div style="text-align: center;">
-                <button onclick="convertInput()">Convert</button>
-                <button onclick="clearOutput()">Clear</button>
+                <!-- <div id="output" style="overflow-y: scroll; min-height: 464px; max-height: 464px !important; border: 1px solid #999"></div> -->
             </div>
         </div>
     </div>
@@ -46,20 +117,29 @@
 </body>
 
 <script>
-    
-    function convertInput() {
-        let result = wmu.transformFragment(document.getElementById('input').value, {});
-        document.getElementById("output").innerHTML = result;
-    }
+  let input = document.querySelector('#input');
 
-    function clearOutput() {
-        document.getElementById("output").innerHTML = "";
-    }
+  function convert() {
+    let html = wmu.transformFragment(document.getElementById('input').value, {});
+    document.getElementById('output').innerHTML = html;
+    document.getElementById('output_code').innerText = html;
+  }
 
-    function initWmu() {
-        document.getElementById('input').value = demoWmuString;
-    }
+  document.getElementById('input').oninput = convert;
 
+  function clicked_output_as_code( ev ) {
+    let codeOn = (ev.target.checked);
+    document.getElementById('output_code').style.visibility = (codeOn ? 'visible' : 'hidden');
+    if (codeOn) {
+      document.getElementById('output_code').style.height = '30%';
+      document.getElementById('output').style.height = '68%';
+    } else {
+      document.getElementById('output_code').style.height = '0';
+      document.getElementById('output').style.height = '100%';
+    }
+  }
 </script>
+
+<script src="demo-wmu.js" onload="document.getElementById('input').value = demoWmuString; convert()"></script>
 
 </html>
