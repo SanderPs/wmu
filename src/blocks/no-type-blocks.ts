@@ -6,6 +6,19 @@ interface IWmuNonTagBlocks {
     regex: RegExp;
 }
 
+const wmu_nontagblocks: IWmuNonTagBlocks[] = [
+  {
+    description: 'a list', 
+    blockType: 'list',
+    regex: /(^-\ |^\d(?::\d)?\.\ )/, 
+  },
+  {
+    description: 'a html comment', 
+    blockType: 'htmlComment',
+    regex: /^<!--\ /
+  },
+];
+
 export function determineBlockType(str: string) {
 
 	for (let item of wmu_nontagblocks) {
@@ -16,15 +29,4 @@ export function determineBlockType(str: string) {
 
 	return 'par';
 }
-const wmu_nontagblocks: IWmuNonTagBlocks[] = [
-    {
-		description: 'a list', 
-		blockType: 'list',
-        regex: /(^-\ |^\d(?::\d)?\.\ )/, 
-    },
-    {
-        description: 'a html comment', 
-        blockType: 'htmlComment',
-        regex: /^<!--\ /
-    },
-];
+
