@@ -34,8 +34,9 @@ export class WmuDocument{
         this.project = projectData;
         this.result = [];
 
-        
-        this.preParse();
+        str = normalize(str);
+
+        this.initParse();
         str = wmuIndex.parse(str, this.indexStore, this.config);
         
         this.blocks = splitBlocks(str);
@@ -47,7 +48,7 @@ export class WmuDocument{
         this.html = parseTags(this.html, config);
     }
 
-    private preParse(): void {
+    private initParse(): void {
         
         this.indexStore = new wmuIndex.IndexStore();
         
@@ -191,6 +192,14 @@ export class WmuDocument{
         return result.trim();
     }
 }
+
+export function normalize(str: string): string {
+  return str
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\\\|/g,'&#x7c;');
+}
+
 
 const regex_block = /(?:\r?\n(?:[ \t]*\r?\n)+)/g;
 const regex_part = /(?:\r?\n\|=[ \t]*\r?\n)/g;

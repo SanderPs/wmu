@@ -8,12 +8,21 @@ This is a library that converts wmu to html.
 
 Read the [quick introduction](wmu.md) to get an idea of wmu markup
 
+
+
+
+
+
 ## Main issues
 
 - using JS find and replace is fast but doesn't result in clean/solid code
 - started as proof-of-concept js code, so it's not really clean and solid everywhere (yet!)
 - i am still figuring out what wmu should be like, so some code is a bit experimetal/temporary
 - css files are also just to make it work and/or temporary
+
+
+
+
 
 ## Run the code
 
@@ -30,7 +39,16 @@ Then open `/examples/demo/demo.html` in your browser!
 
 Open in VS Code and run (F5)
 
+
+
+
+
 ## Roadmap
+
+#### graceful-fs
+
+https://www.npmjs.com/package/graceful-fs
+
 
 #### PagedJS
 
@@ -53,6 +71,11 @@ For instance:
 https://github.com/mermaid-js/mermaid  
 https://www.diagram.codes/ (commercial)  
 https://modeling-languages.com/text-uml-tools-complete-list/  
+
+
+
+
+
 
 ## Code
 

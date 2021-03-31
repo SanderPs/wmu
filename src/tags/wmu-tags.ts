@@ -19,13 +19,6 @@ export const wmu_commands: IWMUCommands[] = [
     //     to: '&#x26;'
     // },
 
-    {
-        description: 'escaped-pipe', // when: 1. pipe is needed as first character of a line; 2. inside a table
-        type: 'inline',
-        regex: /\\\|/g,
-        to: '&#x7c;'
-    },
-  
     // inline:
     {
         description: 'bold', 
@@ -89,6 +82,7 @@ export const wmu_commands: IWMUCommands[] = [
         regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)/g, 
         to: '<a href="$2">$1</a>' 
     },
+    // or: /\b(https?|ftp|file):\/\/[^\s]*/ ?
 
     {
         description: 'diff ins, del, note', 

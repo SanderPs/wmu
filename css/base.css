@@ -123,7 +123,7 @@ div.code-default table tr.del {
     background-color: #fee8e9;
 }
 div.code-default table tr.note {
-    background-color: #e4e4e4;
+    background-color: #e0e0e0;
 }
 .code-del {
     background-color: #ffb6ba;
@@ -136,7 +136,7 @@ div.code-default table tr.note {
     padding: 2px 4px;
 }
 .code-note {
-    background-color: #c2c0c0;
+    background-color: #c8c8c8;
     line-height: 1.5;
     padding: 2px 4px;
 }

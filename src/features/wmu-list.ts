@@ -36,16 +36,23 @@ export class ListTree {
         this.lastAdded = rootNode;
       
         for (let x=0; x < items.length;  x++) {
-          let row = items[x].match(/^(\|*)(?:(.+?)(?:\.?[\t ]+))(.*)$/);
-
-          // row[1] = the number of pipe characters at the beginning of the line
-          // row[2] = the list-item marker (-1IaA etc)
-          // row[3] = the text
-          this.addSequential(row![3], row![1].length + 1, row![2].trim()); // todo: Non-Null Assertion Operator?
+          if (items[x].length > 0) {
+            let row = items[x].match(/^(\|*)(?:(.+?)(?:\.?[\t ]+))(.*)$/);
+            if (row) {
+              // row[1] = the number of pipe characters at the beginning of the line
+              // row[2] = the list-item marker (-1IaA etc)
+              // row[3] = the text
+              this.addSequential(row?.[3], row?.[1].length + 1, row?.[2].trim()); // todo: Non-Null Assertion Operator?
+            }
+          }
+          // todo: else = empty line, ignore?
         }
     }
 
     public addSequential(title: string, level: number, type: string) {
+
+      if (isNaN(level)) return;
+      if (!this.lastAdded) return;
 
         let currentNode = this.lastAdded;
 
