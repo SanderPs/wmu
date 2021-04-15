@@ -30,7 +30,7 @@ export interface IBlockDefinition {
     'block-align'?: string;
     'title'?: string;
     'language'?: string;
-    'format'?: string;
+    'format'?: string[];
     'src'?: string;
     'multiline'?: string;
     'start'?: string;

@@ -25,11 +25,11 @@ export let test1: string = `|config|toc=true|toctitle=Content
 
 |h2|=Paragraaf (1.2)
 
-Opmaak: **bold** //italics// __underline__ ~~striktrought~~
+Opmaak: **bold** //italics// !!underline!! ~~striktrought~~
 
 Combinatie **//tekst//**
 
-En ^^superscript^^ maar ook ^_subscript_^
+En ^^superscript^^ maar ook __subscript__
 
 Some \`\`inline code\`\`
 
@@ -67,38 +67,6 @@ Footnote for chapter 2
 
 
 
-
-<!-- Lijsten -->
-
-- lijst inline
-
-paragraaf:
-- inline lijst in paragraaf
-- 2
-En weer verder
-
-|list|-:-
-|=
-- nummer 1
-- nummer 2
-- nummer 3
-
-
-|list|=1|type=A
-|=
-1 een 
-2 twee
-3 drie
-
-|list
-|=
-|a indicates lowercase letters
-|- should be 'b'
-||A indicates uppercase letters
-|||i indicates lowercase Roman numerals
-||||I indicates uppercase Roman numerals
-|||||1 indicates numbers (default)
-|- should be 'c'
 
 
 Markdown header 1

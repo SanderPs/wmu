@@ -1,9 +1,9 @@
 import * as WmuLib from "../WmuLib";
 
 export interface IWMUCommands {
-    description: string; 
+    _description?: string; 
     type: string; 
-    example?: string;
+    _example?: string;
     regex: RegExp;
     to: string;
     level?: string;
@@ -12,104 +12,104 @@ export interface IWMUCommands {
 
 // todo: net als launch.json:     "version": "0.2.0",
 export const wmu_commands: IWMUCommands[] = [
-    // { onnodig?
-    //     description: 'ampersand',
-    // type: 'inline',
-    //     regex: /(?: *)&(?: *)/g,
-    //     to: '&#x26;'
-    // },
 
     // inline:
     {
-        description: 'bold', 
+        _description: 'bold',
         type: 'inline',
-        regex: /(?:\*\*)(.+?)(?:\*\*)/g, 
-        to: '<b>$1</b>' 
+        regex: /(?:\*\*)(.+?)(?:\*\*)/g,
+        to: '<b>$1</b>'
     },
     {
-        description: 'underscore', 
+        _description: 'underscore',
         type: 'inline',
-        regex: /(?:\_\_)(.+?)(?:\_\_)/g, 
-        to: '<u>$1</u>' 
+        regex: /(?:!!)(.+?)(?:!!)/g,
+        to: '<u>$1</u>'
     },
     {
-        description: 'strike-trough', 
+        _description: 'strike-trough',
         type: 'inline',
-        regex: /(?:~~)(.+?)(?:~~)/g, 
-        to: '<del>$1</del>' 
+        regex: /(?:~~)(.+?)(?:~~)/g,
+        to: '<del>$1</del>'
     },
     {
-        description: 'inline-quote', 
+        _description: 'inline-quote', 
         type: 'inline',
         regex: /(?:"")(.+?)(?:"")/g, 
         to: '<q>$1</q>' 
     },
     {
-        description: 'inline-code',
+        _description: 'inline-code',
         type: 'inline',
         regex: /(?:``)(.+?)(?:``)/g,
         to: '<code>$1</code>'
     },
     {
-        description: 'italic',
+        _description: 'italic',
         type: 'inline',
-        regex: /(?:\/\/)(.+?)(?:\/\/)/g,
-        to: '<i>$1</i>'
+        regex: /([^:])(?:\/\/)(.+?)([^:])(?:\/\/)/g,
+        to: '$1<i>$2</i>$3'
     },
     {
-        description: 'superscript', 
+        _description: 'superscript', 
         type: 'inline',
         regex: /(?:\^\^)(.+?)(?:\^\^)/g, 
         to: '<sup>$1</sup>' 
     },
     {
-        description: 'subscript', 
+        _description: 'subscript', 
         type: 'inline',
-        regex: /(?:\^_)(.+?)(?:_\^)/g, // spiegelen! = de regel
+        regex: /(?:__)(.+?)(?:__)/g,
         to: '<sub>$1</sub>' 
     },
     {
-        description: 'class', 
+        _description: 'class', 
         type: 'inline',
-        example: '[[$text]]##$class##',
+        _example: '[[$text]]##$class##',
         regex: /(?:\[\[(.+?)\]\])##(.+?)(?:##)/g, 
         to: '<span class="$2">$1</span>' 
     },
     {
-        description: 'hyperlink', 
+        _description: 'hyperlink (with text)', 
         type: 'inline',
-        example: '[[$text]]@@$link@@',
+        _example: '[[$text]]@@$link@@',
         regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)/g, 
         to: '<a href="$2">$1</a>' 
     },
-    // or: /\b(https?|ftp|file):\/\/[^\s]*/ ?
+    {
+      _description: 'hyperlink (without text)', 
+      type: 'inline',
+      _example: '@@http(s)://somesite.com/some%20link@@',
+      regex: /(?:@@)(.+?)(?:@@)/g, 
+      to: '<a href="$1">$1</a>' 
+    },
 
     {
-        description: 'diff ins, del, note', 
+        _description: 'diff ins, del, note', 
         type: 'inline',
-        example: '[[$text]]::ins|del|note::',
+        _example: '[[$text]]::ins|del|note::',
         regex: /(?:\[\[(.+?)\]\])::(ins|del|note)::/g, 
         to: '<span class="code-$2">$1</span>' 
     },
     {
-        description: 'diff del', 
+        _description: 'diff del', 
         type: 'inline',
-        example: '[[$text]]::$link::',
+        _example: '[[$text]]::$link::',
         regex: /(?:\[\[(.+?)\]\])::del::/g, 
         to: '<span class="code-del">$1</span>' 
     },
 
     {
-        description: 'markdown-header-1', 
+        _description: 'markdown-header-1', 
         type: 'markdown',
-        example: `$1\n===$`,
+        _example: `$1\n===$`,
         regex: /^(.+?)\r?\n={3,}$/gm, 
         to: '|h1|$1' + WmuLib.eol + WmuLib.eol 
     },
     {
-        description: 'markdown-header-2', 
+        _description: 'markdown-header-2', 
         type: 'markdown',
-        example: `$1\n---$`,
+        _example: `$1\n---$`,
         regex: /^(.+?)\r?\n-{3,}$/gm, 
         to: '|h2|$1' + WmuLib.eol + WmuLib.eol 
     }

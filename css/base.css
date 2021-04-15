@@ -4,8 +4,37 @@ html, body {
 }
 
 p {
-    text-align: justify;
-    text-indent: 1rem;
+    /* text-align: justify; */
+    /* text-indent: 1rem; */
+}
+
+
+
+dl { 
+  margin: 1rem 0;
+  padding: 2px; 
+}
+dl div.dl-level-0 dt { 
+  font-size:1.5rem; 
+  font-weight: bold; 
+  padding: 10px;
+  border-top: 1px solid lightgrey;
+}
+dl div.dl-level-1 dt { 
+  background-color: lightgrey; 
+  display: inline-block; 
+  padding: 6px 8px; 
+  font-weight: bold;
+}
+dl dd { 
+  padding: 10px 6px 10px 0; 
+  margin-inline-start: 20px;
+}
+dl div:nth-child(odd) { 
+
+}
+dl div:nth-child(even) { 
+
 }
 
 h1 {
@@ -30,6 +59,17 @@ h5 {
 
 h6 {
     font-size: 1rem;
+}
+
+q::before {
+  font-weight: bold;
+  font-size: 120%;
+  vertical-align: text-top;
+}
+q::after {
+  font-weight: bold;
+  font-size: 120%;
+  vertical-align: text-top;
 }
 
 ul#toc {
@@ -143,9 +183,15 @@ div.code-default table tr.note {
 
 
 figure {
+  display: table;
     margin-left: 0;
 }
-
+figcaption {
+  font-size: 80%;
+  color: grey;
+  text-align: center;
+  display: table-caption; caption-side: bottom ;
+}
 table.default {
     border-collapse: collapse;
     border-width: 1px;
@@ -172,19 +218,6 @@ table.default td {
     width: 100%;
 }
 
-dl {
-    margin: 1rem 0;
-}
-dl div {
-    margin: 2px 0;
-}
-dt {
-	font-weight: bold;
-}
-dd {
-	margin-inline-start: 20px;
-}
-
 
 /* todo: nodig? */
 /* uit bash manual */
@@ -198,22 +231,44 @@ ul.no-bullet {
     list-style: none;
 }
 
-ul ul {
-    list-style-type: circle;
-    margin-block-start: 0;
-    margin-block-end: 0;
-}
-
 ul, ol {
-    display: block;
     margin-block-start: 0;
     margin-block-end: 1rem;
-    margin-inline-start: 0px;
+    margin-inline-start: -20px;
     margin-inline-end: 0px;
     padding-inline-start: 40px;
 }
 
-/* einde */
+ul ul, ul ol, ol ol, ol ul { /* todo */
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+/* ul list styles */
+/* none, square, circle, disc                                                        */
+.list-style-none   { list-style: none; }
+.list-style-square { list-style: square; }
+.list-style-circle { list-style: circle; }
+.list-style-disc   { list-style: disc; }
+.list-style-dash   { list-style-type: '\2013   '; }
+/* ol list-styles */
+/* decimal, decimal-leading-zero, lower-alpha, upper-alpha, lower-roman, upper-roman */
+.list-style-decimal              { list-style: decimal; }
+.list-style-decimal-leading-zero { list-style: decimal-leading-zero; }
+.list-style-lower-alpha          { list-style: lower-alpha; }
+.list-style-upper-alpha          { list-style: upper-alpha; }
+.list-style-lower-roman          { list-style: lower-roman; }
+.list-style-upper-roman          { list-style: upper-roman; }
+
+
+.list-style-inside {
+  list-style-position: inside;
+}
+.list-style-outside {
+  list-style-position: outside;
+}
+
+/* end Lists */
 
 
 blockquote>p {
@@ -270,7 +325,7 @@ blockquote>footer::before {
     margin-right: auto;
 }
 .block-fill {
-    width: 100%;
+    text-align: justify;
 }
 
 .text-right {

@@ -8,6 +8,7 @@ export const DefaultProjectFileName: string = 'config.wmu';
 
 export function pageHtml(vars: IHtmlPositions): string {
 
+  // todo: solve \r\n issues:
   let templ = `<!doctype html>
 <html lang='${vars.lang}'>
 \t<head>
@@ -37,12 +38,13 @@ ${vars.index}
   return templ;
 }
 
+// todo: solve \r\n issues:
 export function fragmentHtml(vars: IHtmlPositions): string {
 
-  let templ = `${vars.toc}
-
-${vars.body}
-
+  let templ = `${vars.toc}\r
+\r
+${vars.body}\r
+\r
 ${vars.index}
 `;
 
@@ -93,7 +95,7 @@ export function parseDef(str: string) {
             break;
           case 'block':
           case 'b':
-            allVar['format'] = nameValue[1];
+            allVar['format'] = nameValue[1].split(/[ \t;,]+/);
             break;
           case 'img':
           case 'i':
@@ -109,7 +111,11 @@ export function parseDef(str: string) {
             break;
         }
       } else {
-        allVar[nameValue[0]] = nameValue[1];
+        let key=nameValue[0];
+        if (key=='w') {
+          key='width';
+        }
+        allVar[key] = nameValue[1];
       }
     }
   }
@@ -131,26 +137,23 @@ export function alignmentClass(str: string, isBlock: boolean): string | null {
   return ''; // todo: throw
 }
 
-export function classAttr(...args: string[]) {
+// todo: classAttr and attrString, should be one function
+
+export function classAttr(...args: (string|string[])[]) {
   let list = args.filter(function (el) {
+    let result = Array.isArray(el) ? el.join(' ') : el; // todo: flat?
     return el != null && el.length > 0;
   });
 
   return list.length ? ' class="' + list.join(' ') + '"' : '';
 }
 
-export function classAttrx(hrow: string | null, vrow: string | null) {
-  let result = classList(hrow, vrow);
-  return (result.length ? ' class="' + result + '"' : '');
-}
+export function attrString(name: string, ...args: string[]) {
+  let list = args.filter(function (el) {
+    return el != null && el.length > 0;
+  });
 
-export function classList(hrow: string | null, vrow: string | null) {
-  let result = [];
-  for (var i = 0; i < arguments.length; i++) {
-    if (arguments[i] && arguments[i].length)
-      result.push(arguments[i]);
-  }
-  return result.join(' ');
+  return list.length ? name + '="' + list.join(' ') + '"' : '';
 }
 
 export function valignmentClass(str: string) {

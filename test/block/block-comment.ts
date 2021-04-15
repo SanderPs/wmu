@@ -31,7 +31,7 @@ describe('Block comment', () => {
 
     let str: string = `|config|keepComments=yes` + WmuLib.eol +
     WmuLib.eol +
-    `<!-- This is also a comment -->` + WmuLib.eol;
+    `<!-- This is a comment -->` + WmuLib.eol;
 
     const result = transformFragment(str, {});
 
@@ -40,7 +40,7 @@ describe('Block comment', () => {
       `keepComments = true; ` + WmuLib.eol +
       ` -->` + WmuLib.eol +
       WmuLib.eol +
-      `<!-- This is also a comment -->`
+      `<!-- This is a comment -->`
     );
   });
 

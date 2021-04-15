@@ -1,19 +1,19 @@
 import * as WmuLib from "../WmuLib";
 
 interface IWmuNonTagBlocks {
-    description: string; 
+    _description: string; 
     blockType: string; 
     regex: RegExp;
 }
 
 const wmu_nontagblocks: IWmuNonTagBlocks[] = [
   {
-    description: 'a list', 
+    _description: 'a list', 
     blockType: 'list',
-    regex: /(^-\ |^\d(?::\d)?\.\ )/, 
+    regex: /^(?:\S+)(?::\d+)?\)\ /, 
   },
   {
-    description: 'a html comment', 
+    _description: 'a html comment', 
     blockType: 'htmlComment',
     regex: /^<!--\ /
   },

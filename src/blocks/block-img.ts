@@ -16,7 +16,7 @@ export function parse(allVar: IBlockDefinition) {
     '<img' +
     WmuLib.classAttr(
       WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
-      allVar['format'] ?? ''
+      allVar['format']
     ) +
     ' src="' + allVar['src'] + '" />' + WmuLib.eol);
 

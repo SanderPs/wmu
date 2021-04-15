@@ -68,19 +68,20 @@ let x=1;
 console.log(x);  
 ```
 
-## Escaping `|`
+## Escaping characters
 
-You can use the `|` character by escaping it like so `\|`. For instance:
+You can place `\\` before a character to 'escape' it. This to prevent it from having meaning. For instance:
 
 ```
 |par|format=cssclass
-\|A paragraph that starts with a |
+|=
+\\|A paragraph that starts with a |
 
-\|code|language=wmu
-\|=
-\|code: for when you want to write some code 
+\\|code|language=wmu
+\\|=
+\\|code: for when you want to write some code 
 
-|h1|=A title with \|
+|h1|=A title with \\| in it
 ```
 
 
@@ -142,12 +143,12 @@ cell 1 |=| cell 2 |=| cell 3 |=| cell 4 |=| cell 5
 |---|---|
 |bold|`**text**`|
 |italic|`//text//`|
-|underscore|`__text__`|
+|underscore|`!!text!!`|
 |striketrough|`~~text~~`|
 |inline quote|`""text""`|
 |inline code|` ``text`` `|
 |superscript|`^^text^^`|
-|subscript|`^_text_^`|
+|subscript|`__text__`|
 
 ## Other inline Markup codes
 

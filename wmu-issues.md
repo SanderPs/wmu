@@ -3,8 +3,7 @@
 Known issues
 ---
 
-- Hyperlink where text is same as url: 2 times double / (//) makes italic [[http://www.xyz.nl]]@@http://www.xyz.nl@@
-
+- (none at this moment)
 
 Double characters to avoid
 ---

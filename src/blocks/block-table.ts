@@ -9,7 +9,7 @@ export function parse(allVar: IBlockDefinition, body: string[]) {
     WmuLib.classAttr(
       'default',
       WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
-      allVar['format'] ?? ''
+      allVar['format']
     ) +
     '>' + WmuLib.eol);
 

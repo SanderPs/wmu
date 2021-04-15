@@ -73,6 +73,7 @@ export class WmuDocument{
                 if (determinedType == 'htmlComment') {
                   block.body = [ /<!--\s+(.*?)\s+-->/gm.exec(block.header)[1] ];
                 } else {
+                  // list and par:
                   block.body = [block.header];
                 }
                 block.header = "|" + determinedType;
@@ -194,10 +195,16 @@ export class WmuDocument{
 }
 
 export function normalize(str: string): string {
+
   return str
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/\\\|/g,'&#x7c;');
+    .replace(/&(?!amp;)/g, '&amp;')
+    .replace(/<(?!!--)/g, '&lt;')
+    .replace(/([^-])>/g, '$1&gt;')
+    // .replace(/\\\|/g,'&#x7c;')
+    .replace(/\\\\(.)/g, (substring: string, ...args: any[]) => {
+      return "&#" + args[0].charCodeAt(0) + ";";
+    })
+    ;
 }
 
 

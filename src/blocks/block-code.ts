@@ -14,7 +14,7 @@ export function parse(allVar: IBlockDefinition, body: string[], output: string) 
   result.push(
     WmuLib.classAttr(
       WmuLib.alignmentClass(allVar['block-align'] ?? '', true) ?? '',
-      allVar['format'] ?? '',
+      allVar['format'],
       allVar['language'] ? 'codelang-' + allVar['language']?.toLowerCase() : ''
     )
   );
