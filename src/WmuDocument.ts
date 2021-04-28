@@ -196,6 +196,8 @@ export class WmuDocument{
 
 export function normalize(str: string): string {
 
+  // https://en.wikipedia.org/wiki/XML#Escaping
+
   return str
     .replace(/&(?!amp;)/g, '&amp;')
     .replace(/<(?!!--)/g, '&lt;')
