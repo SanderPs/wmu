@@ -1,11 +1,14 @@
 import * as WmuLib from "../WmuLib";
 
+export type propType = ((substring: string, ...args: any[]) => string);
+//(all: string, g1: string, g2: string, g3: string) => string;
+
 export interface IWMUCommands {
     _description?: string; 
     type: string; 
     _example?: string;
     regex: RegExp;
-    to: string;
+    to: propType | string;
     level?: string;
 }
 
@@ -72,9 +75,11 @@ export const wmu_commands: IWMUCommands[] = [
     {
         _description: 'hyperlink (with text)', 
         type: 'inline',
-        _example: '[[$text]]@@$link@@',
-        regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)/g, 
-        to: '<a href="$2">$1</a>' 
+        _example: '[[$text]]@@$link@@(_blank@@)',
+        regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)(_blank@@)?/g, 
+        to: (all, g1, g2, g3) => {
+            return '<a href="' + g2 + '"' + (g3 ? ' target="_blank"' : '') + '>' + g1 + '</a>'
+        } 
     },
     {
       _description: 'hyperlink (without text)', 

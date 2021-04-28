@@ -10,16 +10,16 @@ export function parse(allVar: IBlockDefinition, config: IConfig) {
     if (allVar['toc'] && (!allVar['toc']===false) || (allVar['toctitle'] && allVar['toctitle'].length)) {
 
         config.createToc = true;
-        result.push('createToc = true; ' + WmuLib.eol)
+        result.push('createToc = true; ' + WmuLib.eol);
 
         if (allVar['toctitle'] && allVar['toctitle'].length) {
             config.tocTitle = allVar['toctitle']
-            result.push('tocTitle = ' + allVar['toctitle'] + '; ' + WmuLib.eol)
+            result.push('tocTitle = ' + allVar['toctitle'] + '; ' + WmuLib.eol);
         }
     }
-    if (allVar['keepComments'] == 'yes') {
+    if (allVar['keepComments']) {
       config.keepComments = true;
-      result.push('keepComments = true; ' + WmuLib.eol)
+      result.push('keepComments = true; ' + WmuLib.eol);
     }
 
     result.push(' -->' + WmuLib.eol + WmuLib.eol);

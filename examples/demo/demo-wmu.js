@@ -48,6 +48,10 @@ Default paragraph, no need for a \`\`\|par\`\` tag.
 This is a paragraph with a css class called ""smallcaps""
 
 
+Commentaar blok:
+
+<!-- Lijsten -->
+
 |h3|=Lists
 
 Examples of an inline list:

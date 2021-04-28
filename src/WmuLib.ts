@@ -115,11 +115,22 @@ export function parseDef(str: string) {
         if (key=='w') {
           key='width';
         }
-        allVar[key] = nameValue[1];
+        allVar[key] = parseDefVal(nameValue[1]);
       }
     }
   }
   return allVar;
+}
+
+// TODO: unit tests!
+function parseDefVal( val:  any): string | number | boolean {
+  if (/1|true|yes|on/.test(val)) {
+    return true;
+  }
+  if (/0|false|no|off/.test(val)) {
+    return false;
+  }
+  return val;
 }
 
 export function alignmentClass(str: string, isBlock: boolean): string | null {
