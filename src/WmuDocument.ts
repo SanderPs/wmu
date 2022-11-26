@@ -1,6 +1,6 @@
 import * as WmuLib from "./WmuLib";
 import { IConfig, IParsedBlock, IBlockDefinition, IHtmlPositions, IWmuProject } from "./types";
-import { wmu_commands, IWMUCommands, propType } from "./tags/wmu-tags";
+import { wmu_commands, IWMUCommands } from "./tags/wmu-tags";
 import { determineBlockType } from "./blocks/no-type-blocks";
 import * as blocks from './blocks';
 import * as wmuToc from "./features/wmu-toc";
@@ -242,18 +242,13 @@ export function parseTags(str: string, config: IConfig): string {
         //     return;
         // }
 
-        // result=result.replace(cmd.regex, 
-        //     cmd.to instanceof Function ? (<propType>cmd.to) : cmd.to
-        // );
-
-// weirdness alert!
-        if (typeof cmd.to === 'string') {
-            result=result.replace(cmd.regex, cmd.to);
-        }
-        else {
-            result=result.replace(cmd.regex, cmd.to);
+        if (cmd.to) {
+            result = result.replace(cmd.regex, cmd.to);
         }
 
+        if (cmd.toFunc) {
+            result = result.replace(cmd.regex, cmd.toFunc);
+        }
 
     });
 

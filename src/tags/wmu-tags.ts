@@ -1,16 +1,23 @@
 import * as WmuLib from "../WmuLib";
 
-export type propType = ((substring: string, ...args: any[]) => string);
-//(all: string, g1: string, g2: string, g3: string) => string;
+type replaceFunctionType = { (substring?: string, ...args: any[]): string };
 
-export interface IWMUCommands {
-    _description?: string; 
-    type: string; 
+interface IWMUCommandsBase {
+    _description?: string;
+    type: string;
     _example?: string;
     regex: RegExp;
-    to: propType | string;
     level?: string;
 }
+interface IWMUCommandsToStr extends IWMUCommandsBase {
+    to: string;
+    toFunc?: never;
+}
+interface IWMUCommandsToFunc extends IWMUCommandsBase {
+    to?: never;
+    toFunc: replaceFunctionType;
+}
+export type IWMUCommands = IWMUCommandsToStr | IWMUCommandsToFunc;
 
 
 // todo: net als launch.json:     "version": "0.2.0",
@@ -77,7 +84,7 @@ export const wmu_commands: IWMUCommands[] = [
         type: 'inline',
         _example: '[[$text]]@@$link@@(_blank@@)',
         regex: /(?:\[\[(.+?)\]\])@@(.+?)(?:@@)(_blank@@)?/g, 
-        to: (all, g1, g2, g3) => {
+        toFunc: (all, g1, g2, g3) => {
             return '<a href="' + g2 + '"' + (g3 ? ' target="_blank"' : '') + '>' + g1 + '</a>'
         } 
     },
