@@ -57,8 +57,12 @@ export const wmu_commands: IWMUCommands[] = [
     {
         _description: 'italic',
         type: 'inline',
-        regex: /([^:])(?:\/\/)(.+?)([^:])(?:\/\/)/g,
-        to: '$1<i>$2</i>$3'
+        regex: /((?:\/\/)|(?:https?:))(.+?)(?:\/\/)/g,
+        toFunc: (all, g1, g2, g3) => {
+            return g1?.length === 2 ? '<i>' + g2 + '</i>' : all;
+        
+            // return '<a href="' + g2 + '"' + (g3 ? ' target="_blank"' : '') + '>' + g1 + '</a>'
+        } 
     },
     {
         _description: 'superscript', 
