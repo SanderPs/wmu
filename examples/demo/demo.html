@@ -84,6 +84,10 @@
 
 <body>
 
+  <div id="error-no-wmu" style="display: none; background-color: pink; color: crimson; padding: 20px">
+    <b>Error:</b> Could not find/start wmu!
+  </div>
+
   <div class="wrapper">
 
     <div id="wrapper-left"> 
@@ -120,9 +124,13 @@
   let input = document.querySelector('#input');
 
   function convert() {
-    let html = wmu.transformFragment(document.getElementById('input').value, {});
-    document.getElementById('output').innerHTML = html;
-    document.getElementById('output_code').innerText = html;
+    if (window.wmu !== undefined) {
+      let html = wmu.transformFragment(document.getElementById('input').value, {});
+      document.getElementById('output').innerHTML = html;
+      document.getElementById('output_code').innerText = html;
+    } else {
+      document.getElementById('error-no-wmu').style.display = 'block';
+    }
   }
 
   document.getElementById('input').oninput = convert;
