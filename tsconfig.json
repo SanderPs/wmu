@@ -7,7 +7,6 @@
     "rootDir": "src",
     "outDir": "dist/es5",
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "declaration": true

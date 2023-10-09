@@ -1,5 +1,6 @@
 const path = require("path");
 const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 var settings = {
   libraryName : 'wmu', // name
@@ -20,8 +21,14 @@ var config = {
     umdNamedDefine: true
   },
   resolve: {
-    extensions: ['.ts']
+    extensions: ['.ts'],
+    fallback: {
+      "fs": false
+    }
   },
+  plugins: [new NodePolyfillPlugin({
+    excludeAliases: ['console'],
+  }) ],
   devtool: 'source-map',
   module: {
     rules: [
@@ -33,12 +40,11 @@ var config = {
       minimizer: [
           new TerserPlugin({
               include: /\.min\.js$/,
-              sourceMap: true
+              terserOptions: {
+                sourceMap: true
+              }
           })
       ]
-  },
-  node: {
-    fs: 'empty' // https://github.com/webpack-contrib/css-loader/issues/447
   }
 }
 
