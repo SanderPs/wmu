@@ -40,7 +40,7 @@ export class WmuDocument{
         str = wmuIndex.parse(str, this.indexStore, this.config);
         
         this.blocks = splitBlocks(str);
-        this.parse();
+        this.parse(this.config);
         
         this.postParse();
 
@@ -57,7 +57,7 @@ export class WmuDocument{
         this.tocTree = new wmuToc.TocTree();
     }
 
-    private parse(): void {
+    private parse( config: IConfig ): void {
 
         if (!this.blocks.length)
             return;
@@ -68,6 +68,8 @@ export class WmuDocument{
             let hasTag = block.header.charCodeAt(0) === 124;
 
             if (!hasTag) {
+                // no tag so try to figure out what it is
+                
                 let determinedType = determineBlockType(block.header);
 
                 if (determinedType == 'htmlComment') {
@@ -81,6 +83,8 @@ export class WmuDocument{
             
             let blockVars: IBlockDefinition;
             blockVars = WmuLib.parseDef(block.header); // todo: try catch
+            blockVars.formatOutput = true;
+// default p
 
             switch( blockVars['block-type'] ) {
                 case 'table':

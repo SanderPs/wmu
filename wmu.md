@@ -1,56 +1,52 @@
 ## WMU Basics
 
-1. documents are divided into blocks separated by 2 or more newlines
-2. a block is either a paragraph (just text), or a wmu block starting with `|<identifier>`
-3. a block can have variables like `|<identifier|key=value`
-4. blocks can have parts separated by `|=\n`
-5. text can have inline markup and inline commands
+### 1. Blocks
 
-### Example
+Documents are divided into blocks separated by **2 or more newlines**
+
+(¶ added for clarity)
 
 ```
-block 1: a paragraph
-
-|code|language=javascript
-|=
-|// this is a wmu block for code markup
-
-block 3: a paragraph with //italic// text
+block 1¶
+¶
+block 2¶
+¶
+¶
+block 3¶
 ```
 
-## Wmu contexts
-
-|Method|Input|Output|
-|---|---|---|
-|transformFragment|a wmu string|html fragment (without `body`, `head` and `html`)|
-|transformPage|a wmu string|full html|
-|transformProject|a project file listing wmu files|full html|
-
-## Paragraphs
-
-There are two ways to write a paragraph, a short way:
-
+Output:
 ```
-Paragraph 1
-
-Paragraph 2
+<p>block 1</p>
+<p>block 2</p>
+<p>block 3</p>
 ```
 
-Or as a block:
+
+### 2. Explicit empty lines
+
+If you want an empty line in a block you use a `|`
+
 ```
-|par|format=cssclass
-|=
-Paragraph 1
+block 1
 
-Paragraph 2
+block 2
+|
+still block 2
+
+block 3
 ```
 
-## Empty lines in blocks
+Output:
+```
+<p>block 1</p>
+<p>block 2<br/>
+<br/>
+still block 2</p>
+<p>block 3</p>
+```
 
-Sometimes the things you write should have empty lines but how do you write an empty line inside a block?
-
-Use a `|` to connect lines together. All `|` characters at the begining of the line (of a part) will be removed, so you can do this:
-
+You can use `|` for all lines:
 ```
 |code  
 |=  
@@ -58,7 +54,8 @@ Use a `|` to connect lines together. All `|` characters at the begining of the l
 |  
 |console.log(x);  
 ```
-or just this:
+
+Or just for the empty lines:
 
 ```
 |code  
@@ -67,6 +64,95 @@ let x=1;
 |  
 console.log(x);  
 ```
+
+### 3. Blocks are paragraphs by default
+
+A block is translated by default to a paragraph. It can also be declared a paragraph by using `|par`
+
+```
+The first paragraph
+
+|par
+|=
+The second paragraph
+
+The third paragraph
+```
+
+Output:
+```
+<p>The first paragraph</p>
+<p>The second paragraph</p>
+<p>The third paragraph</p>
+```
+
+### 3. Adding variables/parameters
+
+a block can have variables like `|<identifier>|<key>=value`
+
+```
+The first paragraph
+
+|par|format=my-class
+|=
+The second paragraph
+
+The third paragraph
+```
+
+Output:
+```
+<p>The first paragraph</p>
+<p class="my-class">The second paragraph</p>
+<p>The third paragraph</p>
+```
+
+### 4. Blocks can have multiple parts
+
+Blocks can have parts separated by `|=\n`
+
+```
+|quote
+|=
+Something someone said
+|=
+- by someone
+```
+
+Output:
+```
+<blockquote>
+	<div>Something someone said</div>
+	<footer>- by someone</footer>
+</blockquote>
+```
+
+
+
+### 5. Inline markup
+
+Text can have inline markup and inline commands
+
+```
+**bold** ***strong*** //italic// ///emphasized/// !!underline!! ~~striketrough~~
+```
+
+Output:
+```
+<b>bold</b> <strong>strong</strong> <i>italic</i> <em>emphasized</em> <u>underline</u> <del>striketrough</del>
+```
+
+
+## Wmu Contexts
+
+Wmu includes a standard for projects consisting of multiple files.
+
+|Method|Input|Output|
+|---|---|---|
+|transformProject|a project file listing wmu files|full html|
+|transformFragment|a wmu string|html fragment (without `body`, `head` and `html`)|
+|transformPage|a wmu string|full html|
+
 
 ## Escaping characters
 
@@ -82,6 +168,17 @@ You can place `\\` before a character to 'escape' it. This to prevent it from ha
 \\|code: for when you want to write some code 
 
 |h1|=A title with \\| in it
+```
+
+Would look like:
+``` 
+|A paragraph that starts with a |
+
+|code|language=wmu
+|=
+|code: for when you want to write some code 
+
+A title with | in it
 ```
 
 

@@ -6,6 +6,19 @@ import 'mocha';
 
 describe('Block paragraph', () => {
 
+  it('should convert to html - using transform - no tag', () => {
+
+    let str: string = `This is a paragraph with a css class`;
+
+    const result = transformFragment(str, {});
+
+    expect(result).to.equal(
+      '<p>' + WmuLib.eol +
+      'This is a paragraph with a css class' + WmuLib.eol +
+      '</p>'
+    );
+  });
+
   it('should convert to html - using transform', () => {
 
     let str: string = `|par|format=css-class-xyz

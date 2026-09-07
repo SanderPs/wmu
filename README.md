@@ -2,6 +2,14 @@
 
 More advanced than Markdown, simpler than LaTeX
 
+It should be:
+1. simple and easy to remember
+2. easy to read in it's raw form, no clutter
+3. prevent problems as much as possible
+4. special codes used should be uniform
+5. geared towards books/articles/pdf
+
+
 This is a library that converts wmu to html.
 
 **Note** this repository is a proof-of-concept / prototype! It is not ready yet for its first beta release!!! There are still many things that need to be finished, figured out or rewriten.
@@ -68,6 +76,7 @@ https://lihautan.com/json-parser-with-javascript/
 
 For instance:  
 
+https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams
 https://github.com/mermaid-js/mermaid  
 https://www.diagram.codes/ (commercial)  
 https://modeling-languages.com/text-uml-tools-complete-list/  
